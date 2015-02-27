@@ -13,5 +13,13 @@ namespace SNMPMonitor.PresentationLayer.Tests
             bool actual = true;
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void TestMethod2()
+        {
+            double result = Math.Cos(Math.PI);
+            double expected = -1;
+            Assert.AreEqual(expected, result);
+        }
     }
 }
