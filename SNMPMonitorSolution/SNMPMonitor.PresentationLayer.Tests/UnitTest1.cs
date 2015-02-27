@@ -9,6 +9,9 @@ namespace SNMPMonitor.PresentationLayer.Tests
         [TestMethod]
         public void TestMethod1()
         {
+            bool expected = true;
+            bool actual = true;
+            Assert.AreEqual(expected, actual);
         }
     }
 }
