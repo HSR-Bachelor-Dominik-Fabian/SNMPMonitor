@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
+using Microsoft.AspNet.SignalR;
 
 [assembly: OwinStartup(typeof(SNMPMonitor.PresentationLayer.Startup))]
 
@@ -11,7 +12,13 @@ namespace SNMPMonitor.PresentationLayer
     {
         public void Configuration(IAppBuilder app)
         {
-            // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=316888
+            string sqlConnectionString = "User id=Manager;" +
+                           "Password=HSR-00228866;Data Source=tcp:152.96.56.75,40003;" +
+                           "Trusted_Connection=yes;integrated security=False;" +
+                           "database=SignalR; " +
+                           "connection timeout=30";
+            GlobalHost.DependencyResolver.UseSqlServer(sqlConnectionString);
+
             app.MapSignalR();
         }
     }
