@@ -11,52 +11,57 @@ namespace SNMPManager.BusinessLayer
 {
     class SNMPLibraryTest
     {
-        private static String _iPAdresse = "152.96.56.75";
-
         static void Main(string[] args)
         {
+            GetSNMPDataFromAgents();
+        }
+
+        public static void GetSNMPDataFromAgents()
+        {
+            DatabaseConnection connection = new DatabaseConnection();
+            List<AgentModel> AgentList = connection.GetAgentsFromDatabase();
+
             OctetString community = new OctetString("public");
-
             AgentParameters param = new AgentParameters(community);
-
             param.Version = SnmpVersion.Ver1;
-            IpAddress agent = new IpAddress(_iPAdresse);
-            UdpTarget target = new UdpTarget((IPAddress)agent, 40001, 2000, 1);
- 
-            Pdu pdu = new Pdu(PduType.Get);
-            pdu.VbList.Add("1.3.6.1.2.1.1.1.0"); //sysDescr
-            pdu.VbList.Add("1.3.6.1.2.1.1.2.0"); //sysObjectID
-            pdu.VbList.Add("1.3.6.1.2.1.1.3.0"); //sysUpTime
-            pdu.VbList.Add("1.3.6.1.2.1.1.4.0"); //sysContact
-            pdu.VbList.Add("1.3.6.1.2.1.1.5.0"); //sysName
 
-            SnmpV1Packet result = (SnmpV1Packet)target.Request(pdu, param);
-            DatabaseConnection connection = new DatabaseConnection("152.96.56.75", 40003, "Manager", "HSR-00228866");
-
-            if (result != null)
+            foreach (AgentModel agent in AgentList)
             {
-                if (result.Pdu.ErrorStatus != 0)
+                IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
+                UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
+
+                List<MonitoringTypeModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgtNr);
+                Pdu pdu = new Pdu(PduType.Get);
+                foreach (MonitoringTypeModel MonitoringType in MonitoringTypeList)
                 {
-                    Console.WriteLine("Error in SNMP reply. Error {0} index {1}", 
+                    pdu.VbList.Add(MonitoringType.ObjectID);
+                }
+
+                SnmpV1Packet result = (SnmpV1Packet)target.Request(pdu, param);
+
+                if (result != null)
+                {
+                    if (result.Pdu.ErrorStatus != 0)
+                    {
+                        Console.WriteLine("Error in SNMP reply. Error {0} index {1}",
                         result.Pdu.ErrorStatus,
                         result.Pdu.ErrorIndex);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < result.Pdu.VbList.Count(); i++)
+                        {
+                            connection.SaveMonitorDataToDatabase(agent.AgtNr, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
+                        }
+                    }
                 }
                 else
                 {
-                    for (int i = 0; i < result.Pdu.VbList.Count(); i++)
-                    {
-                        connection.insertValueToDatabase(_iPAdresse, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
-
-                    }
+                    Console.WriteLine("No response recieved from SNMP Agent");
                 }
+                target.Close();
             }
-            else
-            {
-                Console.WriteLine("No response received from SNMP agent.");
-            }
-            connection.getValuesFromDatacase();
-            Console.ReadLine();
-            target.Close();
+            connection.CloseConnection();
         }
     }
 }
