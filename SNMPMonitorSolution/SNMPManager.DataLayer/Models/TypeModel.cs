@@ -11,10 +11,10 @@ namespace SNMPManager.DataLayer
         private int _typeNr;
         private String _name;
 
-        public TypeModel(int TypeNr, String Name)
+        public TypeModel(int typeNr, String name)
         {
-            _typeNr = TypeNr;
-            _name = Name;
+            _typeNr = typeNr;
+            _name = name;
         }
     }
 }

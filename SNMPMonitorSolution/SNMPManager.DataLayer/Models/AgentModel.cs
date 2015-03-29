@@ -8,26 +8,26 @@ namespace SNMPManager.DataLayer
 {
     public class AgentModel
     {
-        private int _agtNr;
-        private String _name;
-        private String _iPAddress;
-        private int _typeNr;
-        private int _port;
+        private readonly int _agentNr;
+        private readonly String _name;
+        private readonly String _iPAddress;
+        private readonly int _typeNr;
+        private readonly int _port;
 
-        public AgentModel(int AgtNr, String Name, String IPAddress, int TypeNr, int Port)
+        public AgentModel(int agentNr, String name, String iPAddress, int typeNr, int port)
         {
-            _agtNr = AgtNr;
-            _name = Name;
-            _iPAddress = IPAddress;
-            _typeNr = TypeNr;
-            _port = Port;
+            _agentNr = agentNr;
+            _name = name;
+            _iPAddress = iPAddress;
+            _typeNr = typeNr;
+            _port = port;
         }
 
-        public int AgtNr
+        public int AgentNr
         {
             get
             {
-                return _agtNr;
+                return _agentNr;
             }
         }
 

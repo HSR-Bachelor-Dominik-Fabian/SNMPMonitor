@@ -18,26 +18,27 @@ namespace SNMPManager.BusinessLayer
 
         public static void GetSNMPDataFromAgents()
         {
-            DatabaseConnection connection = new DatabaseConnection();
+            DatabaseSettings databaseSettings = new DatabaseSettings("152.96.56.75", 40003, "Manager", "HSR-00228866", "SNMPMonitor");
+            DatabaseConnection connection = new DatabaseConnection(databaseSettings);
             List<AgentModel> AgentList = connection.GetAgentsFromDatabase();
 
             OctetString community = new OctetString("public");
             AgentParameters param = new AgentParameters(community);
-            param.Version = SnmpVersion.Ver1;
+            param.Version = SnmpVersion.Ver2;
 
             foreach (AgentModel agent in AgentList)
             {
                 IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
                 UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
 
-                List<MonitoringTypeModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgtNr);
+                List<MonitoringTypeModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgentNr);
                 Pdu pdu = new Pdu(PduType.Get);
                 foreach (MonitoringTypeModel MonitoringType in MonitoringTypeList)
                 {
                     pdu.VbList.Add(MonitoringType.ObjectID);
                 }
 
-                SnmpV1Packet result = (SnmpV1Packet)target.Request(pdu, param);
+                SnmpV2Packet result = (SnmpV2Packet)target.Request(pdu, param);
 
                 if (result != null)
                 {
@@ -51,7 +52,7 @@ namespace SNMPManager.BusinessLayer
                     {
                         for (int i = 0; i < result.Pdu.VbList.Count(); i++)
                         {
-                            connection.SaveMonitorDataToDatabase(agent.AgtNr, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
+                            connection.SaveMonitorDataToDatabase(agent.AgentNr, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
                         }
                     }
                 }
@@ -61,7 +62,7 @@ namespace SNMPManager.BusinessLayer
                 }
                 target.Close();
             }
-            connection.CloseConnection();
+            Console.ReadLine();
         }
     }
 }

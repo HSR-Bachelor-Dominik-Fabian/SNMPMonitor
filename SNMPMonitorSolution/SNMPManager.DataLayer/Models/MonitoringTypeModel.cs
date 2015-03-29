@@ -8,22 +8,22 @@ namespace SNMPManager.DataLayer
 {
     public class MonitoringTypeModel
     {
-        private int _moniTypeNr;
+        private int _monitoringTypeNr;
         private String _description;
         private String _objectID;
 
-        public MonitoringTypeModel(int MoniTypeNr, String Description, String ObjectID)
+        public MonitoringTypeModel(int monitoringTypeNr, String description, String objectID)
         {
-            _moniTypeNr = MoniTypeNr;
-            _description = Description;
-            _objectID = ObjectID;
+            _monitoringTypeNr = monitoringTypeNr;
+            _description = description;
+            _objectID = objectID;
         }
 
-        public int MoniTypeNr
+        public int MonitoringTypeNr
         {
             get
             {
-                return _moniTypeNr;
+                return _monitoringTypeNr;
             }
         }
 

@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="DatabaseSettings.cs" />
     <Compile Include="Models\AgentModel.cs" />
     <Compile Include="Models\MonitoringTypeModel.cs" />
     <Compile Include="Models\TypeModel.cs" />
