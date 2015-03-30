@@ -50,8 +50,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SnmpSharpNet">
-      <HintPath>..\..\..\..\..\Downloads\SnmpSharpNet-0-9-4-bin\SnmpSharpNet-bin-0-9-4\Release\SnmpSharpNet.dll</HintPath>
+    <Reference Include="SnmpSharpNet, Version=0.9.4.0, Culture=neutral, PublicKeyToken=b2181aa3b9571feb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SnmpSharpNet-bin-0-9-4\Release\SnmpSharpNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
