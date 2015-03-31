@@ -9,14 +9,9 @@ using SNMPManager.DataLayer;
 
 namespace SNMPManager.BusinessLayer
 {
-    class SNMPLibraryTest
+    public class SNMPController
     {
-        static void Main(string[] args)
-        {
-            GetSNMPDataFromAgents();
-        }
-
-        public static void GetSNMPDataFromAgents()
+        public void GetSNMPDataFromAgents()
         {
             DatabaseSettings databaseSettings = new DatabaseSettings("152.96.56.75", 40003, "Manager", "HSR-00228866", "SNMPMonitor");
             DatabaseConnection connection = new DatabaseConnection(databaseSettings);
@@ -62,7 +57,6 @@ namespace SNMPManager.BusinessLayer
                 }
                 target.Close();
             }
-            Console.ReadLine();
         }
     }
 }
