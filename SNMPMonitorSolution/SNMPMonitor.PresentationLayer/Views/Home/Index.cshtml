@@ -4,40 +4,42 @@
 
 <head>
     <title>New Notifications</title>
-    <script src="Scripts/jquery-1.10.2.min.js"></script>
-    <script src="Scripts/jquery.signalR-2.2.0.min.js"></script>
-    <script src="signalr/hubs"></script>
-    <script type="text/javascript">
-        $(function () {
-            // Declare a proxy to reference the hub.
-            var notifications = $.connection.SNMPDataHub;
-            debugger;
-            // Create a function that the hub can call to broadcast messages.
-            notifications.client.recieveNotification = function (totalNewMessages, totalNewCircles, totalNewJobs, totalNewNotifications) {
-                // Add the message to the page.
-                $('#spanNewMessages').text(totalNewMessages);
-                $('#spanNewCircles').text(totalNewCircles);
-                $('#spanNewJobNotifications').text(totalNewJobs);
-                $('#spanNewNotifications').text(totalNewNotifications);
-            };
-            // Start the connection.
-            $.connection.hub.start().done(function () {
-                notifications.server.sendNotifications();
-            }).fail(function (e) {
-                alert(e);
-            });
-            //$.connection.hub.start();
-        });
-    </script>
+    
 </head>
 <body>
     <h1>Broadcast Realtime SQL data using SignalR</h1>
-    <div>
-        <p>You have <span id="spanNewMessages">0</span> New Message Notification.</p>
-        <p>You have <span id="spanNewCircles">0</span> New Circles Notification.</p>
-        <p>You have <span id="spanNewJobNotifications">0</span> New Job Notification.</p>
-        <p>You have <span id="spanNewNotifications">0</span> New Notification.</p>
+    <div id="dataContainer">
+        <button id="testButton">Recieve Data</button>
     </div>
+    @section scripts{
+        <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+        <script src="~/signalr/hubs"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // Declare a proxy to reference the hub.
+                var notifications = $.connection.snmpDataHub;
+                // Create a function that the hub can call to broadcast messages.
+                notifications.client.receiveData = function (dataValue) {
+                    $("#dataContainer").append("<p>" + dataValue + "</p>");
+                };
+                
+                // Start the connection.
+                $.connection.hub.start().done(function () {
+
+                    notifications.server.joinDataGroup(".1.3.2.14.23");
+
+                    $("#testButton").click(function () {
+                        var notifications = $.connection.snmpDataHub;
+                        notifications.server.sendSNMPData();
+                    });
+                }).fail(function (e) {
+                    alert(e);
+                });
+                
+                //$.connection.hub.start();
+            });
+        </script>
+    }
 </body>
 
  <!--
