@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
+using Newtonsoft.Json.Linq;
 
 namespace SNMPMonitor.PresentationLayer.Hubs
 {

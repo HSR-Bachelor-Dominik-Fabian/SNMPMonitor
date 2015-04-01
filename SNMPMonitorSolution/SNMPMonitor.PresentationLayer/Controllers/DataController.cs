@@ -1,6 +1,7 @@
 ﻿using SNMPMonitor.PresentationLayer.Hubs;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             Hub.SendSNMPData();
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
+        [HttpPost]
         public HttpStatusCodeResult RowInsertedTrigger(string param)
         {
             SNMPDataHub Hub = new SNMPDataHub();

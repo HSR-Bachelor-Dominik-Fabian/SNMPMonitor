@@ -4,14 +4,13 @@ using System.Data.SqlClient;
 using Microsoft.SqlServer.Server;
 using System.Net;
 using System.Diagnostics;
-using System.Text;
-using System.IO;
+using System.Collections.Specialized;
 
 
 public partial class Triggers
 {
     // Enter existing table or view for the target and uncomment the attribute line
-    //[Microsoft.SqlServer.Server.SqlTrigger(Name = "SNMPMonitorRowInsertedTrigger", Event = "FOR INSERT")]
+    //[Microsoft.SqlServer.Server.SqlTrigger(Name = "SNMPMonitorRowInsertedTrigger")]
     public static void SNMPMonitorRowInsertedTrigger()
     {
         try
@@ -20,32 +19,59 @@ public partial class Triggers
             if (myContext.TriggerAction == TriggerAction.Insert)
             {
                 Uri uri = new Uri("http://152.96.56.75/Data/RowInsertedTrigger");
-                Stream dataStream;
-                WebRequest request = WebRequest.Create(uri);
-                request.Method = "POST";
+                WebClient client = new WebClient();
+                SqlCommand command;
+                SqlDataReader reader;
+                string values = "[";
+                using (SqlConnection connection
+                   = new SqlConnection(@"context connection=true"))
+                {
+                    connection.Open();
+                    command = new SqlCommand(@"SELECT * FROM INSERTED;",
+                       connection);
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
 
-                byte[] byteArray = Encoding.UTF8.GetBytes(myContext.EventData.Value);
+                            values += "[" + reader.GetName(i) + "," + reader.GetValue(i) + "],";
+                        }
+                    } 
+                    
+                    reader.Close();
+                    
+                }
+                values += "]";
 
-                // Set the ContentType property of the WebRequest.
-                request.ContentType = "application/x-www-form-urlencoded";
 
-                // Set the ContentLength property of the WebRequest.
-                request.ContentLength = byteArray.Length;
 
-                // Get the request stream.
-                dataStream = request.GetRequestStream();
 
-                // Write the data to the request stream.
-                dataStream.Write(byteArray, 0, byteArray.Length);
+                string param = "param=" + values;
+                client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                client.UploadString(uri,"POST", param);
+                /*client.UploadValues(uri, "POST", new NameValueCollection()
+                {
+                    {"param", param}
+                });*/
+                /*
+                SqlPipe sqlP = SqlContext.Pipe;
+                sqlP.Send(myContext.ColumnCount.ToString());
+                */
 
-                // Close the Stream object.
-                dataStream.Close();
-
+                /*client.UploadValues(uri,"POST", new NameValueCollection()
+                {
+                    {"param",myContext.EventData.Value}
+                });*/
+                /*SqlPipe sqlP = SqlContext.Pipe;
+                sqlP.Send(myContext.EventData.Value);*/
+                //client.OpenRead(uri).Close();
             }
         }
         catch (Exception exc)
         {
-            Console.WriteLine(exc.Message);
+            SqlPipe sqlP = SqlContext.Pipe;
+            sqlP.Send("Fehler: " + exc.Message);
         }
     }
 }
