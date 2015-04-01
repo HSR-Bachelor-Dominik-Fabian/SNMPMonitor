@@ -47,7 +47,7 @@ namespace SNMPManager.BusinessLayer
                     {
                         for (int i = 0; i < result.Pdu.VbList.Count(); i++)
                         {
-                            connection.SaveMonitorDataToDatabase(agent.AgentNr, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
+                            connection.SaveMonitorDataToDatabase(agent, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
                         }
                     }
                 }
