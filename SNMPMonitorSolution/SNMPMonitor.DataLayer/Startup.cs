@@ -10,8 +10,6 @@ namespace SNMPMonitor.DataLayer
     {
         public static void Configuration(string connectionString)
         {
-            SQLDependency.DependencyConfig config = new SQLDependency.DependencyConfig(connectionString);
-            //config.startupDependency();
         }
     }
 }

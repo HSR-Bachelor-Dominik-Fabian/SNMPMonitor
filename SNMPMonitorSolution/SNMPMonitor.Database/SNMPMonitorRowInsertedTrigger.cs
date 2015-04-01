@@ -24,8 +24,7 @@ public partial class Triggers
         }
         catch (Exception exc)
         {
-            EventLog log = new EventLog();
-            log.WriteEntry(exc.Message, EventLogEntryType.Error);
+            Console.WriteLine(exc.Message);
         }
     }
 }
