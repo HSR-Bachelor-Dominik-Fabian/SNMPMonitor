@@ -116,9 +116,9 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand getMoniTypeNrCommand = new SqlCommand("SELECT * FROM MonitoringType WHERE ObjectID = '@monitoringTypeNrString'", _myConnection);
-                SqlParameter sp = new SqlParameter("monitoringTypeNrString", monitoringTypeNrString);
-                getMoniTypeNrCommand.Parameters.Add(sp);
+                SqlCommand getMoniTypeNrCommand = new SqlCommand("SELECT * FROM MonitoringType WHERE ObjectID = '" + monitoringTypeNrString + "'", _myConnection);
+                //SqlParameter sp = new SqlParameter("monitoringTypeNrString", monitoringTypeNrString);
+                //getMoniTypeNrCommand.Parameters.Add(sp);
                 SqlDataReader myReader = getMoniTypeNrCommand.ExecuteReader();
                 myReader.Read();
                 int monitoringTypeNr = (int)myReader["MonitoringTypeNr"];
