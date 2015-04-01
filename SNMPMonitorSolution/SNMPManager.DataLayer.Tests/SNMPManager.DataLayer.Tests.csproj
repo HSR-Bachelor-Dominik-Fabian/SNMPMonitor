@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{83A1F64A-4273-4924-BFA3-6E3AA139BEDC}</ProjectGuid>
+    <ProjectGuid>{E5428C67-1747-4409-B9B6-C2820CD9CF7E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SNMPManager.BusinessLayer.Tests</RootNamespace>
-    <AssemblyName>SNMPManager.BusinessLayer.Tests</AssemblyName>
+    <RootNamespace>SNMPManager.DataLayer.Tests</RootNamespace>
+    <AssemblyName>SNMPManager.DataLayer.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,17 +51,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="SNMPControllerTest.cs" />
+    <Compile Include="DatabaseConnectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SNMPManager.BusinessLayer\SNMPManager.BusinessLayer.csproj">
-      <Project>{d96c56e9-d6a4-4aac-b439-42fcfc21dc91}</Project>
-      <Name>SNMPManager.BusinessLayer</Name>
+    <ProjectReference Include="..\SNMPManager.DataLayer\SNMPManager.DataLayer.csproj">
+      <Project>{7a4c8c96-62a5-40ff-ae92-4db0e95f2c72}</Project>
+      <Name>SNMPManager.DataLayer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -110,7 +110,7 @@ namespace SNMPManager.DataLayer
             return myReader;
         }
 
-        public void SaveMonitorDataToDatabase(int agentNr, String monitoringTypeNrString, String result)
+        public void SaveMonitorDataToDatabase(AgentModel agent, String monitoringTypeNrString, String result)
         {
             try
             {
@@ -124,7 +124,24 @@ namespace SNMPManager.DataLayer
                 int monitoringTypeNr = (int)myReader["MonitoringTypeNr"];
                 myReader.Close();
 
-                SqlCommand myCommand = new SqlCommand("INSERT INTO MonitorData(Result, AgentNr, MonitoringTypeNr) VALUES('" + result + "', '" + agentNr + "', '" + monitoringTypeNr + "')", _myConnection);
+                SqlCommand myCommand = new SqlCommand("INSERT INTO MonitorData(Result, AgentNr, MonitoringTypeNr) VALUES('" + result + "', '" + agent.AgentNr + "', '" + monitoringTypeNr + "')", _myConnection);
+                myCommand.ExecuteNonQuery();
+                _myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                _myConnection.Close();
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        public void AddAgentToDatabase(AgentModel agent)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand myCommand = new SqlCommand("INSERT INTO Agent(AgentNr, Name, IPAddress, Port, TypeNr) VALUES('" + agent.AgentNr + "', '" + agent.Name + "', '" + agent.IPAddress + "', '" + agent.Port + "', '" + agent.TypeNr +  "')", _myConnection);
                 myCommand.ExecuteNonQuery();
                 _myConnection.Close();
             }
