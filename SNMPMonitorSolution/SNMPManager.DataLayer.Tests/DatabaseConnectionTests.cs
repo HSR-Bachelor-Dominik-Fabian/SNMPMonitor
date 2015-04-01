@@ -14,8 +14,7 @@ namespace SNMPManager.DataLayer.Tests
         [TestInitialize]
         public void TestSetup()
         {
-            databaseSettingsTest = new DatabaseSettings("152.96.56.75", 40003, "ManagerTest", "HSR-00228866", "SNMPMonitorTest");
-            databaseConnection = new DatabaseConnection(databaseSettingsTest);
+            databaseConnection = new DatabaseConnection(Properties.Settings.Default.TestDatabase);
 
             List<AgentModel> agents = databaseConnection.GetAgentsFromDatabase();
             
@@ -39,9 +38,6 @@ namespace SNMPManager.DataLayer.Tests
         [TestMethod]
         public void TestDatabaseConnectionGetMonitoringTypes()
         {
-            DatabaseConnection databaseConnection = new DatabaseConnection(databaseSettingsTest);
-
-
             int actual = databaseConnection.GetMonitoringTypesForAgentFromDatabase(1).Count;
 
             int expected = 4;

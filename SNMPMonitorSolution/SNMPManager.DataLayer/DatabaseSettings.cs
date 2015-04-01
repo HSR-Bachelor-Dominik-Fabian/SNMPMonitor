@@ -8,58 +8,18 @@ namespace SNMPManager.DataLayer
 {
     public class DatabaseSettings
     {
-        private readonly String _location;
-        private readonly int _port;
-        private readonly String _user;
-        private readonly String _password;
-        private readonly String _databaseName;
+        private readonly string _connectionString;
 
-        public DatabaseSettings(String location, int port, String user, String password, String databaseName)
+        public DatabaseSettings(string connectionString)
         {
-            _location = location;
-            _port = port;
-            _user = user;
-            _password = password;
-            _databaseName = databaseName;
+            _connectionString = connectionString;
         }
 
-        public String Location
+        public String ConnectionString
         {
             get
             {
-                return _location;
-            }
-        }
-
-        public int Port
-        {
-            get
-            {
-                return _port;
-            }
-        }
-
-        public String User
-        {
-            get
-            {
-                return _user;
-            }
-        }
-
-        public String Password
-        {
-            get
-            {
-                return _password;
-            }
-        }
-
-        public String DatabaseName
-        {
-            get
-            {
-                return _databaseName;
+                return _connectionString;
             }
         }
     }

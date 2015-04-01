@@ -11,21 +11,19 @@ namespace SNMPManager.DataLayer
     public class DatabaseConnection
     {
         private SqlConnection _myConnection;
-        private readonly DatabaseSettings _databaseSettings;
+        private DatabaseSettings _databaseSettings;
+        private readonly string _connectionString;
 
-        public DatabaseConnection(DatabaseSettings databaseSettings)
+        public DatabaseConnection(string connectionString)
         {
-            _databaseSettings = databaseSettings;
+            _connectionString = connectionString;
             EstablishSQLConnection();
         }
 
         private void EstablishSQLConnection()
         {
-            _myConnection = new SqlConnection("User id=" + _databaseSettings.User + ";" +
-                           "Password=" + _databaseSettings.Password + ";Data Source=tcp:" + _databaseSettings.Location + "," + _databaseSettings.Port + ";" +
-                           "Trusted_Connection=yes;integrated security=False;" +
-                           "database=" + _databaseSettings.DatabaseName + "; " +
-                           "connection timeout=5");
+            _databaseSettings = new DatabaseSettings(_connectionString);
+            _myConnection = new SqlConnection(_databaseSettings.ConnectionString);
         }
 
         public List<AgentModel> GetAgentsFromDatabase()

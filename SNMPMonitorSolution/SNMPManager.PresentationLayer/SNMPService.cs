@@ -30,8 +30,9 @@ namespace SNMPManager.PresentationLayer
 
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            SNMPController controller = new SNMPController();
-            controller.GetSNMPDataFromAgents();
+            string connectionString = Properties.Settings.Default.ProdDatabase;
+            SNMPController controller = new SNMPController(connectionString);
+            controller.SaveSNMPDataFromAgentsToDatabase();
         }
     }
 }

@@ -11,10 +11,16 @@ namespace SNMPManager.BusinessLayer
 {
     public class SNMPController
     {
-        public void GetSNMPDataFromAgents()
+        private readonly string _connectionString;
+
+        public SNMPController(string connectionString)
         {
-            DatabaseSettings databaseSettings = new DatabaseSettings("152.96.56.75", 40003, "Manager", "HSR-00228866", "SNMPMonitor");
-            DatabaseConnection connection = new DatabaseConnection(databaseSettings);
+            _connectionString = connectionString;
+        }
+
+        public void SaveSNMPDataFromAgentsToDatabase()
+        {            
+            DatabaseConnection connection = new DatabaseConnection(_connectionString);
             List<AgentModel> AgentList = connection.GetAgentsFromDatabase();
 
             OctetString community = new OctetString("public");
