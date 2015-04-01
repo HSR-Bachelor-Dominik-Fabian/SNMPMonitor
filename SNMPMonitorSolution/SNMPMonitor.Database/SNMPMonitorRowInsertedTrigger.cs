@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using Microsoft.SqlServer.Server;
 using System.Net;
 using System.Diagnostics;
+using System.Text;
+using System.IO;
 
 
 public partial class Triggers
@@ -18,8 +20,27 @@ public partial class Triggers
             if (myContext.TriggerAction == TriggerAction.Insert)
             {
                 Uri uri = new Uri("http://152.96.56.75/Data/RowInsertedTrigger");
-                WebClient client = new WebClient();
-                client.OpenRead(uri);
+                Stream dataStream;
+                WebRequest request = WebRequest.Create(uri);
+                request.Method = "POST";
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(myContext.EventData.Value);
+
+                // Set the ContentType property of the WebRequest.
+                request.ContentType = "application/x-www-form-urlencoded";
+
+                // Set the ContentLength property of the WebRequest.
+                request.ContentLength = byteArray.Length;
+
+                // Get the request stream.
+                dataStream = request.GetRequestStream();
+
+                // Write the data to the request stream.
+                dataStream.Write(byteArray, 0, byteArray.Length);
+
+                // Close the Stream object.
+                dataStream.Close();
+
             }
         }
         catch (Exception exc)
