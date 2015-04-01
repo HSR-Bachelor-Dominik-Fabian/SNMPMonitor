@@ -27,7 +27,7 @@ namespace SNMPManager.PresentationLayer.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=152.96.56.75,40003;Initial Catalog=SNMPMonitor;Persist Security Info=" +
-            "True;User ID=Monitor;Password=HSR-00228866")]
+            "True;User ID=Manager;Password=HSR-00228866")]
         public string ProdDatabase {
             get {
                 return ((string)(this["ProdDatabase"]));
