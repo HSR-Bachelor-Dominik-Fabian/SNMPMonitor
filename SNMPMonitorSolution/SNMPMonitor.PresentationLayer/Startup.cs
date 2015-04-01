@@ -12,14 +12,8 @@ namespace SNMPMonitor.PresentationLayer
     {
         public void Configuration(IAppBuilder app)
         {
-            string sqlConnectionString = "User id=Manager;" +
-                           "Password=HSR-00228866;Data Source=tcp:152.96.56.75,40003;" +
-                           "Trusted_Connection=yes;integrated security=False;" +
-                           "database=SignalR; " +
-                           "connection timeout=30";
-            GlobalHost.DependencyResolver.UseSqlServer(sqlConnectionString);
-
             app.MapSignalR();
+            //SNMPMonitor.BusinessLayer.Startup.Configuration(Properties.Settings.Default.SNMPMonitorConnectionString);
         }
     }
 }
