@@ -22,7 +22,7 @@ public partial class Triggers
                 WebClient client = new WebClient();
                 SqlCommand command;
                 SqlDataReader reader;
-                string values = "[";
+                string values = "{param:[";
                 using (SqlConnection connection
                    = new SqlConnection(@"context connection=true"))
                 {
@@ -35,14 +35,14 @@ public partial class Triggers
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
 
-                            values += "[" + reader.GetName(i) + "," + reader.GetValue(i) + "],";
+                            values += "{name:\"" + reader.GetName(i) + "\",value:\"" + reader.GetValue(i) + "\"},";
                         }
                     } 
                     
                     reader.Close();
                     
                 }
-                values += "]";
+                values += "]}";
 
 
 
