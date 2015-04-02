@@ -22,12 +22,12 @@ public partial class Triggers
                 WebClient client = new WebClient();
                 SqlCommand command;
                 SqlDataReader reader;
-                string values = "[";
+                string values = "{param:[";
                 using (SqlConnection connection
                    = new SqlConnection(@"context connection=true"))
                 {
                     connection.Open();
-                    command = new SqlCommand(@"SELECT * FROM INSERTED;",
+                    command = new SqlCommand(@"SELECT i.AgentNr, mt.ObjectID, i.Result, i.MonitorTimestamp FROM INSERTED i INNER JOIN MonitoringType mt ON i.MonitoringTypeNr = mt.MonitoringTypeNr;",
                        connection);
                     reader = command.ExecuteReader();
                     while (reader.Read())
@@ -35,14 +35,14 @@ public partial class Triggers
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
 
-                            values += "[" + reader.GetName(i) + "," + reader.GetValue(i) + "],";
+                            values += "{name:\"" + reader.GetName(i) + "\",value:\"" + reader.GetValue(i) + "\"},";
                         }
                     } 
                     
                     reader.Close();
                     
                 }
-                values += "]";
+                values += "]}";
 
 
 
