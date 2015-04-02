@@ -27,7 +27,7 @@ public partial class Triggers
                    = new SqlConnection(@"context connection=true"))
                 {
                     connection.Open();
-                    command = new SqlCommand(@"SELECT * FROM INSERTED;",
+                    command = new SqlCommand(@"SELECT i.AgentNr, mt.ObjectID, i.Result, i.MonitorTimestamp FROM INSERTED i INNER JOIN MonitoringType mt ON i.MonitoringTypeNr = mt.MonitoringTypeNr;",
                        connection);
                     reader = command.ExecuteReader();
                     while (reader.Read())
