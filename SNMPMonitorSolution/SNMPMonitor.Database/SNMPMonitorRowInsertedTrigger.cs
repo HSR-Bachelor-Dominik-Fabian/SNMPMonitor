@@ -35,7 +35,7 @@ public partial class Triggers
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
 
-                            values += "{name:\"" + reader.GetName(i) + "\",value:\"" + reader.GetValue(i) + "\"},";
+                            values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
                         }
                     } 
                     

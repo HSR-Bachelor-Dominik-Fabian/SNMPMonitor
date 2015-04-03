@@ -15,6 +15,9 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         public HttpStatusCodeResult RowInsertedTrigger()
         {            
             SNMPDataHub Hub = new SNMPDataHub();
+            string param = "{param:[{\"Result\":\"Test123\"},{\"MonitorTimestamp\":\"2015-04-01 15:02:55.177\"},{\"ObjectID\":\"Test123\"},{\"AgentNr\":\"123\"},]}";
+            JObject jobject = JObject.Parse(param);
+            Models.MonitorDataModel monitor = new Models.MonitorDataModel(jobject);
             Hub.SendSNMPData();
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
@@ -23,7 +26,8 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         {
             SNMPDataHub Hub = new SNMPDataHub();
             JObject jobject = JObject.Parse(param);
-            Hub.SendSNMPData(jobject);
+            Models.MonitorDataModel monitor = new Models.MonitorDataModel(jobject);
+            Hub.SendSNMPData(JObject.FromObject(monitor));
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json.Linq;
+using SNMPMonitor.PresentationLayer.Models;
 
 namespace SNMPMonitor.PresentationLayer.Hubs
 {
@@ -27,6 +28,7 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         }
         public void SendSNMPData(JObject dataToShow)
         {
+            MonitorDataModel model = new MonitorDataModel();
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             context.Clients.Group(".1.3.2.14.23").receiveData(dataToShow);
         }
