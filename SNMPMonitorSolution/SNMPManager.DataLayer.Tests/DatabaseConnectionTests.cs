@@ -8,7 +8,6 @@ namespace SNMPManager.DataLayer.Tests
     [TestClass]
     public class DatabaseConnectionTests
     {
-        private DatabaseSettings databaseSettingsTest;
         DatabaseConnection databaseConnection;
 
         [TestInitialize]
