@@ -27,7 +27,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             SNMPDataHub Hub = new SNMPDataHub();
             JObject jobject = JObject.Parse(param);
             Models.MonitorDataModel monitor = new Models.MonitorDataModel(jobject);
-            Hub.SendSNMPData(JObject.FromObject(monitor));
+            Hub.SendSNMPData(monitor);
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
     }

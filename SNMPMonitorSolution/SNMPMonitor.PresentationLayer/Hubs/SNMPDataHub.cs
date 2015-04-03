@@ -20,17 +20,10 @@ namespace SNMPMonitor.PresentationLayer.Hubs
             Random rnd = new Random();
             context.Clients.Group(".1.3.2.14.23").receiveData(rnd.Next(100));
         }
-        [Obsolete]
-        public void SendSNMPData(string dataToShow)
+        public void SendSNMPData(MonitorDataModel dataToShow)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            context.Clients.Group(".1.3.2.14.23").receiveData(dataToShow);
-        }
-        public void SendSNMPData(JObject dataToShow)
-        {
-            MonitorDataModel model = new MonitorDataModel();
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            context.Clients.Group(".1.3.2.14.23").receiveData(dataToShow);
+            context.Clients.Group("Agent_" + dataToShow.AgentID).receiveData(JObject.FromObject(dataToShow));
         }
 
         public Task JoinDataGroup(string groupName)
