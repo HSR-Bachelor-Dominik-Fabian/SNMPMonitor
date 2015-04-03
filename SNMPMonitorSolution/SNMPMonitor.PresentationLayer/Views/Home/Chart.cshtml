@@ -21,10 +21,32 @@
         <script src="~/Scripts/exporting.js"></script>
         <script type="text/javascript">
             $(function () {
-                $('#button').click(function () {
-                    //add something to the chart
-                    appendPoint();
+                var notifications = $.connection.snmpDataHub;
+                // Create a function that the hub can call to broadcast messages.
+                notifications.client.receiveData = function (dataValue) {
+                    if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3.1.2.2") {
+                        appendPoint(dataValue);
+                    }
+                };
+
+                // Start the connection.
+                $.connection.hub.start().done(function () {
+
+                    notifications.server.joinDataGroup("Agent_1");
+
+                }).fail(function (e) {
+                    alert(e);
                 });
+
+                //$('#button').click(function () {
+                //    //add something to the chart
+
+                //    var myJSON = {
+                //        "timestamp": "12:00:00",
+                //        "value": 15
+                //    }
+                //    appendPoint(myJSON);
+                //});
 
                 chart = new Highcharts.Chart({
                     chart: {
@@ -40,7 +62,9 @@
                     yAxis: {
                         title: {
                             text: 'in %'
-                        }
+                        },
+                        min: 0,
+                        max: 100
                     },
                     exporting: {
                         enabled: false
@@ -56,24 +80,20 @@
                     }]
                 });
 
-                function appendPoint() {
+                function appendPoint(json) {
                     // add new Point
                     var series = chart.series[0];
                     //var y = series.data[0].y + 2;
-                    series.addPoint(myJSON.value, false, true);
+                    series.addPoint(parseInt(json.Result), false, true);
 
                     //add new Timestamp
                     var categories = chart.xAxis[0].categories;
-                    categories.push(myJSON.timestamp);
+                    categories.push(json.MonitorTimestamp);
                     chart.xAxis[0].setCategories(categories, false);
 
                     chart.redraw();
                 }
 
-                var myJSON = {
-                    "timestamp": "12:00:00",
-                    "value" : 15
-                }
 
             });
         </script>
