@@ -10,6 +10,7 @@ namespace SNMPManager.PresentationLayer
     public static class SNMPService
     {
         private static Timer _timer = new Timer();
+        private static SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabase);
 
         public static void Start()
         {
@@ -30,8 +31,6 @@ namespace SNMPManager.PresentationLayer
 
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            string connectionString = Properties.Settings.Default.ProdDatabase;
-            SNMPController controller = new SNMPController(connectionString);
             controller.SaveSNMPDataFromAgentsToDatabase();
         }
     }

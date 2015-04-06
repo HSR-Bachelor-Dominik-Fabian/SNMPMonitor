@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="DatabaseConnectionManager.cs" />
     <Compile Include="DatabaseSettings.cs" />
     <Compile Include="Models\AgentModel.cs" />
     <Compile Include="Models\MonitoringTypeModel.cs" />

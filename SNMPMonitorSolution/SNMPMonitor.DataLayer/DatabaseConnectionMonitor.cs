@@ -8,13 +8,13 @@ using SNMPMontor.DataLayer;
 
 namespace SNMPMonitor.DataLayer
 {
-    public class DatabaseConnection
+    public class DatabaseConnectionMonitor
     {
         private SqlConnection _myConnection;
         private DatabaseSettings _databaseSettings;
         private readonly string _connectionString;
 
-        public DatabaseConnection(string connectionString)
+        public DatabaseConnectionMonitor(string connectionString)
         {
             _connectionString = connectionString;
             EstablishSQLConnection();
@@ -108,38 +108,23 @@ namespace SNMPMonitor.DataLayer
             return myReader;
         }
 
-        public void SaveMonitorDataToDatabase(AgentModel agent, String monitoringTypeNrString, String result)
-        {
-            try
-            {
-                _myConnection.Open();
-
-                SqlCommand getMoniTypeNrCommand = new SqlCommand("SELECT * FROM MonitoringType WHERE ObjectID = '" + monitoringTypeNrString + "'", _myConnection);
-                //SqlParameter sp = new SqlParameter("monitoringTypeNrString", monitoringTypeNrString);
-                //getMoniTypeNrCommand.Parameters.Add(sp);
-                SqlDataReader myReader = getMoniTypeNrCommand.ExecuteReader();
-                myReader.Read();
-                int monitoringTypeNr = (int)myReader["MonitoringTypeNr"];
-                myReader.Close();
-
-                SqlCommand myCommand = new SqlCommand("INSERT INTO MonitorData(Result, AgentNr, MonitoringTypeNr) VALUES('" + result + "', '" + agent.AgentNr + "', '" + monitoringTypeNr + "')", _myConnection);
-                myCommand.ExecuteNonQuery();
-                _myConnection.Close();
-            }
-            catch (Exception e)
-            {
-                _myConnection.Close();
-                Console.WriteLine(e.ToString());
-            }
-        }
-
         public void AddAgentToDatabase(AgentModel agent)
         {
             try
             {
                 _myConnection.Open();
 
-                SqlCommand saveAgentCommand = new SqlCommand("INSERT INTO Agent(AgentNr, Name, IPAddress, Port, TypeNr) VALUES('" + agent.AgentNr + "', '" + agent.Name + "', '" + agent.IPAddress + "', '" + agent.Port + "', '" + agent.TypeNr +  "')", _myConnection);
+                SqlCommand saveAgentCommand = new SqlCommand("INSERT INTO Agent(AgentNr, Name, IPAddress, Port, TypeNr) VALUES(@agentNr, @name, @iPAddress, @port, @typeNr)", _myConnection);
+                SqlParameter paramAgentNr = new SqlParameter("@agentNr", agent.AgentNr);
+                SqlParameter paramName = new SqlParameter("@name", agent.Name);
+                SqlParameter paramIPAddress = new SqlParameter("@iPAddress", agent.IPAddress);
+                SqlParameter paramPort = new SqlParameter("@port", agent.Port);
+                SqlParameter paramTypeNr = new SqlParameter("@typeNr", agent.TypeNr);
+                saveAgentCommand.Parameters.Add(paramAgentNr);
+                saveAgentCommand.Parameters.Add(paramName);
+                saveAgentCommand.Parameters.Add(paramIPAddress);
+                saveAgentCommand.Parameters.Add(paramPort);
+                saveAgentCommand.Parameters.Add(paramTypeNr);
                 saveAgentCommand.ExecuteNonQuery();
 
                 _myConnection.Close();
@@ -151,13 +136,19 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
-        public void AddAgentToDatabaseForDemo(AgentModel agent)
+        public void AddAgentToDatabaseForDemo(string name, string iPAddress, int port)
         {
             try
             {
                 _myConnection.Open();
 
-                SqlCommand saveAgentCommand = new SqlCommand("EXEC saveAgentForDemo @Name = '" + agent.Name + "', @IPAddress = '" + agent.IPAddress + "', @Port = " + agent.Port ,_myConnection);
+                SqlCommand saveAgentCommand = new SqlCommand("EXEC saveAgentForDemo @Name = @name, @IPAddress = @iPAddress, @Port = @port" ,_myConnection);
+                SqlParameter paramName = new SqlParameter("@name", name);
+                SqlParameter paramIP = new SqlParameter("@iPAddress", iPAddress);
+                SqlParameter paramPort = new SqlParameter("@port", port);
+                saveAgentCommand.Parameters.Add(paramName);
+                saveAgentCommand.Parameters.Add(paramIP);
+                saveAgentCommand.Parameters.Add(paramPort);
                 saveAgentCommand.ExecuteNonQuery();
 
                 _myConnection.Close();

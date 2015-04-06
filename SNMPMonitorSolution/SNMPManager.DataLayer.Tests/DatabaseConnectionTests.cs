@@ -8,12 +8,12 @@ namespace SNMPManager.DataLayer.Tests
     [TestClass]
     public class DatabaseConnectionTests
     {
-        DatabaseConnection databaseConnection;
+        DatabaseConnectionManager databaseConnection;
 
         [TestInitialize]
         public void TestSetup()
         {
-            databaseConnection = new DatabaseConnection(Properties.Settings.Default.TestDatabase);
+            databaseConnection = new DatabaseConnectionManager(Properties.Settings.Default.TestDatabase);
 
             List<AgentModel> agents = databaseConnection.GetAgentsFromDatabase();
             
