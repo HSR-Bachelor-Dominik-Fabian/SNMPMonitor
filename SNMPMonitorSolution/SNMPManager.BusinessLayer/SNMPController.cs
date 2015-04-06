@@ -18,14 +18,8 @@ namespace SNMPManager.BusinessLayer
             _connectionString = connectionString;
         }
 
-        public static void Main()
+        public void SaveSNMPDataFromAgentsToDatabase()
         {
-            SaveSNMPDataFromAgentsToDatabase();
-        }
-
-        public static void SaveSNMPDataFromAgentsToDatabase()
-        {
-            string _connectionString = "Data Source=152.96.56.75,40003;Initial Catalog=SNMPMonitor;Persist Security Info=True;User ID=Manager;Password=HSR-00228866";
             DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
             List<AgentModel> AgentList = connection.GetAgentsFromDatabase();
 
@@ -52,15 +46,12 @@ namespace SNMPManager.BusinessLayer
                 {
                     if (result.Pdu.ErrorStatus != 0)
                     {
-                        Console.WriteLine("Error in SNMP reply. Error {0} index {1}",
-                        result.Pdu.ErrorStatus,
-                        result.Pdu.ErrorIndex);
+                        Console.WriteLine("Error in SNMP reply. Error {0} index {1}", result.Pdu.ErrorStatus, result.Pdu.ErrorIndex);
                     }
                     else
                     {
                         for (int i = 0; i < result.Pdu.VbList.Count(); i++)
                         {
-                            Console.WriteLine(result.Pdu.VbList[i].Oid.ToString() + ", " + result.Pdu.VbList[i].Value.ToString());
                             connection.SaveMonitorDataToDatabase(agent, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
                         }
                     }
