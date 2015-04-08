@@ -30,10 +30,15 @@ namespace SNMPManager.DataLayer
         {
             List<AgentModel> agentList = new List<AgentModel>();
             _myConnection.Open();
-            SqlDataReader mMyReader = GetDataFromDatabase("Agent");
-            while(mMyReader.Read())
+
+            SqlCommand getMonitoringTypesForAgent = new SqlCommand("getAgents", _myConnection);
+            getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+
+            SqlDataReader myAgentsSet = getMonitoringTypesForAgent.ExecuteReader();
+
+            while (myAgentsSet.Read())
             {
-                agentList.Add(new AgentModel((int) mMyReader["AgentNr"], mMyReader["Name"].ToString(), mMyReader["IPAddress"].ToString(), (int) mMyReader["TypeNr"], (int) mMyReader["Port"]));
+                agentList.Add(new AgentModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"]));
             }
             _myConnection.Close();
             return agentList;
@@ -67,34 +72,29 @@ namespace SNMPManager.DataLayer
 
         public List<TypeModel> GetTypesFromDatabase()
         {
-            _myConnection.Open();
-
             List<TypeModel> typeList = new List<TypeModel>();
-            SqlDataReader myReader = GetDataFromDatabase("Type");
-            while(myReader.Read())
-            {
-                typeList.Add(new TypeModel((int) myReader["TypeNr"], myReader["Name"].ToString()));
-            }
-            _myConnection.Close();
-            return typeList;
-        }
-
-        private SqlDataReader GetDataFromDatabase(String DatabaseName)
-        {
-            SqlDataReader myReader = null;
             try
             {
-                SqlCommand selectCommand = new SqlCommand("SELECT * FROM " + DatabaseName, _myConnection);
-                //selectCommand.Parameters.Add(new SqlParameter("@databaseName", DatabaseName));
-                myReader = selectCommand.ExecuteReader();
+                _myConnection.Open();
+
+                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getTypes", _myConnection);
+                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+
+                SqlDataReader myTypesSet = getMonitoringTypesForAgent.ExecuteReader();
+
+                while (myTypesSet.Read())
+                {
+                    typeList.Add(new TypeModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
+                }
+                _myConnection.Close();
             }
             catch (Exception e)
             {
+                _myConnection.Close();
                 Console.WriteLine(e.StackTrace.ToString());
             }
-            return myReader;
+            return typeList;
         }
-
 
         public void SaveMonitorDataToDatabase(AgentModel agent, String monitoringTypeNr, String result)
         {
