@@ -26,9 +26,9 @@ namespace SNMPMonitor.DataLayer
             _myConnection = new SqlConnection(_databaseSettings.ConnectionString);
         }
 
-        public List<AgentModel> GetAgentsFromDatabase()
+        public List<AgentDataModel> GetAgentsFromDatabase()
         {
-            List<AgentModel> agentList = new List<AgentModel>();
+            List<AgentDataModel> agentList = new List<AgentDataModel>();
             try
             {
                 _myConnection.Open();
@@ -40,7 +40,7 @@ namespace SNMPMonitor.DataLayer
 
                 while (myAgentsSet.Read())
                 {
-                    agentList.Add(new AgentModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"]));
+                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
                 }
                 _myConnection.Close();
             }
@@ -52,9 +52,9 @@ namespace SNMPMonitor.DataLayer
             return agentList;
         }
         
-        public List<MonitoringTypeModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
+        public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
         {
-            List<MonitoringTypeModel> monitoringTypeList = new List<MonitoringTypeModel>();
+            List<MonitoringTypeDataModel> monitoringTypeList = new List<MonitoringTypeDataModel>();
             try
             {
                 _myConnection.Open();
@@ -67,7 +67,7 @@ namespace SNMPMonitor.DataLayer
 
                 while (myMonitoringTypeSet.Read())
                 {
-                    monitoringTypeList.Add(new MonitoringTypeModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
+                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
                 }
                 _myConnection.Close();
             }
@@ -79,9 +79,9 @@ namespace SNMPMonitor.DataLayer
             return monitoringTypeList;
         }
 
-        public List<TypeModel> GetTypesFromDatabase()
+        public List<TypeDataModel> GetTypesFromDatabase()
         {
-            List<TypeModel> typeList = new List<TypeModel>();
+            List<TypeDataModel> typeList = new List<TypeDataModel>();
             try
             {
                 _myConnection.Open();
@@ -93,7 +93,7 @@ namespace SNMPMonitor.DataLayer
 
                 while (myTypesSet.Read())
                 {
-                    typeList.Add(new TypeModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
+                    typeList.Add(new TypeDataModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
                 }
                 _myConnection.Close();
             }
@@ -105,18 +105,20 @@ namespace SNMPMonitor.DataLayer
             return typeList;
         }
 
-        public void AddAgentToDatabase(AgentModel agent)
+        public void AddAgentToDatabase(AgentDataModel agent)
         {
             try
             {
                 _myConnection.Open();
 
-                SqlCommand saveAgentCommand = new SqlCommand("INSERT INTO Agent(AgentNr, Name, IPAddress, Port, TypeNr) VALUES(@agentNr, @name, @iPAddress, @port, @typeNr)", _myConnection);
-                saveAgentCommand.Parameters.Add(new SqlParameter("@agentNr", agent.AgentNr));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@name", agent.Name));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@iPAddress", agent.IPAddress));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@port", agent.Port));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@typeNr", agent.TypeNr));
+                SqlCommand saveAgentCommand = new SqlCommand("addAgent", _myConnection);
+                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@Name", agent.Name));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@IPAddress", agent.IPAddress));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@Port", agent.Port));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@TypeNr", agent.TypeNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@StatusNr", agent.Status));
                 saveAgentCommand.ExecuteNonQuery();
 
                 _myConnection.Close();

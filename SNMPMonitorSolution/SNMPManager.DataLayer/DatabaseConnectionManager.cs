@@ -38,7 +38,7 @@ namespace SNMPManager.DataLayer
 
             while (myAgentsSet.Read())
             {
-                agentList.Add(new AgentModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"]));
+                agentList.Add(new AgentModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
             }
             _myConnection.Close();
             return agentList;
@@ -125,12 +125,14 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand saveAgentCommand = new SqlCommand("INSERT INTO Agent(AgentNr, Name, IPAddress, Port, TypeNr) VALUES(@agentNr, @name, @iPAddress, @port, @typeNr)", _myConnection);
-                saveAgentCommand.Parameters.Add(new SqlParameter("@agentNr", agent.AgentNr));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@name", agent.Name));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@iPAddress", agent.IPAddress));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@port", agent.Port));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@typeNr", agent.TypeNr));
+                SqlCommand saveAgentCommand = new SqlCommand("addAgent", _myConnection);
+                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@Name", agent.Name));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@IPAddress", agent.IPAddress));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@Port", agent.Port));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@TypeNr", agent.TypeNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@StatusNr", agent.Status));
                 saveAgentCommand.ExecuteNonQuery();
 
                 _myConnection.Close();

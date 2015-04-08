@@ -6,21 +6,23 @@ using System.Threading.Tasks;
 
 namespace SNMPMontor.DataLayer
 {
-    public class AgentModel
+    public class AgentDataModel
     {
         private readonly int _agentNr;
         private readonly String _name;
         private readonly String _iPAddress;
         private readonly int _typeNr;
         private readonly int _port;
+        private readonly int _status;
 
-        public AgentModel(int agentNr, String name, String iPAddress, int typeNr, int port)
+        public AgentDataModel(int agentNr, String name, String iPAddress, int typeNr, int port, int status)
         {
             _agentNr = agentNr;
             _name = name;
             _iPAddress = iPAddress;
             _typeNr = typeNr;
             _port = port;
+            _status = status;
         }
 
         public int AgentNr
@@ -60,6 +62,14 @@ namespace SNMPMontor.DataLayer
             get
             {
                 return _port;
+            }
+        }
+
+        public int Status
+        {
+            get
+            {
+                return _status;
             }
         }
 

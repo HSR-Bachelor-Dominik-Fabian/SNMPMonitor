@@ -41,9 +41,9 @@
   <ItemGroup>
     <Compile Include="DatabaseConnectionMonitor.cs" />
     <Compile Include="DatabaseSettings.cs" />
-    <Compile Include="Models\AgentModel.cs" />
-    <Compile Include="Models\MonitoringTypeModel.cs" />
-    <Compile Include="Models\TypeModel.cs" />
+    <Compile Include="DataModels\AgentDataModel.cs" />
+    <Compile Include="DataModels\MonitoringTypeDataModel.cs" />
+    <Compile Include="DataModels\TypeDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

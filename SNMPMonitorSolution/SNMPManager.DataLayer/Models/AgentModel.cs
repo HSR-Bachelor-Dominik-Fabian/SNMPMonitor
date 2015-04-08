@@ -13,14 +13,16 @@ namespace SNMPManager.DataLayer
         private readonly String _iPAddress;
         private readonly int _typeNr;
         private readonly int _port;
+        private readonly int _status;
 
-        public AgentModel(int agentNr, String name, String iPAddress, int typeNr, int port)
+        public AgentModel(int agentNr, String name, String iPAddress, int typeNr, int port, int status)
         {
             _agentNr = agentNr;
             _name = name;
             _iPAddress = iPAddress;
             _typeNr = typeNr;
             _port = port;
+            _status = status;
         }
 
         public int AgentNr
@@ -60,6 +62,14 @@ namespace SNMPManager.DataLayer
             get
             {
                 return _port;
+            }
+        }
+
+        public int Status
+        {
+            get
+            {
+                return _status;
             }
         }
 
