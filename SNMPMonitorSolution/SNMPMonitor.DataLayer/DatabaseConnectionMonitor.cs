@@ -46,8 +46,9 @@ namespace SNMPMonitor.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand getMonitoringTypesForAgent = new SqlCommand("EXEC getMonitoringTypesForAgent @AgentNr = @agentNr", _myConnection);
-                getMonitoringTypesForAgent.Parameters.Add(new SqlParameter("@agentNr", agentNr));
+                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getMonitoringTypesForAgent", _myConnection);
+                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+                getMonitoringTypesForAgent.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
 
                 SqlDataReader myMonitoringTypeSet = getMonitoringTypesForAgent.ExecuteReader();
 
@@ -123,10 +124,11 @@ namespace SNMPMonitor.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand saveAgentCommand = new SqlCommand("EXEC saveAgentForDemo @Name = @name, @IPAddress = @iPAddress, @Port = @port" ,_myConnection);
-                SqlParameter paramName = new SqlParameter("@name", name);
-                SqlParameter paramIP = new SqlParameter("@iPAddress", iPAddress);
-                SqlParameter paramPort = new SqlParameter("@port", port);
+                SqlCommand saveAgentCommand = new SqlCommand("saveAgentForDemo" ,_myConnection);
+                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlParameter paramName = new SqlParameter("@Name", name);
+                SqlParameter paramIP = new SqlParameter("@IPAddress", iPAddress);
+                SqlParameter paramPort = new SqlParameter("@Port", port);
                 saveAgentCommand.Parameters.Add(paramName);
                 saveAgentCommand.Parameters.Add(paramIP);
                 saveAgentCommand.Parameters.Add(paramPort);
@@ -135,6 +137,24 @@ namespace SNMPMonitor.DataLayer
                 _myConnection.Close();
             }
             catch (Exception e)
+            {
+                _myConnection.Close();
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        public void GetSummaryOfAgent(int agentNr)
+        {
+            try
+            {
+                _myConnection.Open();
+                SqlCommand getSummaryOfAgentCommand = new SqlCommand("getSummaryForAgent", _myConnection);
+                getSummaryOfAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                getSummaryOfAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+                SqlDataReader summarySetOfAgent = getSummaryOfAgentCommand.ExecuteReader();
+                _myConnection.Close();
+
+            } catch (Exception e)
             {
                 _myConnection.Close();
                 Console.WriteLine(e.ToString());

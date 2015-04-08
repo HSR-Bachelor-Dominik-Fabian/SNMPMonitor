@@ -46,8 +46,9 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand getMonitoringTypesForAgent = new SqlCommand("EXEC getMonitoringTypesForAgent @AgentNr = @agentNr", _myConnection);
-                getMonitoringTypesForAgent.Parameters.Add(new SqlParameter("@agentNr", agentNr));
+                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getMonitoringTypesForAgent", _myConnection);
+                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+                getMonitoringTypesForAgent.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
 
                 SqlDataReader myMonitoringTypeSet = getMonitoringTypesForAgent.ExecuteReader();
 
@@ -101,10 +102,11 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand saveMonitorDataCommand = new SqlCommand("EXEC saveMonitorData @MonitoringTypeNr = @monitoringTypeNr, @Result = @result, @AgentNr = @agentNr", _myConnection);
-                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@monitoringTypeNr", monitoringTypeNr));
-                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@result", result));
-                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@agentNr", agent.AgentNr));
+                SqlCommand saveMonitorDataCommand = new SqlCommand("saveMonitorData", _myConnection);
+                saveMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@MonitoringTypeNr", monitoringTypeNr));
+                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@Result", result));
+                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
 
                 saveMonitorDataCommand.ExecuteNonQuery();
                 _myConnection.Close();
