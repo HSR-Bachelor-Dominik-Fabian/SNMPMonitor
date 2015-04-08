@@ -143,6 +143,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MonitorTemplateController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -254,6 +255,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\doT.min.js" />
     <Content Include="Scripts\exporting.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -284,6 +286,8 @@
     <Content Include="Views\Home\Chat.cshtml" />
     <Content Include="Views\Home\table.cshtml" />
     <Content Include="Views\Home\Chart.cshtml" />
+    <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_3_3_1_2_2.cshtml" />
+    <Content Include="Views\MonitorTemplate\Monitor_Agent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

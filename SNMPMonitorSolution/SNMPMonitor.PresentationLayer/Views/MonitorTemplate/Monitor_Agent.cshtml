@@ -1,0 +1,23 @@
+﻿<div>
+    <h3>Agent Nr. {{=it.AgentNr}}</h3>
+    {{~it.MonitorTests:value}}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var ObjNr = '{{=value.ObjectNrReplaced}}';
+                $.ajax({
+                    url: "MonitorTemplate/Monitor_" + ObjNr,
+                    method: "GET",
+                    success: function (data) {
+                        var monitor = doT.template(data);
+                        var jsonForMonitor = { "AgentNr": {{=it.AgentNr}}};
+                        $("#Monitor{{=it.AgentNr}}_{{=value.ObjectNrReplaced}}").html(monitor(jsonForMonitor));
+                    }
+                });
+            });
+        </script>
+        <div id="Monitor{{=it.AgentNr}}_{{=value.ObjectNrReplaced}}">
+
+        </div>
+    {{~}}
+</div>
+

@@ -9,65 +9,37 @@
 <body>
     <h1>Broadcast Realtime SQL data using SignalR</h1>
     <div id="dataContainer">
-        <button id="testButton">Recieve Data</button>
     </div>
     @section scripts{
-        <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-        <script src="~/signalr/hubs"></script>
         <script type="text/javascript">
             $(document).ready(function () {
-                // Declare a proxy to reference the hub.
-                var notifications = $.connection.snmpDataHub;
-                // Create a function that the hub can call to broadcast messages.
-                notifications.client.receiveData = function (dataValue) {
-                    $("#dataContainer").append("<p>" + dataValue + "</p>");
+                var def = {
+                    loadfile: function (url) {
+                        var temp;
+                        $.ajax({
+                            url: url + a,
+                            type: 'get',
+                            async: false,
+                            success: function (html) {
+                                temp = html;
+                            }
+                        });
+
+                        return temp;
+                    }
                 };
-                
-                // Start the connection.
-                $.connection.hub.start().done(function () {
 
-                    notifications.server.joinDataGroup("Agent_1");
-
-                    $("#testButton").click(function () {
-                        var notifications = $.connection.snmpDataHub;
-                        notifications.server.sendSNMPData();
-                    });
-                }).fail(function (e) {
-                    alert(e);
-                });
-                
-                //$.connection.hub.start();
+                $.ajax({
+                    url: "@Url.Action("Monitor_Agent","MonitorTemplate")",
+                    method: "GET",
+                    success: function (data) {
+                        var monitorTest = doT.template(data,undefined,def);
+                        var json = { "AgentNr": 1, "MonitorTests": [{ "ObjectNrReplaced": "1_3_6_1_2_1_25_3_3_1_2_2" }]};
+                        $("#dataContainer").html(monitorTest(json));
+                    }
+                })
             });
+
         </script>
     }
 </body>
-
- <!--
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
--->

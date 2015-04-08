@@ -20,6 +20,11 @@ namespace SNMPMonitor.PresentationLayer
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/Scripts/js").Include("~/Scripts/doT.min.js",
+                "~/Scripts/jquery.signalR-2.2.0.min.js",
+                "~/Scripts/highcharts.js",
+                "~/Scripts/exporting.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
                       "~/Content/site.css"));
         }
