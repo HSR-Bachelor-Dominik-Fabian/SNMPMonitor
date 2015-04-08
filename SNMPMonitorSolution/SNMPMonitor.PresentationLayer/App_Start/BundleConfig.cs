@@ -20,8 +20,7 @@ namespace SNMPMonitor.PresentationLayer
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
                       "~/Content/site.css"));
         }
     }
