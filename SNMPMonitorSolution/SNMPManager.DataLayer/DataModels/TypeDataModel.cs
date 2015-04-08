@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SNMPManager.DataLayer
 {
-    public class TypeModel
+    public class TypeDataModel
     {
         private int _typeNr;
         private String _name;
 
-        public TypeModel(int typeNr, String name)
+        public TypeDataModel(int typeNr, String name)
         {
             _typeNr = typeNr;
             _name = name;

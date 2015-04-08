@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SNMPManager.DataLayer
 {
-    public class MonitoringTypeModel
+    public class MonitoringTypeDataModel
     {
         private int _monitoringTypeNr;
         private String _description;
         private String _objectID;
 
-        public MonitoringTypeModel(int monitoringTypeNr, String description, String objectID)
+        public MonitoringTypeDataModel(int monitoringTypeNr, String description, String objectID)
         {
             _monitoringTypeNr = monitoringTypeNr;
             _description = description;

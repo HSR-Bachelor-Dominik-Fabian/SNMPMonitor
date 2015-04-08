@@ -26,9 +26,9 @@ namespace SNMPManager.DataLayer
             _myConnection = new SqlConnection(_databaseSettings.ConnectionString);
         }
 
-        public List<AgentModel> GetAgentsFromDatabase()
+        public List<AgentDataModel> GetAgentsFromDatabase()
         {
-            List<AgentModel> agentList = new List<AgentModel>();
+            List<AgentDataModel> agentList = new List<AgentDataModel>();
             _myConnection.Open();
 
             SqlCommand getMonitoringTypesForAgent = new SqlCommand("getAgents", _myConnection);
@@ -38,15 +38,15 @@ namespace SNMPManager.DataLayer
 
             while (myAgentsSet.Read())
             {
-                agentList.Add(new AgentModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
+                agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
             }
             _myConnection.Close();
             return agentList;
         }
         
-        public List<MonitoringTypeModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
+        public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
         {
-            List<MonitoringTypeModel> monitoringTypeList = new List<MonitoringTypeModel>();
+            List<MonitoringTypeDataModel> monitoringTypeList = new List<MonitoringTypeDataModel>();
             try
             {
                 _myConnection.Open();
@@ -59,7 +59,7 @@ namespace SNMPManager.DataLayer
 
                 while (myMonitoringTypeSet.Read())
                 {
-                    monitoringTypeList.Add(new MonitoringTypeModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
+                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
                 }
                 _myConnection.Close();
             } catch (Exception e)
@@ -70,9 +70,9 @@ namespace SNMPManager.DataLayer
             return monitoringTypeList;
         }
 
-        public List<TypeModel> GetTypesFromDatabase()
+        public List<TypeDataModel> GetTypesFromDatabase()
         {
-            List<TypeModel> typeList = new List<TypeModel>();
+            List<TypeDataModel> typeList = new List<TypeDataModel>();
             try
             {
                 _myConnection.Open();
@@ -84,7 +84,7 @@ namespace SNMPManager.DataLayer
 
                 while (myTypesSet.Read())
                 {
-                    typeList.Add(new TypeModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
+                    typeList.Add(new TypeDataModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
                 }
                 _myConnection.Close();
             }
@@ -96,7 +96,7 @@ namespace SNMPManager.DataLayer
             return typeList;
         }
 
-        public void SaveMonitorDataToDatabase(AgentModel agent, String monitoringTypeNr, String result)
+        public void SaveMonitorDataToDatabase(AgentDataModel agent, String monitoringTypeNr, String result)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace SNMPManager.DataLayer
         }
 
 
-        public void AddAgentToDatabase(AgentModel agent)
+        public void AddAgentToDatabase(AgentDataModel agent)
         {
             try
             {

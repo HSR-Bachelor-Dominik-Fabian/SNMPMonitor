@@ -15,10 +15,10 @@ namespace SNMPManager.DataLayer.Tests
         {
             databaseConnection = new DatabaseConnectionManager(Properties.Settings.Default.TestDatabase);
 
-            List<AgentModel> agents = databaseConnection.GetAgentsFromDatabase();
+            List<AgentDataModel> agents = databaseConnection.GetAgentsFromDatabase();
             
             if(agents.Count == 0) {
-                AgentModel agent = new AgentModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", 1, 40003);
+                AgentDataModel agent = new AgentDataModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", 1, 40003);
                 databaseConnection.AddAgentToDatabase(agent);
             }
         }

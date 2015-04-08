@@ -21,21 +21,21 @@ namespace SNMPManager.BusinessLayer
         public void SaveSNMPDataFromAgentsToDatabase()
         {
             DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
-            List<AgentModel> AgentList = connection.GetAgentsFromDatabase();
+            List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
 
             OctetString community = new OctetString("public");
             AgentParameters param = new AgentParameters(community);
             param.Version = SnmpVersion.Ver2;
             
-            foreach (AgentModel agent in AgentList)
+            foreach (AgentDataModel agent in AgentList)
             {
                 IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
                 UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
 
-                List<MonitoringTypeModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgentNr);
+                List<MonitoringTypeDataModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgentNr);
                 
                 Pdu pdu = new Pdu(PduType.Get);
-                foreach (MonitoringTypeModel MonitoringType in MonitoringTypeList)
+                foreach (MonitoringTypeDataModel MonitoringType in MonitoringTypeList)
                 {
                     pdu.VbList.Add(MonitoringType.ObjectID);
                 }
