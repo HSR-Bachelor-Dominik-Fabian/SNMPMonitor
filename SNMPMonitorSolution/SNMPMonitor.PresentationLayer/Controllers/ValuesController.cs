@@ -8,12 +8,5 @@ namespace SNMPMonitor.PresentationLayer.Controllers
 {
     public class ValuesController : Controller
     {
-
-        SNMPDataRepo repo = new SNMPDataRepo();
-        
-        public IEnumerable<SNMPData> Get()
-        {
-            return repo.GetData();
-        }
 	}
 }

@@ -148,7 +148,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\SNMPDataHub.cs" />
     <Compile Include="Models\MonitorDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,8 +156,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="SNMPData.cs" />
-    <Compile Include="SNMPDataRepo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -279,13 +276,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\Chat.cshtml" />
-    <Content Include="Views\Home\table.cshtml" />
-    <Content Include="Views\Home\Chart.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_3_3_1_2_8.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Agent.cshtml" />
   </ItemGroup>
