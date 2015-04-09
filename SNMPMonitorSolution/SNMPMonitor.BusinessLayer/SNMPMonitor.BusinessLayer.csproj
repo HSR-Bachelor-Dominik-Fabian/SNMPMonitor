@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{11C58037-8B5C-41D1-BC66-9D5D40014D00}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SNMPMonitor.BusinessLayer</RootNamespace>
     <AssemblyName>SNMPMonitor.BusinessLayer</AssemblyName>

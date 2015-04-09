@@ -31,6 +31,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SNMPMonitor.Database", "SNM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPMonitor.DataLayer.Tests", "SNMPMonitor.DataLayer.Tests\SNMPMonitor.DataLayer.Tests.csproj", "{E7AAD793-6600-4744-9726-57F90732BAF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPMonitor.BusinessLayer.Tests", "SNMPMonitor.BusinessLayer.Tests\SNMPMonitor.BusinessLayer.Tests.csproj", "{F6A17095-9FBE-4A68-A432-52F9B3C7EDA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{E7AAD793-6600-4744-9726-57F90732BAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7AAD793-6600-4744-9726-57F90732BAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7AAD793-6600-4744-9726-57F90732BAF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6A17095-9FBE-4A68-A432-52F9B3C7EDA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6A17095-9FBE-4A68-A432-52F9B3C7EDA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6A17095-9FBE-4A68-A432-52F9B3C7EDA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6A17095-9FBE-4A68-A432-52F9B3C7EDA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,5 +110,6 @@ Global
 		{E5428C67-1747-4409-B9B6-C2820CD9CF7E} = {3BF7B6BC-A45B-4C81-8D04-4BC18BF9497F}
 		{D75F0F23-6E68-4BDF-B5A2-E32C96C8A5CF} = {17CA8779-D87B-42A5-A987-6B36C7A18044}
 		{E7AAD793-6600-4744-9726-57F90732BAF5} = {17CA8779-D87B-42A5-A987-6B36C7A18044}
+		{F6A17095-9FBE-4A68-A432-52F9B3C7EDA7} = {17CA8779-D87B-42A5-A987-6B36C7A18044}
 	EndGlobalSection
 EndGlobal
