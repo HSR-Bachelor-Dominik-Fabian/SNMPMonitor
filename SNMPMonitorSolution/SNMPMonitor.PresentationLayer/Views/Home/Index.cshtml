@@ -34,7 +34,7 @@
                     method: "GET",
                     success: function (data) {
                         var monitorTest = doT.template(data,undefined,def);
-                        var json = { "AgentNr": 1, "MonitorTests": [{ "ObjectNrReplaced": "1_3_6_1_2_1_25_3_3_1_2_2" }]};
+                        var json = { "AgentNr": 1, "MonitorTests": [{ "ObjectNrReplaced": "1_3_6_1_2_1_25_3_3_1_2_8" }]};
                         $("#dataContainer").html(monitorTest(json));
                     }
                 })

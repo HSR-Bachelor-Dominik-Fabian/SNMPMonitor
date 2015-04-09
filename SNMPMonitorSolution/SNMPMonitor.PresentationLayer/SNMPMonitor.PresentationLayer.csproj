@@ -286,7 +286,7 @@
     <Content Include="Views\Home\Chat.cshtml" />
     <Content Include="Views\Home\table.cshtml" />
     <Content Include="Views\Home\Chart.cshtml" />
-    <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_3_3_1_2_2.cshtml" />
+    <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_3_3_1_2_8.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Agent.cshtml" />
   </ItemGroup>
   <ItemGroup>

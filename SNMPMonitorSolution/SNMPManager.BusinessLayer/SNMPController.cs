@@ -18,6 +18,14 @@ namespace SNMPManager.BusinessLayer
             _connectionString = connectionString;
         }
 
+        /*
+        public static void Main()
+        {
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabase);
+            controller.SaveSNMPDataFromAgentsToDatabase();
+        }
+        */
+
         public void SaveSNMPDataFromAgentsToDatabase()
         {
             DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);

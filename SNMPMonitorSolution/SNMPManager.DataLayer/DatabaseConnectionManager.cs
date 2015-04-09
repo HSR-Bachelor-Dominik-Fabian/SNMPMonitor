@@ -127,7 +127,6 @@ namespace SNMPManager.DataLayer
 
                 SqlCommand saveAgentCommand = new SqlCommand("addAgent", _myConnection);
                 saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@Name", agent.Name));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@IPAddress", agent.IPAddress));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@Port", agent.Port));

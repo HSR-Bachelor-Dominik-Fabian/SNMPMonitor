@@ -15,7 +15,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         }
 
 
-        public PartialViewResult Monitor_1_3_6_1_2_1_25_3_3_1_2_2()
+        public PartialViewResult Monitor_1_3_6_1_2_1_25_3_3_1_2_8()
         {
             return PartialView();
         }
