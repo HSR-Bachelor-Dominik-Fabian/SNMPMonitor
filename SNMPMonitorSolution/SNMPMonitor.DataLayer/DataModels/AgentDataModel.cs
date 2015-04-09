@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SNMPMontor.DataLayer
+namespace SNMPMonitor.DataLayer
 {
     public class AgentDataModel
     {
