@@ -42,6 +42,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             if (int.TryParse(id, out agentId))
             {
                 List<MonitorData> businessLayerHistory = controller.GetHistoryOfOIDForAgent(agentId, oid);
+                businessLayerHistory.Sort((item1, item2) => item1.Timestamp.CompareTo(item2.Timestamp));
                 history = new HistoryMonitorDataModel(businessLayerHistory);
             }
             else

@@ -63,6 +63,7 @@
                             url: '@Url.Action("HistoryDataForOID","Data")',
                             data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3.1.2.8',
                             async: false,
+                            cache: false,
                             method: 'Get',
                             success: function (data) {
                                 $.each(data.History, function (index, value) {
