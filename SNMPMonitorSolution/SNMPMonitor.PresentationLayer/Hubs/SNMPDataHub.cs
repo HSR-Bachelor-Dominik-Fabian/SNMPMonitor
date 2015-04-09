@@ -18,7 +18,7 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             Random rnd = new Random();
-            context.Clients.Group(".1.3.2.14.23").receiveData(rnd.Next(100));
+            context.Clients.Group("Agent_1").receiveData(rnd.Next(100));
         }
         public void SendSNMPData(MonitorDataModel dataToShow)
         {

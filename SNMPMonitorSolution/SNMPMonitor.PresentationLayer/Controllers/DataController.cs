@@ -16,10 +16,10 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         public HttpStatusCodeResult RowInsertedTrigger()
         {            
             SNMPDataHub Hub = new SNMPDataHub();
-            string param = "{param:[{\"Result\":\"Test123\"},{\"MonitorTimestamp\":\"2015-04-01 15:02:55.177\"},{\"ObjectID\":\"Test123\"},{\"AgentNr\":\"123\"},]}";
+            string param = "{param:[{\"Result\":\"12\"},{\"MonitorTimestamp\":\"2015-04-10 15:02:55.177\"},{\"ObjectID\":\"1.3.6.1.2.1.25.3.3.1.2.8\"},{\"AgentNr\":\"1\"},]}";
             JObject jobject = JObject.Parse(param);
             Models.MonitorDataModel monitor = new Models.MonitorDataModel(jobject);
-            Hub.SendSNMPData();
+            Hub.SendSNMPData(monitor);
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
         [HttpPost]

@@ -1,79 +1,80 @@
 ﻿    <script src="~/signalr/hubs"></script>
     <script type="text/javascript">
-                $(document).ready(function () {
-                    var notifications = $.connection.snmpDataHub;
-                    notifications.client.receiveData = function (dataValue) {
-                        if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3.1.2.8") {
-                            appendPoint(dataValue);
-                        }
-                    };
-
-                    createChart();
-
-                    $.ajax({
-                        url: '@Url.Action("HistoryDataForOID","Data")',
-                        data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3.1.2.8',
-                        async: false,
-                        method: 'Get',
-                        success: function (data) {
-                            alert(data.History[0].Result);
-                        }
-                    });
-
-
-                    $.connection.hub.start().done(function () {
-                        notifications.server.joinDataGroup("Agent_{{=it.AgentNr}}");
-
-                    }).fail(function (e) {
-                        alert(e);
-                    });
-
-                });
-                    
-                function appendPoint(json) {
-                    var series = chart.series[0];
-                    series.addPoint(parseInt(json.Result), false, true);
-                    var categories = chart.xAxis[0].categories;
-                    categories.push(json.MonitorTimestamp);
-                    chart.xAxis[0].setCategories(categories, false);
-
-                    chart.redraw();
+        $(document).ready(function () {
+            var notifications = $.connection.snmpDataHub;
+            notifications.client.receiveData = function (dataValue) {
+                if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3.1.2.8") {
+                    appendPoint(dataValue);
                 }
+            };
 
-                function createChart() {
-                    chart = new Highcharts.Chart({
-                            chart: {
-                                renderTo: 'container',
-                                type: 'line'
-                            },
-                            title: {
-                                text: 'CPU Auslastung'
-                            },
-                            xAxis: {
-                                categories: ['12:00:00', '12:00:05', '12:00:10', '12:00:15', '12:00:20', '12:00:25', '12:00:30', '12:00:35', '12:00:40', '12:00:45', '12:00:50', '12:00:55']
-                            },
-                            yAxis: {
-                                title: {
-                                    text: 'in %'
-                                },
-                                min: 0,
-                                max: 100
-                            },
-                            exporting: {
-                                enabled: false
-                            },
-                            credits: {
-                                enabled: false
-                            },
-                            legend: {
-                                enabled: false
-                            },
-                            series: [{
-                                data: [12, 15, 25, 20, 30, 50, 50, 46, 40, 20, 8, 16]
-                            }]
-                        });
+            createChart();
+
+            $.connection.hub.start().done(function () {
+                notifications.server.joinDataGroup("Agent_{{=it.AgentNr}}");
+
+            }).fail(function (e) {
+                alert(e);
+            });
+
+        });
                     
-                    }
+        function appendPoint(json) {
+            var chart = $("#container").highcharts();
+            var cpuserie = chart.series[0];
+            /*cpuserie.addPoint({ x: new Date(json.MonitorTimestamp), y: parseInt(json.Result) });*/
+            shift = cpuserie.data.length >= 10;
+            cpuserie.addPoint({ x: new Date().getTime(), y: parseInt(json.Result) }, true, shift);
+        }
+
+        function createChart() {
+            $("#container").highcharts({
+                chart: {
+                    type: 'line',
+                    animation: Highcharts.svg
+                },
+                title: {
+                    text: 'CPU Auslastung'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'in %'
+                    },
+                    min: 0,
+                    max: 100
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: "CPU Auslastung",
+                    data: (function () {
+                        var newdata = [];
+                        $.ajax({
+                            url: '@Url.Action("HistoryDataForOID","Data")',
+                            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3.1.2.8',
+                            async: false,
+                            method: 'Get',
+                            success: function (data) {
+                                $.each(data.History, function (index, value) {
+                                    newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: parseInt(value.Result) });
+                                });
+                            }
+                        });
+                        return newdata;
+                    }())
+                }]
+            });     
+        }
     </script>
     <div id="container">
 
