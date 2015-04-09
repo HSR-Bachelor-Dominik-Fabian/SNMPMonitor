@@ -9,9 +9,20 @@ namespace SNMPManager.BusinessLayer.Tests
         [TestMethod]
         public void TestSNMPController()
         {
-            string connectionString = Properties.Settings.Default.TestDatabase;
-            SNMPController controller = new SNMPController(connectionString);
-            controller.SaveSNMPDataFromAgentsToDatabase();
+            bool successfull = false;
+            try
+            {
+                string connectionString = Properties.Settings.Default.TestDatabase;
+                SNMPController controller = new SNMPController(connectionString);
+                controller.SaveSNMPDataFromAgentsToDatabase();
+                successfull = true;
+            }
+            catch (Exception exc)
+            {
+                successfull = false;
+            }
+
+            Assert.IsTrue(successfull);
         }
     }
 }

@@ -70,7 +70,6 @@ namespace SNMPManager.BusinessLayer
                 }
                 
                 target.Close();
-                Console.ReadLine();
             }
         }
     }

@@ -16,7 +16,7 @@ namespace SNMPMonitor.BusinessLayer.Tests
         [TestMethod]
         public void GetMonitoringTypesFromAgentTest()
         {
-            
+            Assert.IsTrue(true);
         }
     }
 }
