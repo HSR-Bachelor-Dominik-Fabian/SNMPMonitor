@@ -22,9 +22,9 @@
         function appendPoint(json) {
             var chart = $("#container").highcharts();
             var cpuserie = chart.series[0];
-            /*cpuserie.addPoint({ x: new Date(json.MonitorTimestamp), y: parseInt(json.Result) });*/
+            
             shift = cpuserie.data.length >= 10;
-            cpuserie.addPoint({ x: new Date().getTime(), y: parseInt(json.Result) }, true, shift);
+            cpuserie.addPoint({ x: new Date(json.MonitorTimestamp), y: parseInt(json.Result) }, true, shift);
         }
 
         function createChart() {

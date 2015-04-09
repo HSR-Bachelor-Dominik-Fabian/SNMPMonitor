@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SNMPMonitor.BusinessLayer;
 using SNMPMonitor.PresentationLayer.Hubs;
 using SNMPMonitor.PresentationLayer.Models;
 using System;
@@ -35,17 +36,18 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         [HttpGet]
         public JsonResult HistoryDataForOID(string id, string oid)
         {
-            List<MonitorDataModel> models = new List<MonitorDataModel>();
-
-            MonitorDataModel temp = new MonitorDataModel();
-            temp.AgentID = 1;
-            temp.MonitorTimestamp = DateTime.Now;
-            temp.ObjectID = "1.3.6.1.2.1.25.3.3.1.2.8";
-            temp.Result = "10";
-            models.Add(temp);
-
-            HistoryMonitorDataModel history = new HistoryMonitorDataModel(models);
-
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            int agentId;
+            HistoryMonitorDataModel history = null;
+            if (int.TryParse(id, out agentId))
+            {
+                List<MonitorData> businessLayerHistory = controller.GetHistoryOfOIDForAgent(agentId, oid);
+                history = new HistoryMonitorDataModel(businessLayerHistory);
+            }
+            else
+            {
+                //TODO: Return Error
+            }
             return Json(history,JsonRequestBehavior.AllowGet);
         }
     }

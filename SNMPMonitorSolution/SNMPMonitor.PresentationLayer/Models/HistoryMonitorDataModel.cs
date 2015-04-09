@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SNMPMonitor.BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,9 +21,14 @@ namespace SNMPMonitor.PresentationLayer.Models
             }
         }
 
-        public HistoryMonitorDataModel(List<MonitorDataModel> history)
+        public HistoryMonitorDataModel(List<MonitorData> history)
         {
-            this._history = history;
+            this._history = new List<MonitorDataModel>();
+            foreach (MonitorData monitor in history)
+            {
+                MonitorDataModel model = new MonitorDataModel(monitor);
+                this._history.Add(model);
+            }
         }
     }
 }

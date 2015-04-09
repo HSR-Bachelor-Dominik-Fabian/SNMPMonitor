@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SNMPMonitor.BusinessLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,15 @@ namespace SNMPMonitor.PresentationLayer.Models
             this._monitorTimestamp = new DateTime();
             this._objectID = string.Empty;
         }
+
+        public MonitorDataModel(MonitorData model)
+        {
+            this._result = model.Result;
+            this._objectID = model.ObjectID;
+            this._monitorTimestamp = model.Timestamp;
+            this._agentID = model.AgentNr;
+        }
+
         public MonitorDataModel(JObject json)
         {
             try
