@@ -8,9 +8,9 @@ namespace SNMPMonitor.DataLayer
 {
     public class MonitoringTypeDataModel
     {
-        private int _monitoringTypeNr;
-        private String _description;
-        private String _objectID;
+        private readonly int _monitoringTypeNr;
+        private readonly String _description;
+        private readonly String _objectID;
 
         public MonitoringTypeDataModel(int monitoringTypeNr, String description, String objectID)
         {

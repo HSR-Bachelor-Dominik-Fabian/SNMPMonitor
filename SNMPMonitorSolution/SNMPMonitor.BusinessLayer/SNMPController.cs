@@ -41,5 +41,33 @@ namespace SNMPMonitor.BusinessLayer
         {
             _databaseConnection.AddAgentToDatabaseForDemo(name, iPAddress, port);
         }
+
+        public List<Agent> GetAgents()
+        {
+            List<Agent> agentList = new List<Agent>();
+            List<AgentDataModel> resultList = _databaseConnection.GetAgentsFromDatabase();
+            foreach (AgentDataModel agentData in resultList) 
+            {
+                agentList.Add(new Agent(agentData.AgentNr, agentData.Name, agentData.IPAddress, agentData.TypeNr, agentData.Port, agentData.Status));
+            }
+            return agentList;
+        }
+
+        public List<Type> GetTypes()
+        {
+            List<Type> typeList = new List<Type>();
+            List<TypeDataModel> resultList = _databaseConnection.GetTypesFromDatabase();
+            foreach (TypeDataModel typeData in resultList)
+            {
+                typeList.Add(new Type(typeData.TypeNr, typeData.Name));
+            }
+            return typeList;
+        }
+
+        public void AddAgentToDatabase(Agent agent)
+        {
+            AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, agent.TypeNr, agent.Port, agent.Status);
+            _databaseConnection.AddAgentToDatabase(agentData);
+        }
     }
 }
