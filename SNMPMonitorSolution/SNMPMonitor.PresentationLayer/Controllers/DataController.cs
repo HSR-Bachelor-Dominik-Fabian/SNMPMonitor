@@ -51,5 +51,27 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             }
             return Json(history,JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetMonitorSummary()
+        {
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            List<KeyValuePair<Agent, List<MonitoringType>>> monitorSummary = controller.GetMonitoringSummary();
+            return Json(monitorSummary,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public HttpStatusCodeResult AddAgentToMonitor(string inputAgentName, string inputIpAddress, string inputPortNr)
+        {
+            HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            int portNr;
+            if(int.TryParse(inputPortNr, out portNr)){
+                controller.AddAgentToDatabaseForDemo(inputAgentName, inputIpAddress, portNr);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+            }
+
+            return output;
+        }
     }
 }

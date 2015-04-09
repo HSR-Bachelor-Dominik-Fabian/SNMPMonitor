@@ -1,23 +1,26 @@
 ﻿<div>
-    <h3>Agent Nr. {{=it.AgentNr}}</h3>
-    {{~it.MonitorTests:value}}
+    <h3>Agent {{=it.Key.Name}}</h3>
+    {{~it.Value:item}}
         <script type="text/javascript">
             $(document).ready(function () {
-                var ObjNr = '{{=value.ObjectNrReplaced}}';
+                var ObjNr = '{{=item.ObjectIDReplaced}}';
                 $.ajax({
-                    url: "MonitorTemplate/Monitor_" + ObjNr,
+                    url: "@Url.Action("Monitor_","MonitorTemplate")" + ObjNr,
                     method: "GET",
                     success: function (data) {
                         var monitor = doT.template(data);
-                        var jsonForMonitor = { "AgentNr": {{=it.AgentNr}}};
-                        $("#Monitor{{=it.AgentNr}}_{{=value.ObjectNrReplaced}}").html(monitor(jsonForMonitor));
+                        
+                        var jsonForMonitor = { "AgentNr": {{=it.Key.AgentNr}}};
+                        $("#Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}").html(monitor(jsonForMonitor));
+                    },
+                    error: function(data, error, thrownerror){
                     }
                 });
             });
         </script>
-        <div id="Monitor{{=it.AgentNr}}_{{=value.ObjectNrReplaced}}">
+    <div id="Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}">
 
-        </div>
+    </div>
     {{~}}
 </div>
 

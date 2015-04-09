@@ -144,7 +144,6 @@
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MonitorTemplateController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,6 +280,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_3_3_1_2_8.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Agent.cshtml" />
+    <Content Include="Views\Home\Monitor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

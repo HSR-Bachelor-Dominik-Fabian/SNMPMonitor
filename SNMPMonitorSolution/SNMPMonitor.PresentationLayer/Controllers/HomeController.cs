@@ -12,5 +12,10 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         {
             return View();
         }
+
+        public ActionResult Monitor()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "Monitor";
+}
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: "@Url.Action("GetMonitorSummary", "Data")",
+                type: "GET",
+                success: function (data) {
+
+                    $.each(data, function (index, value) {
+                        createAgent(value);
+                    });
+                    //TODO: createAgent for every json
+                    
+                },
+                error: function () {
+
+                }
+            });
+        });
+
+        function createAgent(json) {
+            var def = {
+                loadfile: function (url) {
+                    var temp;
+                    $.ajax({
+                        url: url + a,
+                        type: 'get',
+                        async: false,
+                        success: function (html) {
+                            temp = html;
+                        }
+                    });
+
+                    return temp;
+                }
+            };
+
+            $.ajax({
+                url: "@Url.Action("Monitor_Agent","MonitorTemplate")",
+                method: "GET",
+                success: function (data) {
+                    var monitorTest = doT.template(data, undefined, def);
+                    
+                    $("#dataContainer").append(monitorTest(json));
+                }
+            });
+        }
+    </script>
+}
+
+<h2>Monitor</h2>
+
+<div id="dataContainer">
+</div>

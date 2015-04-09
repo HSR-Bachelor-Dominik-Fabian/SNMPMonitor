@@ -9,14 +9,16 @@ namespace SNMPMonitor.BusinessLayer
     public class MonitoringType
     {
         private int _monitoringTypeNr;
-        private String _description;
-        private String _objectID;
+        private string _description;
+        private string _objectID;
+        private string _objectIDReplaced;
 
-        public MonitoringType(int monitoringTypeNr, String description, String objectID)
+        public MonitoringType(int monitoringTypeNr, string description, string objectID)
         {
             _monitoringTypeNr = monitoringTypeNr;
             _description = description;
             _objectID = objectID;
+            _objectIDReplaced = objectID.Replace('.', '_');
         }
 
         public int MonitoringTypeNr
@@ -27,7 +29,7 @@ namespace SNMPMonitor.BusinessLayer
             }
         }
 
-        public String Description
+        public string Description
         {
             get
             {
@@ -35,11 +37,19 @@ namespace SNMPMonitor.BusinessLayer
             }
         }
 
-        public String ObjectID
+        public string ObjectID
         {
             get
             {
                 return _objectID;
+            }
+        }
+
+        public string ObjectIDReplaced
+        {
+            get
+            {
+                return _objectIDReplaced;
             }
         }
     }

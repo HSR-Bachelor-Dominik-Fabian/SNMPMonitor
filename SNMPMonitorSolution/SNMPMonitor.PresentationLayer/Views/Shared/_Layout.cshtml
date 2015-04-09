@@ -23,12 +23,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>
                 </ul>
             </div>
         </div>
     </header>
+    <div class="alertBox container">
+
+    </div>
     <div class="container body-content">
         @RenderBody()
         <hr />

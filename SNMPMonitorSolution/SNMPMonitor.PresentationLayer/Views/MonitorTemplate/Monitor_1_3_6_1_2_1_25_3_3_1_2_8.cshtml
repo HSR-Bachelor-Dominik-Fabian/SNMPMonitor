@@ -20,7 +20,7 @@
         });
                     
         function appendPoint(json) {
-            var chart = $("#container").highcharts();
+            var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8").highcharts();
             var cpuserie = chart.series[0];
             
             shift = cpuserie.data.length >= 10;
@@ -28,7 +28,7 @@
         }
 
         function createChart() {
-            $("#container").highcharts({
+            $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8").highcharts({
                 chart: {
                     type: 'line',
                     animation: Highcharts.svg
@@ -77,6 +77,6 @@
             });     
         }
     </script>
-    <div id="container">
+    <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8">
 
     </div>
