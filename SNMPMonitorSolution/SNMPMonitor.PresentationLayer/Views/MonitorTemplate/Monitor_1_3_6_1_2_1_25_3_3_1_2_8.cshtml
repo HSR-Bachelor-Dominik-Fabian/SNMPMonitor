@@ -7,6 +7,18 @@
                             appendPoint(dataValue);
                         }
                     };
+
+                    $.ajax({
+                        url: '@Url.Action("HistoryDataForOID","Data")',
+                        data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3.1.2.8',
+                        async: false,
+                        method: 'Get',
+                        success: function (data) {
+                            alert(data.History[0].Result);
+                        }
+                    });
+
+
                     $.connection.hub.start().done(function () {
                         notifications.server.joinDataGroup("Agent_{{=it.AgentNr}}");
 
@@ -14,6 +26,18 @@
                         alert(e);
                     });
 
+                    
+                function appendPoint(json) {
+                    var series = chart.series[0];
+                    series.addPoint(parseInt(json.Result), false, true);
+                    var categories = chart.xAxis[0].categories;
+                    categories.push(json.MonitorTimestamp);
+                    chart.xAxis[0].setCategories(categories, false);
+
+                    chart.redraw();
+                }
+
+                function createChart() {
                     chart = new Highcharts.Chart({
                         chart: {
                             renderTo: 'container',
@@ -46,14 +70,6 @@
                         }]
                     });
                 });
-                function appendPoint(json) {
-                    var series = chart.series[0];
-                    series.addPoint(parseInt(json.Result), false, true);
-                    var categories = chart.xAxis[0].categories;
-                    categories.push(json.MonitorTimestamp);
-                    chart.xAxis[0].setCategories(categories, false);
-
-                    chart.redraw();
                 }
     </script>
     <div id="container">
