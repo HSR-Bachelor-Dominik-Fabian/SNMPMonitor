@@ -28,6 +28,7 @@
                         alert(e);
                     });
 
+                });
                     
                 function appendPoint(json) {
                     var series = chart.series[0];
@@ -41,38 +42,38 @@
 
                 function createChart() {
                     chart = new Highcharts.Chart({
-                        chart: {
-                            renderTo: 'container',
-                            type: 'line'
-                        },
-                        title: {
-                            text: 'CPU Auslastung'
-                        },
-                        xAxis: {
-                            categories: ['12:00:00', '12:00:05', '12:00:10', '12:00:15', '12:00:20', '12:00:25', '12:00:30', '12:00:35', '12:00:40', '12:00:45', '12:00:50', '12:00:55']
-                        },
-                        yAxis: {
-                            title: {
-                                text: 'in %'
+                            chart: {
+                                renderTo: 'container',
+                                type: 'line'
                             },
-                            min: 0,
-                            max: 100
-                        },
-                        exporting: {
-                            enabled: false
-                        },
-                        credits: {
-                            enabled: false
-                        },
-                        legend: {
-                            enabled: false
-                        },
-                        series: [{
-                            data: [12, 15, 25, 20, 30, 50, 50, 46, 40, 20, 8, 16]
-                        }]
-                    });
-                });
-                }
+                            title: {
+                                text: 'CPU Auslastung'
+                            },
+                            xAxis: {
+                                categories: ['12:00:00', '12:00:05', '12:00:10', '12:00:15', '12:00:20', '12:00:25', '12:00:30', '12:00:35', '12:00:40', '12:00:45', '12:00:50', '12:00:55']
+                            },
+                            yAxis: {
+                                title: {
+                                    text: 'in %'
+                                },
+                                min: 0,
+                                max: 100
+                            },
+                            exporting: {
+                                enabled: false
+                            },
+                            credits: {
+                                enabled: false
+                            },
+                            legend: {
+                                enabled: false
+                            },
+                            series: [{
+                                data: [12, 15, 25, 20, 30, 50, 50, 46, 40, 20, 8, 16]
+                            }]
+                        });
+                    
+                    }
     </script>
     <div id="container">
 
