@@ -42,8 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Agent.cs" />
     <Compile Include="Models\MonitorData.cs" />
     <Compile Include="Models\MonitoringType.cs" />
+    <Compile Include="Models\Type.cs" />
     <Compile Include="SNMPController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
