@@ -83,6 +83,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SNMPMonitor.BusinessLayer\SNMPMonitor.BusinessLayer.csproj">
+      <Project>{11c58037-8b5c-41d1-bc66-9d5d40014d00}</Project>
+      <Name>SNMPMonitor.BusinessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SNMPMonitor.PresentationLayer\SNMPMonitor.PresentationLayer.csproj">
       <Project>{dfbe19e9-b079-4e3a-ac8e-ef367bb28fca}</Project>
       <Name>SNMPMonitor.PresentationLayer</Name>
