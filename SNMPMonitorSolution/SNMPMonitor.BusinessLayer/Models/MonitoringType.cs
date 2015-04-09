@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SNMPMonitor.BusinessLayer
 {
-    class MonitoringType
+    public class MonitoringType
     {
         private int _monitoringTypeNr;
         private String _description;
