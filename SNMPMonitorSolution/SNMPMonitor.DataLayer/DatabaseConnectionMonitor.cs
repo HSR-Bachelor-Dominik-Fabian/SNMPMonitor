@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using SNMPMontor.DataLayer;
+using SNMPMonitor.DataLayer;
 
 namespace SNMPMonitor.DataLayer
 {
@@ -153,6 +153,36 @@ namespace SNMPMonitor.DataLayer
                 Console.WriteLine(e.ToString());
             }
         }
+
+        public List<MonitorDataDataModel> GetHistoryOfOIDForAgent(int agentNr, string ObjectID)
+        {
+            List<MonitorDataDataModel> monitorDataList = new List<MonitorDataDataModel>();
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand getHistoryOfOIDForAgentCommand = new SqlCommand("getHistoryOfOIDForAgent", _myConnection);
+                getHistoryOfOIDForAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                getHistoryOfOIDForAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+                getHistoryOfOIDForAgentCommand.Parameters.Add(new SqlParameter("@ObjectID", ObjectID));
+
+                SqlDataReader myHistoryOfOidForAgentSet = getHistoryOfOIDForAgentCommand.ExecuteReader();
+
+                while (myHistoryOfOidForAgentSet.Read())
+                {
+                    monitorDataList.Add(new MonitorDataDataModel((DateTime)myHistoryOfOidForAgentSet["MonitorTimestamp"], myHistoryOfOidForAgentSet["Result"].ToString(), (int)myHistoryOfOidForAgentSet["AgentNR"], myHistoryOfOidForAgentSet["ObjectID"].ToString()));
+                }
+
+                _myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                _myConnection.Close();
+                Console.WriteLine(e.StackTrace.ToString());
+            }
+            return monitorDataList;
+        }
+
         /*
         public void GetSummaryOfAgent(int agentNr)
         {
