@@ -14,10 +14,11 @@ namespace SNMPMonitor.PresentationLayer.Controllers
 {
     public class DataController : Controller
     {
-        public HttpStatusCodeResult RowInsertedTrigger()
+        public HttpStatusCodeResult RowInsertedTrigger(string id  = "1", string result = "12")
         {            
             SNMPDataHub Hub = new SNMPDataHub();
-            string param = "{param:[{\"Result\":\"12\"},{\"MonitorTimestamp\":\"2015-04-10 15:02:55.177\"},{\"ObjectID\":\"1.3.6.1.2.1.25.3.3.1.2.8\"},{\"AgentNr\":\"1\"},]}";
+            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string param = "{param:[{\"Result\":\""+result+"\"},{\"MonitorTimestamp\":\""+ date +"\"},{\"ObjectID\":\"1.3.6.1.2.1.25.3.3.1.2.8\"},{\"AgentNr\":\""+id+"\"},]}";
             JObject jobject = JObject.Parse(param);
             Models.MonitorDataModel monitor = new Models.MonitorDataModel(jobject);
             Hub.SendSNMPData(monitor);
