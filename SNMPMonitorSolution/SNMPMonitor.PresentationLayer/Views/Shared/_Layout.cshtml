@@ -26,11 +26,9 @@
                     <li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>
                     <li>@Html.ActionLink("Logs", "Logs", "Home")</li>
                     <li>
-                        <p class="navbar-btn">
-                            <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AddAgent", "Home")'">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                        </p>
+                        <button type="button" class="btn btn-success navbar-btn btn-sm" onclick="location.href='@Url.Action("AddAgent", "Home")'">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
                     </li>
                 </ul>
             </div>
