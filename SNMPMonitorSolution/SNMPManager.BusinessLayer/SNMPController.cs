@@ -6,29 +6,23 @@ using System.Threading.Tasks;
 using System.Net;
 using SnmpSharpNet;
 using SNMPManager.DataLayer;
+using System.Diagnostics;
 
 namespace SNMPManager.BusinessLayer
 {
     public class SNMPController
     {
         private readonly string _connectionString;
+        private DatabaseConnectionManager connection;
 
         public SNMPController(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        /*
-        public static void Main()
+        public void GetSNMPDataFromAgents(Boolean isLongTimeCheck)
         {
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabase);
-            controller.SaveSNMPDataFromAgentsToDatabase();
-        }
-        */
-
-        public void SaveSNMPDataFromAgentsToDatabase()
-        {
-            DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
+            connection = new DatabaseConnectionManager(_connectionString);
             List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
 
             OctetString community = new OctetString("public");
@@ -40,13 +34,7 @@ namespace SNMPManager.BusinessLayer
                 IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
                 UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
 
-                List<MonitoringTypeDataModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgentNr);
-                
-                Pdu pdu = new Pdu(PduType.Get);
-                foreach (MonitoringTypeDataModel MonitoringType in MonitoringTypeList)
-                {
-                    pdu.VbList.Add(MonitoringType.ObjectID);
-                }
+                Pdu pdu = GetPduForAgent(isLongTimeCheck, agent);
 
                 SnmpV2Packet result = (SnmpV2Packet)target.Request(pdu, param);
                 
@@ -58,10 +46,7 @@ namespace SNMPManager.BusinessLayer
                     }
                     else
                     {
-                        for (int i = 0; i < result.Pdu.VbList.Count(); i++)
-                        {
-                            connection.SaveMonitorDataToDatabase(agent, result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString());
-                        }
+                        SendDataToDataLayer(isLongTimeCheck, agent, result);
                     }
                 }
                 else
@@ -70,6 +55,42 @@ namespace SNMPManager.BusinessLayer
                 }
                 
                 target.Close();
+            }
+        }
+
+        private Pdu GetPduForAgent(Boolean isLongTimeCheck, AgentDataModel agent)
+        {
+            List<MonitoringTypeDataModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgentNr);
+
+            Pdu pdu = new Pdu(PduType.Get);
+            foreach (MonitoringTypeDataModel MonitoringType in MonitoringTypeList)
+            {
+                if (isLongTimeCheck && MonitoringType.IsLongTimeCheck)
+                {
+                    pdu.VbList.Add(MonitoringType.ObjectID);
+                }
+                else if (!isLongTimeCheck && !MonitoringType.IsLongTimeCheck)
+                {
+                    pdu.VbList.Add(MonitoringType.ObjectID);
+                }
+            }
+            return pdu;
+        }
+
+        private void SendDataToDataLayer(Boolean isLongTimeCheck, AgentDataModel agent, SnmpV2Packet result)
+        {
+            List<KeyValuePair<string, string>> resultList = new List<KeyValuePair<string, string>>();
+            for (int i = 0; i < result.Pdu.VbList.Count(); i++)
+            {
+                resultList.Add(new KeyValuePair<string, string>(result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString()));
+            }
+            if (isLongTimeCheck)
+            {
+                connection.SaveLongTimeMonitorDataToDatabase(agent, resultList);
+            }
+            else
+            {
+                connection.SaveMonitorDataToDatabase(agent, resultList);
             }
         }
     }

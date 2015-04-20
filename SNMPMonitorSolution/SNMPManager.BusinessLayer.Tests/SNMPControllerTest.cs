@@ -14,7 +14,7 @@ namespace SNMPManager.BusinessLayer.Tests
             {
                 string connectionString = Properties.Settings.Default.TestDatabase;
                 SNMPController controller = new SNMPController(connectionString);
-                controller.SaveSNMPDataFromAgentsToDatabase();
+                controller.GetSNMPDataFromAgents(false);
                 successfull = true;
             }
             catch (Exception exc)

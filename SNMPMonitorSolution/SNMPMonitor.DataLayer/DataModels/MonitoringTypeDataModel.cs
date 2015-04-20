@@ -11,9 +11,9 @@ namespace SNMPMonitor.DataLayer
         private readonly int _monitoringTypeNr;
         private readonly String _description;
         private readonly String _objectID;
-        private readonly Boolean _isLongTimeCheck;
+        private readonly bool _isLongTimeCheck;
 
-        public MonitoringTypeDataModel(int monitoringTypeNr, String description, String objectID, Boolean IsLongTimeCheck)
+        public MonitoringTypeDataModel(int monitoringTypeNr, String description, String objectID, bool IsLongTimeCheck)
         {
             _monitoringTypeNr = monitoringTypeNr;
             _description = description;
@@ -45,7 +45,7 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
-        public Boolean IsLongTimeCheck
+        public bool IsLongTimeCheck
         {
             get
             {
