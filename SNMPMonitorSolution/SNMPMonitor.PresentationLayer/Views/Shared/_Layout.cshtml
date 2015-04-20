@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - SNMPMonitor</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -22,25 +22,36 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Dashboard", "Index", "Home")</li>
                     <li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>
+                    <li>@Html.ActionLink("Logs", "Logs", "Home")</li>
+                    <li>
+                        <p class="navbar-btn">
+                            <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AddAgent", "Home")'">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                        </p>
+                    </li>
                 </ul>
             </div>
         </div>
     </header>
-    <div class="alertBox container">
 
-    </div>
     <div class="container body-content">
         @RenderBody()
+
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Dominik Heeb, Fabian Keller, Etienne Georgy</p>
         </footer>
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/Scripts/js")
     @RenderSection("scripts", required: false)
+    <script>
+
+
+    </script>
 </body>
 </html>
