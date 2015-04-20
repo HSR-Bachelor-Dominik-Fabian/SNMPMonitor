@@ -20,42 +20,44 @@ namespace SNMPManager.BusinessLayer
             _connectionString = connectionString;
         }
 
-        public void GetSNMPDataFromAgents(Boolean isLongTimeCheck)
+        public void GetSNMPDataFromAgents(bool isLongTimeCheck)
         {
             connection = new DatabaseConnectionManager(_connectionString);
             List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
 
+            Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent, isLongTimeCheck));
+        }
+
+        private void GetSNMPDataFromSingleAgent(AgentDataModel agent, bool isLongTimeCheck)
+        {
             OctetString community = new OctetString("public");
             AgentParameters param = new AgentParameters(community);
             param.Version = SnmpVersion.Ver2;
-            
-            foreach (AgentDataModel agent in AgentList)
+
+            IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
+            UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
+
+            Pdu pdu = GetPduForAgent(isLongTimeCheck, agent);
+
+            SnmpV2Packet result = (SnmpV2Packet)target.Request(pdu, param);
+
+            if (result != null)
             {
-                IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
-                UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
-
-                Pdu pdu = GetPduForAgent(isLongTimeCheck, agent);
-
-                SnmpV2Packet result = (SnmpV2Packet)target.Request(pdu, param);
-                
-                if (result != null)
+                if (result.Pdu.ErrorStatus != 0)
                 {
-                    if (result.Pdu.ErrorStatus != 0)
-                    {
-                        Console.WriteLine("Error in SNMP reply. Error {0} index {1}", result.Pdu.ErrorStatus, result.Pdu.ErrorIndex);
-                    }
-                    else
-                    {
-                        SendDataToDataLayer(isLongTimeCheck, agent, result);
-                    }
+                    Console.WriteLine("Error in SNMP reply. Error {0} index {1}", result.Pdu.ErrorStatus, result.Pdu.ErrorIndex);
                 }
                 else
                 {
-                    Console.WriteLine("No response recieved from SNMP Agent");
+                    SendDataToDataLayer(isLongTimeCheck, agent, result);
                 }
-                
-                target.Close();
             }
+            else
+            {
+                Console.WriteLine("No response recieved from SNMP Agent");
+            }
+
+            target.Close();
         }
 
         private Pdu GetPduForAgent(Boolean isLongTimeCheck, AgentDataModel agent)
