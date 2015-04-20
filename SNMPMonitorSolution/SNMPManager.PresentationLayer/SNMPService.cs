@@ -42,8 +42,8 @@ namespace SNMPManager.PresentationLayer
 
         private static void OnLongTimedEvent(object source, ElapsedEventArgs e)
         {
-            _longTimer.Interval = 14400000;
             controller.GetSNMPDataFromAgents(true);
+            _longTimer.Interval = 14400000;
         }
     }
 }

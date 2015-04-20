@@ -121,7 +121,6 @@ namespace SNMPManager.DataLayer
             }
         }
 
-
         public void AddAgentToDatabase(AgentDataModel agent)
         {
             try
@@ -154,9 +153,9 @@ namespace SNMPManager.DataLayer
 
                 SqlCommand saveLongTimeMonitorDataCommand = new SqlCommand("saveLongTimeSNMPDataForAgent", _myConnection);
                 saveLongTimeMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.Name));
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysName", agent.IPAddress));
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysDesc", agent.Port));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysName", resultSet[1].Value));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysDesc", resultSet[0].Value));
                 saveLongTimeMonitorDataCommand.ExecuteNonQuery();
 
                 _myConnection.Close();
