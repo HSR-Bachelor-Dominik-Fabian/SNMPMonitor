@@ -9,29 +9,41 @@ namespace SNMPManager.PresentationLayer
 {
     public static class SNMPService
     {
-        private static Timer _timer = new Timer();
+        private static Timer _shortTimer = new Timer();
+        private static Timer _longTimer = new Timer();
         private static SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabase);
 
         public static void Start()
         {
-            _timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            _timer.Interval = 5000;
-            _timer.Enabled = true;
+            _shortTimer.Elapsed += new ElapsedEventHandler(OnShortTimedEvent);
+            _shortTimer.Interval = 5000;
+            _shortTimer.Enabled = true;
+
+            _longTimer.Elapsed += new ElapsedEventHandler(OnLongTimedEvent);
+            _longTimer.Interval = 5000;
+            _longTimer.Enabled = true;
         }
 
         public static void Stop()
         {
-            _timer.Enabled = false;
+            _shortTimer.Enabled = false;
+            _longTimer.Enabled = false;
         }
 
         public static Boolean IsRunning()
         {
-            return _timer.Enabled;
+            return _shortTimer.Enabled && _longTimer.Enabled;
         }
 
-        private static void OnTimedEvent(object source, ElapsedEventArgs e)
+        private static void OnShortTimedEvent(object source, ElapsedEventArgs e)
         {
-            controller.SaveSNMPDataFromAgentsToDatabase();
+            controller.GetSNMPDataFromAgents(false);
+        }
+
+        private static void OnLongTimedEvent(object source, ElapsedEventArgs e)
+        {
+            _longTimer.Interval = 14400000;
+            controller.GetSNMPDataFromAgents(true);
         }
     }
 }
