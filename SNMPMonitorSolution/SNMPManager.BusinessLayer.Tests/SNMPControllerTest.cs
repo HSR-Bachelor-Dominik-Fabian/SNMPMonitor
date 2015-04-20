@@ -1,0 +1,28 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace SNMPManager.BusinessLayer.Tests
+{
+    [TestClass]
+    public class SNMPControllerTest
+    {
+        [TestMethod]
+        public void TestSNMPController()
+        {
+            bool successfull = false;
+            try
+            {
+                string connectionString = Properties.Settings.Default.TestDatabase;
+                SNMPController controller = new SNMPController(connectionString);
+                controller.SaveSNMPDataFromAgentsToDatabase();
+                successfull = true;
+            }
+            catch (Exception exc)
+            {
+                successfull = false;
+            }
+
+            Assert.IsTrue(successfull);
+        }
+    }
+}
