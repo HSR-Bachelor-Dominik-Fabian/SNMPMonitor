@@ -37,18 +37,43 @@ namespace SNMPManager.BusinessLayer.ExceptionHandling
 
         private static void HandleNORMAL(ExceptionCategory category, Exception exc)
         {
-            DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
+            try
+            {
+                DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
+            }
+            catch (Exception innerExc)
+            {
+                DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
+                HandleException(ExceptionCategory.Fatal, innerExc);
+            }
+            
         }
 
         private static void HandleLOW(ExceptionCategory category, Exception exc)
         {
-            DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
+            try
+            {
+                DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
+            }
+            catch (Exception innerExc)
+            {
+                DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
+                HandleException(ExceptionCategory.Fatal, innerExc);
+            }
         }
 
         private static void HandleHIGH(ExceptionCategory category, Exception exc)
         {
-            DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
-            DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
+            try
+            {
+                DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
+                DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
+            }
+            catch (Exception innerExc)
+            {
+                DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
+                HandleException(ExceptionCategory.Fatal, innerExc);
+            }
         }
     }
 }

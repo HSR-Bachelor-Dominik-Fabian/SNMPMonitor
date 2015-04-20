@@ -33,6 +33,7 @@ namespace SNMPManager.DataLayer.ExceptionHandling
             Trace.WriteLine("StackTrace: " + exc.StackTrace);
             Trace.Unindent();
             Trace.WriteLine("End Exception SNMP Manager");
+            Trace.WriteLine("----");
             listener.Flush();
             listener.Close();
         }
