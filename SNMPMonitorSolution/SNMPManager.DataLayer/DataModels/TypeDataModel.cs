@@ -8,8 +8,8 @@ namespace SNMPManager.DataLayer
 {
     public class TypeDataModel
     {
-        private int _typeNr;
-        private String _name;
+        private readonly int _typeNr;
+        private readonly String _name;
 
         public TypeDataModel(int typeNr, String name)
         {

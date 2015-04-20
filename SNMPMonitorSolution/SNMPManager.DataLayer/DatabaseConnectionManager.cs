@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using SNMPManager.DataLayer;
+using System.Diagnostics;
 
 namespace SNMPManager.DataLayer
 {
@@ -59,13 +60,14 @@ namespace SNMPManager.DataLayer
 
                 while (myMonitoringTypeSet.Read())
                 {
-                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
+                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString(), (bool) myMonitoringTypeSet["IsLongTimeCheck"]));
                 }
                 _myConnection.Close();
             } catch (Exception e)
             {
                 _myConnection.Close();
-                Console.WriteLine(e.StackTrace.ToString());
+                Trace.WriteLine(e.StackTrace.ToString());
+                //Console.WriteLine(e.StackTrace.ToString());
             }
             return monitoringTypeList;
         }
@@ -96,19 +98,20 @@ namespace SNMPManager.DataLayer
             return typeList;
         }
 
-        public void SaveMonitorDataToDatabase(AgentDataModel agent, String monitoringTypeNr, String result)
+        public void SaveMonitorDataToDatabase(AgentDataModel agent, List<KeyValuePair<string, string>> resultSet)
         {
             try
             {
                 _myConnection.Open();
+                foreach(KeyValuePair<string, string> result in resultSet) {
+                    SqlCommand saveMonitorDataCommand = new SqlCommand("saveMonitorData", _myConnection);
+                    saveMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    saveMonitorDataCommand.Parameters.Add(new SqlParameter("@MonitoringTypeNr", result.Key));
+                    saveMonitorDataCommand.Parameters.Add(new SqlParameter("@Result", result.Value));
+                    saveMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
 
-                SqlCommand saveMonitorDataCommand = new SqlCommand("saveMonitorData", _myConnection);
-                saveMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@MonitoringTypeNr", monitoringTypeNr));
-                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@Result", result));
-                saveMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
-
-                saveMonitorDataCommand.ExecuteNonQuery();
+                    saveMonitorDataCommand.ExecuteNonQuery();
+                }
                 _myConnection.Close();
             }
             catch (Exception e)
@@ -140,6 +143,50 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Close();
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        public void SaveLongTimeMonitorDataToDatabase(AgentDataModel agent, List<KeyValuePair<string, string>> resultSet)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand saveLongTimeMonitorDataCommand = new SqlCommand("saveLongTimeSNMPDataForAgent", _myConnection);
+                saveLongTimeMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.Name));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysName", agent.IPAddress));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysDesc", agent.Port));
+                saveLongTimeMonitorDataCommand.ExecuteNonQuery();
+
+                _myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                _myConnection.Close();
+                Console.WriteLine(e.StackTrace.ToString());
+            }
+        }
+
+        public void AddEventToDatabase(string exceptionType, string category, string timestamp, string hResult, string message, string stackTrace)
+        {
+            try
+            {
+                _myConnection.Open();
+                /*
+                SqlCommand saveLongTimeMonitorDataCommand = new SqlCommand("addEvent", _myConnection);
+                saveLongTimeMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.Name));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysName", agent.IPAddress));
+                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysDesc", agent.Port));
+                saveLongTimeMonitorDataCommand.ExecuteNonQuery();
+                */
+                _myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                _myConnection.Close();
+                Console.WriteLine(e.StackTrace.ToString());
             }
         }
     }
