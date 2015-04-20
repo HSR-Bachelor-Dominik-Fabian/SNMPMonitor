@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SNMPManager.DataLayer.ExceptionHandling
@@ -12,20 +13,26 @@ namespace SNMPManager.DataLayer.ExceptionHandling
     {
         public static void LogException(string category, Exception exc)
         {
-            string sEvent;
-
-            sEvent = "SNMP Manager Exception\nCategory: " + category + "\nMessage: " + exc.Message + "\n\nStackTrace: " + exc.StackTrace;
             string absolute_path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase), Properties.Settings.Default.LogPath);
             Uri uri = new Uri(absolute_path);
             string path = Path.GetFullPath(uri.AbsolutePath);
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+            }
             TextWriterTraceListener listener = new TextWriterTraceListener(path);
-            Debug.Listeners.Add(listener);
+            Trace.Listeners.Add(listener);
 
-            Debug.WriteLine("SNMP Manager Exception");
-            Debug.Indent();
-            Debug.WriteLine(sEvent);
-            Debug.Unindent();
-            Debug.WriteLine("End Exception SNMP Manager");
+            Trace.WriteLine("SNMP Manager Exception");
+            Trace.Indent();
+            Trace.WriteLine("ExceptionType: " + exc.GetType().ToString());
+            Trace.WriteLine("Category: " + category);
+            Trace.WriteLine("Timestamp: " + DateTime.Now.ToString());
+            Trace.WriteLine("HResult" + exc.HResult);
+            Trace.WriteLine("Message: " + exc.Message);
+            Trace.WriteLine("StackTrace: " + exc.StackTrace);
+            Trace.Unindent();
+            Trace.WriteLine("End Exception SNMP Manager");
             listener.Flush();
             listener.Close();
         }

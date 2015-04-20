@@ -36,7 +36,7 @@ namespace SNMPManager.DataLayer.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("./Log.txt")]
+        [global::System.Configuration.DefaultSettingValueAttribute("./Log/Log.txt")]
         public string LogPath {
             get {
                 return ((string)(this["LogPath"]));
