@@ -17,5 +17,15 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         {
             return View();
         }
+
+        public ActionResult Logs()
+        {
+            return View();
+        }
+
+        public ActionResult AddAgent()
+        {
+            return View();
+        }
     }
 }

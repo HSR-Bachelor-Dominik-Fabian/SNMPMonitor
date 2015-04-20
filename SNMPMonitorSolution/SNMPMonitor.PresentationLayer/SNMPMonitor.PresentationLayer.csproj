@@ -281,6 +281,8 @@
     <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_3_3_1_2_8.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Agent.cshtml" />
     <Content Include="Views\Home\Monitor.cshtml" />
+    <Content Include="Views\Home\Logs.cshtml" />
+    <Content Include="Views\Home\AddAgent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
