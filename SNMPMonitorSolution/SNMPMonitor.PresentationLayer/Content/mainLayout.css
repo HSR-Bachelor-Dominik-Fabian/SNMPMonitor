@@ -1,4 +1,28 @@
 ﻿.navbar-btn-margin {
   margin: 10px 15px;
 }
+.ma-small-text {
+  color: #8e8c84;
+}
+.ma-small-h4 {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+.ma-small-padding {
+  padding: 5px;
+}
+#agentSmallWrapper {
+  background-color: #ffffff;
+  width: 200px;
+  border: 2px solid #dfd7ca;
+}
+.ma-success {
+  border-left: 10px solid #93c54b;
+}
+.ma-danger {
+  border-left: 10px solid #d9534f;
+}
+.ma-warning {
+  border-left: 10px solid #f47c3c;
+}
 /*# sourceMappingURL=mainLayout.css.map */

@@ -171,6 +171,7 @@
     </Content>
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\img\LogoSNMPMonitorWhite.png" />
+    <Content Include="Content\img\servericon.png" />
     <Content Include="Content\mainLayout.css">
       <DependentUpon>mainLayout.less</DependentUpon>
     </Content>
