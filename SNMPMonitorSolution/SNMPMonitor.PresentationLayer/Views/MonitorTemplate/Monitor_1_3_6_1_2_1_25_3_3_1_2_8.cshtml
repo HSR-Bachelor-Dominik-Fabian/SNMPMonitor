@@ -26,6 +26,11 @@
         }
 
         function createChart{{=it.AgentNr}}() {
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                }
+            });
             $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8").highcharts({
                 chart: {
                     type: 'line',
