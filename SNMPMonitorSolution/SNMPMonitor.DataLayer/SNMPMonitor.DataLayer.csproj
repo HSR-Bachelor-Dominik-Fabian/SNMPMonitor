@@ -45,6 +45,7 @@
     <Compile Include="DataModels\MonitorDataDataModel.cs" />
     <Compile Include="DataModels\MonitoringTypeDataModel.cs" />
     <Compile Include="DataModels\TypeDataModel.cs" />
+    <Compile Include="ExceptionHandling\ExceptionLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

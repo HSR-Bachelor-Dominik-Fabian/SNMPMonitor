@@ -9,5 +9,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=152.96.56.75,40003;Initial Catalog=SNMPMonitor;Persist Security Info=True;User ID=Manager;Password=HSR-00228866</Value>
     </Setting>
+    <Setting Name="LogPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">./Log/Log.txt</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
