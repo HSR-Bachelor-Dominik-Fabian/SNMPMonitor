@@ -23,10 +23,13 @@ namespace SNMPMonitor.PresentationLayer
             bundles.Add(new ScriptBundle("~/Scripts/js").Include("~/Scripts/doT.min.js",
                 "~/Scripts/jquery.signalR-2.2.0.min.js",
                 "~/Scripts/highcharts.js",
-                "~/Scripts/exporting.js"));
+                "~/Scripts/exporting.js",
+                "~/Scripts/jasny-bootstrap.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/bootstrap/jasny/jasny-bootstrap.less",
+                     "~/Content/mainLayout.less"));
         }
     }
 }

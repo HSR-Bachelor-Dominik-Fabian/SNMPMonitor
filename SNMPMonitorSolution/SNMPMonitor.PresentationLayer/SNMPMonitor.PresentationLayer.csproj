@@ -163,8 +163,20 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\jasny\jasny-bootstrap.css">
+      <DependentUpon>jasny-bootstrap.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\jasny\jasny-bootstrap.min.css">
+      <DependentUpon>jasny-bootstrap.css</DependentUpon>
+    </Content>
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\img\LogoSNMPMonitorWhite.png" />
+    <Content Include="Content\mainLayout.css">
+      <DependentUpon>mainLayout.less</DependentUpon>
+    </Content>
+    <Content Include="Content\mainLayout.min.css">
+      <DependentUpon>mainLayout.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -246,6 +258,23 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\bootstrap\jasny\alerts-fixed.less" />
+    <Content Include="Content\bootstrap\jasny\button-labels.less" />
+    <Content Include="Content\bootstrap\jasny\fileinput.less" />
+    <Content Include="Content\bootstrap\jasny\grid-container-smooth.less" />
+    <Content Include="Content\bootstrap\jasny\jasny-bootstrap.less" />
+    <Content Include="Content\bootstrap\jasny\nav-tab-alignment.less" />
+    <Content Include="Content\bootstrap\jasny\navmenu.less" />
+    <Content Include="Content\bootstrap\jasny\offcanvas.less" />
+    <Content Include="Content\bootstrap\jasny\rowlink.less" />
+    <Content Include="Content\bootstrap\jasny\variables.less" />
+    <Content Include="Content\bootstrap\jasny\jasny-bootstrap.css.map">
+      <DependentUpon>jasny-bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Content\mainLayout.less" />
+    <Content Include="Content\mainLayout.css.map">
+      <DependentUpon>mainLayout.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\SNMPMonitor.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -255,6 +284,7 @@
     <Content Include="Scripts\doT.min.js" />
     <Content Include="Scripts\exporting.js" />
     <Content Include="Scripts\highcharts.js" />
+    <Content Include="Scripts\jasny-bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
