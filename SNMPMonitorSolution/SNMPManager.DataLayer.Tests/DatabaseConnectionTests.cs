@@ -37,7 +37,7 @@ namespace SNMPManager.DataLayer.Tests
         [TestMethod]
         public void TestDatabaseConnectionGetMonitoringTypes()
         {
-            int actual = databaseConnection.GetMonitoringTypesForAgentFromDatabase(1).Count;
+            int actual = databaseConnection.GetMonitoringTypesForAgentForCheckFromDatabase(1).Count;
 
             int expected = 4;
 

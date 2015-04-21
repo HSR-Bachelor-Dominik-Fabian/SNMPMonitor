@@ -45,14 +45,14 @@ namespace SNMPManager.DataLayer
             return agentList;
         }
         
-        public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
+        public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentForCheckFromDatabase(int agentNr)
         {
             List<MonitoringTypeDataModel> monitoringTypeList = new List<MonitoringTypeDataModel>();
             try
             {
                 _myConnection.Open();
 
-                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getMonitoringTypesForAgent", _myConnection);
+                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getMonitoringTypesForAgentForCheck", _myConnection);
                 getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
                 getMonitoringTypesForAgent.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
 
@@ -60,14 +60,13 @@ namespace SNMPManager.DataLayer
 
                 while (myMonitoringTypeSet.Read())
                 {
-                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString(), (bool) myMonitoringTypeSet["IsLongTimeCheck"]));
+                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
                 }
                 _myConnection.Close();
             } catch (Exception e)
             {
                 _myConnection.Close();
                 Trace.WriteLine(e.StackTrace.ToString());
-                //Console.WriteLine(e.StackTrace.ToString());
             }
             return monitoringTypeList;
         }
@@ -98,13 +97,13 @@ namespace SNMPManager.DataLayer
             return typeList;
         }
 
-        public void SaveMonitorDataToDatabase(AgentDataModel agent, List<KeyValuePair<string, string>> resultSet)
+        public void AddMonitorDataToDatabase(AgentDataModel agent, List<KeyValuePair<string, string>> resultSet)
         {
             try
             {
                 _myConnection.Open();
                 foreach(KeyValuePair<string, string> result in resultSet) {
-                    SqlCommand saveMonitorDataCommand = new SqlCommand("saveMonitorData", _myConnection);
+                    SqlCommand saveMonitorDataCommand = new SqlCommand("addMonitorData", _myConnection);
                     saveMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     saveMonitorDataCommand.Parameters.Add(new SqlParameter("@MonitoringTypeNr", result.Key));
                     saveMonitorDataCommand.Parameters.Add(new SqlParameter("@Result", result.Value));
@@ -142,28 +141,6 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Close();
                 Console.WriteLine(e.ToString());
-            }
-        }
-
-        public void SaveLongTimeMonitorDataToDatabase(AgentDataModel agent, List<KeyValuePair<string, string>> resultSet)
-        {
-            try
-            {
-                _myConnection.Open();
-
-                SqlCommand saveLongTimeMonitorDataCommand = new SqlCommand("saveLongTimeSNMPDataForAgent", _myConnection);
-                saveLongTimeMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysName", resultSet[1].Value));
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysDesc", resultSet[0].Value));
-                saveLongTimeMonitorDataCommand.ExecuteNonQuery();
-
-                _myConnection.Close();
-            }
-            catch (Exception e)
-            {
-                _myConnection.Close();
-                Console.WriteLine(e.StackTrace.ToString());
             }
         }
 
