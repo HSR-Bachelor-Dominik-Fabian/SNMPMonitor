@@ -314,6 +314,7 @@
     <Content Include="Views\Home\Logs.cshtml" />
     <Content Include="Views\Home\AddAgent.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Agent_Small.cshtml" />
+    <Content Include="Views\Home\SideBarContent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

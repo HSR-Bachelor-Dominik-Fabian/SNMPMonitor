@@ -40,17 +40,8 @@
     </button>
     <div id="sideStatus" class="navmenu navmenu-default navmenu-fixed-right offcanvas-xs border-none-navmenu">
         <div class="navmenu-headnav"></div>
-        <div class="navmenu-brand ">Gesamtzustand</div>
-        <div>[BILD] 1</div>
-        <div>[BILD] 0</div>
-        <div>[BILD] 1</div>
-        <h3>Logs</h3>
-        <div id="sideLog">
-            <ul>
-                <li>08:10 System gestoppt</li>
-                <li>08:00 System gestartet</li>
-                <li>07:42 Interner Fehler</li>
-            </ul>
+        <div class="navmenu-brand border-bottom">Gesamtzustand</div>
+        <div class="navmenu-sidebar-content">
         </div>
     </div>
 
@@ -66,6 +57,18 @@
     @Scripts.Render("~/Scripts/js")
     @RenderSection("scripts", required: false)
     <script type="text/javascript">
+        $(document).ready(function(){
+            $.ajax({
+                url: '@Url.Action("SideBarContent","Home")',
+                method: "Get",
+                success: function (data) {
+                    $(".navmenu-sidebar-content").html(data);
+                }
+            });
+        });
+
+
+
         $("#sideStatus").on("show.bs.offcanvas", function () {
             AnimateRotate($('#systemStatusToggleButtonIcon'),0,180);
         });
@@ -86,6 +89,7 @@
             var $elem = elem;
             $({deg: from}).animate({deg: angle}, {
                 duration: 500,
+                easing: 'swing',
                 step: function(now) {
                     $elem.css({
                         transform: 'rotate(' + now + 'deg)'

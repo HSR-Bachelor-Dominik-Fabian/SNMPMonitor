@@ -27,5 +27,11 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public PartialViewResult SideBarContent()
+        {
+            return PartialView();
+        }
     }
 }
