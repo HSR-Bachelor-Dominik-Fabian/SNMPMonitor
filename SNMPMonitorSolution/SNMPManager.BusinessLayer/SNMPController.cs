@@ -7,6 +7,7 @@ using System.Net;
 using SnmpSharpNet;
 using SNMPManager.DataLayer;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SNMPManager.BusinessLayer
 {
@@ -14,6 +15,7 @@ namespace SNMPManager.BusinessLayer
     {
         private readonly string _connectionString;
         private DatabaseConnectionManager connection;
+        private Object _sync = new Object();
 
         public SNMPController(string connectionString)
         {
@@ -23,13 +25,17 @@ namespace SNMPManager.BusinessLayer
         public void GetSNMPDataFromAgents(bool isLongTimeCheck)
         {
             connection = new DatabaseConnectionManager(_connectionString);
+            Monitor.Enter(_sync);
             List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
+            Monitor.Exit(_sync);
 
             Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent, isLongTimeCheck));
         }
 
         private void GetSNMPDataFromSingleAgent(AgentDataModel agent, bool isLongTimeCheck)
         {
+            //Trace.WriteLine("Task läuft: " + agent.AgentNr);
+
             OctetString community = new OctetString("public");
             AgentParameters param = new AgentParameters(community);
             param.Version = SnmpVersion.Ver2;
@@ -62,7 +68,9 @@ namespace SNMPManager.BusinessLayer
 
         private Pdu GetPduForAgent(Boolean isLongTimeCheck, AgentDataModel agent)
         {
+            Monitor.Enter(_sync);
             List<MonitoringTypeDataModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentFromDatabase(agent.AgentNr);
+            Monitor.Exit(_sync);
 
             Pdu pdu = new Pdu(PduType.Get);
             foreach (MonitoringTypeDataModel MonitoringType in MonitoringTypeList)
@@ -86,6 +94,7 @@ namespace SNMPManager.BusinessLayer
             {
                 resultList.Add(new KeyValuePair<string, string>(result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString()));
             }
+            Monitor.Enter(_sync);
             if (isLongTimeCheck)
             {
                 connection.SaveLongTimeMonitorDataToDatabase(agent, resultList);
@@ -94,6 +103,7 @@ namespace SNMPManager.BusinessLayer
             {
                 connection.SaveMonitorDataToDatabase(agent, resultList);
             }
+            Monitor.Exit(_sync);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace SNMPManager.PresentationLayer
             _shortTimer.Enabled = true;
 
             _longTimer.Elapsed += new ElapsedEventHandler(OnLongTimedEvent);
-            _longTimer.Interval = 5000;
+            _longTimer.Interval = 7500;
             _longTimer.Enabled = true;
         }
 
