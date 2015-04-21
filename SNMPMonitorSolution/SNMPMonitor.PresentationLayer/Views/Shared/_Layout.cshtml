@@ -35,9 +35,26 @@
         </div>
     </header>
 
+    <button type="button" class="btn-default visible-xs btn-toggle-status-fixed-right" data-toggle="offcanvas" data-target="#sideStatus" data-canvas="body">
+        <span class="glyphicon glyphicon-chevron-left"></span>Systemstatus
+    </button>
+    <div id="sideStatus" class="navmenu navmenu-default navmenu-fixed-right offcanvas-xs">
+        <h3>Gesamtzustand</h3>
+        <div>[BILD] 1</div>
+        <div>[BILD] 0</div>
+        <div>[BILD] 1</div>
+        <h3>Logs</h3>
+        <div id="sideLog">
+            <ul>
+                <li>08:10 System gestoppt</li>
+                <li>08:00 System gestartet</li>
+                <li>07:42 Interner Fehler</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
-
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Dominik Heeb, Fabian Keller, Etienne Georgy</p>
