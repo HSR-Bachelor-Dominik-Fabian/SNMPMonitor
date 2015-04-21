@@ -7,8 +7,25 @@
   .body-content {
     padding-right: 300px;
   }
+  .navmenu-headnav{
+      height: @navbar-height + 3;
+  }
+}
+
+@media (max-width: @screen-sm-max){
+  .navmenu-headnav{
+      height: @navbar-height + 1;
+  }
 }
 
 .btn-toggle-status-fixed-right{
     float:right;
+}
+.navmenu-headnav{
+    background-color: @gray-darker;
+    width: 300px;
+    
+}
+.border-none-navmenu{
+    border: none;
 }
