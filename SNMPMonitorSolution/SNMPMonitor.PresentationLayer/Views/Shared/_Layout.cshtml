@@ -11,7 +11,7 @@
     <header class="navbar navbar-static-top navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button id="hamburger" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -20,7 +20,7 @@
                     <img src="~/Content/img/LogoSNMPMonitorWhite.png" style="width:60px" alt="SNMP Monitor" />
                 </a>
             </div>
-            <div class="navbar-collapse collapse">
+            <div id="navigationBar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Dashboard", "Index", "Home")</li>
                     <li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>
@@ -35,9 +35,18 @@
         </div>
     </header>
 
+    <button id="systemStatusToggleButton" type="button" class="btn-default visible-xs btn-toggle-status-fixed-right" data-toggle="offcanvas" data-target="#sideStatus" data-canvas="body">
+        <span id="systemStatusToggleButtonIcon" class="glyphicon glyphicon-chevron-left"></span>  Systemstatus
+    </button>
+    <div id="sideStatus" class="navmenu navmenu-default navmenu-fixed-right offcanvas-xs border-none-navmenu">
+        <div class="navmenu-headnav"></div>
+        <div class="navmenu-brand border-bottom">Gesamtzustand</div>
+        <div class="navmenu-sidebar-content">
+        </div>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
-
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Dominik Heeb, Fabian Keller, Etienne Georgy</p>
@@ -47,9 +56,47 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/Scripts/js")
     @RenderSection("scripts", required: false)
-    <script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.ajax({
+                url: '@Url.Action("SideBarContent","Home")',
+                method: "Get",
+                success: function (data) {
+                    $(".navmenu-sidebar-content").html(data);
+                }
+            });
+        });
 
 
+
+        $("#sideStatus").on("show.bs.offcanvas", function () {
+            AnimateRotate($('#systemStatusToggleButtonIcon'),0,180);
+        });
+
+        $("#sideStatus").on("hide.bs.offcanvas", function () {
+            AnimateRotate($('#systemStatusToggleButtonIcon'),180, 0);
+        });
+
+        $("#navigationBar").on("show.bs.collapse", function () {
+            AnimateRotate($('#hamburger'), 0, 180);
+        });
+
+        $("#navigationBar").on("hide.bs.collapse", function () {
+            AnimateRotate($('#hamburger'), 180, 0);
+        });
+
+        function AnimateRotate(elem, from,angle) {
+            var $elem = elem;
+            $({deg: from}).animate({deg: angle}, {
+                duration: 500,
+                easing: 'swing',
+                step: function(now) {
+                    $elem.css({
+                        transform: 'rotate(' + now + 'deg)'
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>

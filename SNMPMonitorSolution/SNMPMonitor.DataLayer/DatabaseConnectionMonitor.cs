@@ -67,7 +67,7 @@ namespace SNMPMonitor.DataLayer
 
                 while (myMonitoringTypeSet.Read())
                 {
-                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString(), (bool) myMonitoringTypeSet["IsLongTimeCheck"]));
+                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
                 }
                 _myConnection.Close();
             }

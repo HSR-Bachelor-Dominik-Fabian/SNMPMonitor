@@ -1,6 +1,35 @@
 ﻿.navbar-btn-margin {
   margin: 10px 15px;
 }
+@media (min-width: 768px) {
+  .body-content {
+    padding-right: 300px;
+  }
+  .navmenu-headnav {
+    height: 63px;
+  }
+}
+@media (max-width: 991px) {
+  .navmenu-headnav {
+    height: 61px;
+  }
+}
+.btn-toggle-status-fixed-right {
+  float: right;
+}
+.navmenu-headnav {
+  background-color: #279ddd;
+  width: 300px;
+}
+.border-bottom {
+  border-bottom: 2px solid #dfd7ca;
+}
+.border-none-navmenu {
+  border: none;
+}
+.navmenu-sidebar-content {
+  margin: 10px 15px;
+}
 .ma-small-text {
   color: #8e8c84;
 }

@@ -28,7 +28,6 @@ namespace SNMPMonitor.PresentationLayer
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
                       "~/Content/site.css",
-                      "~/Content/bootstrap/jasny/jasny-bootstrap.less",
                      "~/Content/mainLayout.less"));
         }
     }
