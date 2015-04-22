@@ -8,7 +8,7 @@ using SNMPManager.BusinessLayer;
 using System.Timers;
 using System.Web;
 
-namespace SNMPManager.PresentationLayer.Controllers
+namespace SNMPManager.ServiceLayer.Controllers
 {
     public class DefaultController : ApiController
     {

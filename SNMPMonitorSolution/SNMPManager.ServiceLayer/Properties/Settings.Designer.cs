@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SNMPManager.PresentationLayer.Tests.Properties {
+namespace SNMPManager.ServiceLayer.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -26,11 +26,11 @@ namespace SNMPManager.PresentationLayer.Tests.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=152.96.56.75,40003;Initial Catalog=SNMPMonitorTest;Persist Security I" +
-            "nfo=True;User ID=ManagerTest;Password=HSR-00228866")]
-        public string TestDatabase {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=152.96.56.75,40003;Initial Catalog=SNMPMonitor;Persist Security Info=" +
+            "True;User ID=Manager;Password=HSR-00228866")]
+        public string ProdDatabase {
             get {
-                return ((string)(this["TestDatabase"]));
+                return ((string)(this["ProdDatabase"]));
             }
         }
     }

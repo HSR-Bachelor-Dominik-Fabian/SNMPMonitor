@@ -6,8 +6,8 @@
     <ProjectGuid>{7A79DD2B-6751-4292-85AE-F0618EC22FD3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SNMPManager.PresentationLayer.Tests</RootNamespace>
-    <AssemblyName>SNMPManager.PresentationLayer.Tests</AssemblyName>
+    <RootNamespace>SNMPManager.ServiceLayer.Tests</RootNamespace>
+    <AssemblyName>SNMPManager.ServiceLayer.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -56,7 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SNMPManager.PresentationLayer\SNMPManager.ServiceLayer.csproj">
+    <ProjectReference Include="..\SNMPManager.ServiceLayer\SNMPManager.ServiceLayer.csproj">
       <Project>{DB29DE1D-7C67-4D84-8FE9-F186F3DB5D81}</Project>
       <Name>SNMPManager.ServiceLayer</Name>
     </ProjectReference>

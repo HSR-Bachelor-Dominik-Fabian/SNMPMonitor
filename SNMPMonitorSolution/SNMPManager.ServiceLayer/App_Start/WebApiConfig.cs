@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace SNMPManager.PresentationLayer
+namespace SNMPManager.ServiceLayer
 {
     public static class WebApiConfig
     {

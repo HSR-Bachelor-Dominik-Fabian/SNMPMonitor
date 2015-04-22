@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 
-namespace SNMPManager.PresentationLayer
+namespace SNMPManager.ServiceLayer
 {
     public class WebApiApplication : System.Web.HttpApplication
     {

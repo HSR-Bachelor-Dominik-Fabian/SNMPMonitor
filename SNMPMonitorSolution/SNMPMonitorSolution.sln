@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SNMPManager", "SNMPManager"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPMonitor.PresentationLayer.Tests", "SNMPMonitor.PresentationLayer.Tests\SNMPMonitor.PresentationLayer.Tests.csproj", "{D719FC65-8526-4F18-B403-9F6C447CC7DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPManager.ServiceLayer", "SNMPManager.PresentationLayer\SNMPManager.ServiceLayer.csproj", "{DB29DE1D-7C67-4D84-8FE9-F186F3DB5D81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPManager.ServiceLayer", "SNMPManager.ServiceLayer\SNMPManager.ServiceLayer.csproj", "{DB29DE1D-7C67-4D84-8FE9-F186F3DB5D81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPManager.ServiceLayer.Tests", "SNMPManager.PresentationLayer.Tests\SNMPManager.ServiceLayer.Tests.csproj", "{7A79DD2B-6751-4292-85AE-F0618EC22FD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPManager.ServiceLayer.Tests", "SNMPManager.ServiceLayer.Tests\SNMPManager.ServiceLayer.Tests.csproj", "{7A79DD2B-6751-4292-85AE-F0618EC22FD3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SNMPManager.BusinessLayer", "SNMPManager.BusinessLayer\SNMPManager.BusinessLayer.csproj", "{D96C56E9-D6A4-4AAC-B439-42FCFC21DC91}"
 EndProject
