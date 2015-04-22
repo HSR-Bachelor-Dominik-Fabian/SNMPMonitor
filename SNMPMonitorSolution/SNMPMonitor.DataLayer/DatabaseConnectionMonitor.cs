@@ -183,6 +183,31 @@ namespace SNMPMonitor.DataLayer
             return monitorDataList;
         }
 
+        public void AddEventToDatabase(string exceptionType, string category, string timestamp, string hResult, string message, string stackTrace)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand addEventCommand = new SqlCommand("addEvent", _myConnection);
+                addEventCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                addEventCommand.Parameters.Add(new SqlParameter("@ExceptionType", exceptionType));
+                addEventCommand.Parameters.Add(new SqlParameter("@Category", category));
+                addEventCommand.Parameters.Add(new SqlParameter("@EventTimestamp", timestamp));
+                addEventCommand.Parameters.Add(new SqlParameter("@HResult", hResult));
+                addEventCommand.Parameters.Add(new SqlParameter("@Message", message));
+                addEventCommand.Parameters.Add(new SqlParameter("@Stacktrace", stackTrace));
+                addEventCommand.ExecuteNonQuery();
+
+                _myConnection.Close();
+            }
+            catch (Exception e)
+            {
+                _myConnection.Close();
+                Console.WriteLine(e.StackTrace.ToString());
+            }
+        }
+
         /*
         public void GetSummaryOfAgent(int agentNr)
         {
