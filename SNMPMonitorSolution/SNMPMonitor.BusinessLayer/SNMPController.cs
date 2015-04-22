@@ -81,5 +81,10 @@ namespace SNMPMonitor.BusinessLayer
             }
             return returnList;
         }
+
+        public void AddEvent(string exceptionType, string category, string timestamp, string hResult, string message, string stackTrace)
+        {
+            _databaseConnection.AddEventToDatabase(exceptionType, category, timestamp, hResult, message, stackTrace);
+        }
     }
 }

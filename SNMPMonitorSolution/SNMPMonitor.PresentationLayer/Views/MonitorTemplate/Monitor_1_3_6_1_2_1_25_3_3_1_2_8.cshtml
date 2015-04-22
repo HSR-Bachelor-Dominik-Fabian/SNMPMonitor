@@ -22,7 +22,7 @@
         function appendPoint{{=it.AgentNr}}(json) {
             var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8").highcharts();
             var shift = chart.series[0].data.length >= 10;
-            chart.series[0].addPoint({ x: new Date(json.MonitorTimestamp), y: parseInt(json.Result) }, true, shift);
+            chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y: parseInt(json.Result) }, true, shift);
         }
 
         function createChart{{=it.AgentNr}}() {

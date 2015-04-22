@@ -149,14 +149,17 @@ namespace SNMPManager.DataLayer
             try
             {
                 _myConnection.Open();
-                /*
-                SqlCommand saveLongTimeMonitorDataCommand = new SqlCommand("addEvent", _myConnection);
-                saveLongTimeMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.Name));
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysName", agent.IPAddress));
-                saveLongTimeMonitorDataCommand.Parameters.Add(new SqlParameter("@SysDesc", agent.Port));
-                saveLongTimeMonitorDataCommand.ExecuteNonQuery();
-                */
+                
+                SqlCommand addEventCommand = new SqlCommand("addEvent", _myConnection);
+                addEventCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                addEventCommand.Parameters.Add(new SqlParameter("@ExceptionType", exceptionType));
+                addEventCommand.Parameters.Add(new SqlParameter("@Category", category));
+                addEventCommand.Parameters.Add(new SqlParameter("@EventTimestamp", timestamp));
+                addEventCommand.Parameters.Add(new SqlParameter("@HResult", hResult));
+                addEventCommand.Parameters.Add(new SqlParameter("@Message", message));
+                addEventCommand.Parameters.Add(new SqlParameter("@Stacktrace", stackTrace));
+                addEventCommand.ExecuteNonQuery();
+                
                 _myConnection.Close();
             }
             catch (Exception e)
