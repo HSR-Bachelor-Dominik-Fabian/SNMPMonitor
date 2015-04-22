@@ -56,9 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SNMPManager.PresentationLayer\SNMPManager.PresentationLayer.csproj">
+    <ProjectReference Include="..\SNMPManager.PresentationLayer\SNMPManager.ServiceLayer.csproj">
       <Project>{DB29DE1D-7C67-4D84-8FE9-F186F3DB5D81}</Project>
-      <Name>SNMPManager.PresentationLayer</Name>
+      <Name>SNMPManager.ServiceLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
