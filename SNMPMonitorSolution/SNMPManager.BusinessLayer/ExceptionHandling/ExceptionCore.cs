@@ -33,6 +33,7 @@ namespace SNMPManager.BusinessLayer.ExceptionHandling
         {
             DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
             //TODO: Stop Service
+            throw exc;
         }
 
         private static void HandleNORMAL(ExceptionCategory category, Exception exc)

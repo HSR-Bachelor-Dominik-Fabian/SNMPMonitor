@@ -39,7 +39,8 @@ namespace SNMPMonitor.DataLayer.ExceptionHandling
 
         public static void SaveExceptionToDB(string category, Exception exc)
         {
-            //TODO:Dominik Implement SaveExceptionToDB
+            DatabaseConnectionMonitor connectionManager = new DatabaseConnectionMonitor(Properties.Settings.Default.ProdDatabase);
+            connectionManager.AddEventToDatabase(exc.GetType().ToString(), category, DateTime.Now.ToString(), exc.HResult.ToString(), exc.Message, exc.StackTrace);
         }
     }
 }
