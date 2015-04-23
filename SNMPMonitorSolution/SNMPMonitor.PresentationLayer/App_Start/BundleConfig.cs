@@ -29,6 +29,8 @@ namespace SNMPMonitor.PresentationLayer
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
                       "~/Content/site.css",
                      "~/Content/mainLayout.less"));
+
+            bundles.Add(new StyleBundle("~/Content/dasboardStyles").Include("~/Content/dashboardLayout.less"));
         }
     }
 }

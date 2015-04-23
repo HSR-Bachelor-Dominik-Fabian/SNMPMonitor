@@ -2,5 +2,29 @@
     ViewBag.Title = "Dashboard";
 }
 
+@Styles.Render("~/Content/dasboardStyles")
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: "@Url.Action("Monitor_Agent_Small", "MonitorTemplate")",
+                method: "GET",
+                success: function (data) {
+                    $("#dataContainer").append(data);
+                    $("#dataContainer").append(data);
+                    $("#dataContainer").append(data);
+                    $("#dataContainer").append(data);
+                    $("#dataContainer").append(data);
+                    $("#dataContainer").append(data);
+                }
+            });
+        });
+    </script>
+}
+
+<div id="dataContainer" class="container-fluid">
+
+</div>
 
 

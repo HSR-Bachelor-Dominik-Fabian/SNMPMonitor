@@ -276,6 +276,7 @@
     <Content Include="Content\mainLayout.css.map">
       <DependentUpon>mainLayout.css</DependentUpon>
     </Content>
+    <Content Include="Content\dashboardLayout.less" />
     <None Include="Properties\PublishProfiles\SNMPMonitor.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
