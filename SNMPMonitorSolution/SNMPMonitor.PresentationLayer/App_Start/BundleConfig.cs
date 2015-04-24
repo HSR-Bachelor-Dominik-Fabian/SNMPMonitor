@@ -24,13 +24,18 @@ namespace SNMPMonitor.PresentationLayer
                 "~/Scripts/jquery.signalR-2.2.0.min.js",
                 "~/Scripts/highcharts.js",
                 "~/Scripts/exporting.js",
-                "~/Scripts/jasny-bootstrap.min.js"));
+                "~/Scripts/jasny-bootstrap.min.js",
+                "~/Scripts/jquery.inputmask/jquery.inputmask.js",
+                "~/Scripts/jquery.inputmask/jquery.inputmask.extensions.js",
+                "~/Scripts/jquery.inputmask/jquery.inputmask.regex.extensions.js",
+                "~/Scripts/jquery.inputmask/jquery.inputmask.numeric.extensions.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
                       "~/Content/site.css",
                      "~/Content/mainLayout.less"));
 
             bundles.Add(new StyleBundle("~/Content/dasboardStyles").Include("~/Content/dashboardLayout.less"));
+
         }
     }
 }
