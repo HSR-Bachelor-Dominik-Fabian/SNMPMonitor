@@ -46,7 +46,7 @@ namespace SNMPManager.DataLayer
             }
             catch (Exception e)
             {
-                Trace.WriteLine(e.StackTrace.ToString());
+                throw e;
             }
             finally
             {
@@ -74,7 +74,7 @@ namespace SNMPManager.DataLayer
                 }
             } catch (Exception e)
             {
-                Trace.WriteLine(e.StackTrace.ToString());
+                throw e;
             }
             finally
             {
@@ -102,7 +102,7 @@ namespace SNMPManager.DataLayer
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace.ToString());
+                throw e;
             }
             finally
             {
@@ -129,7 +129,7 @@ namespace SNMPManager.DataLayer
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace.ToString());
+                throw e;
             }
             finally
             {
@@ -155,7 +155,7 @@ namespace SNMPManager.DataLayer
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                throw e;
             }
             finally
             {
@@ -182,7 +182,7 @@ namespace SNMPManager.DataLayer
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace.ToString());
+                throw e;
             }
             finally
             {
