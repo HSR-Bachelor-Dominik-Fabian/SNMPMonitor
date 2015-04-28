@@ -10,7 +10,7 @@ namespace SNMPManager.ServiceLayer
     public static class SNMPService
     {
         private static Timer _shortTimer = new Timer();
-        private static SNMPController controller = new SNMPController(SNMPManager.ServiceLayer.Properties.Settings.Default.ProdDatabase);
+        private static SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabase);
 
         public static void Start()
         {

@@ -30,18 +30,28 @@ namespace SNMPManager.DataLayer
         public List<AgentDataModel> GetAgentsFromDatabase()
         {
             List<AgentDataModel> agentList = new List<AgentDataModel>();
-            _myConnection.Open();
-
-            SqlCommand getMonitoringTypesForAgent = new SqlCommand("getAgents", _myConnection);
-            getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
-
-            SqlDataReader myAgentsSet = getMonitoringTypesForAgent.ExecuteReader();
-
-            while (myAgentsSet.Read())
+            try
             {
-                agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
+                _myConnection.Open();
+
+                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getAgents", _myConnection);
+                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+
+                SqlDataReader myAgentsSet = getMonitoringTypesForAgent.ExecuteReader();
+
+                while (myAgentsSet.Read())
+                {
+                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
+                }
             }
-            _myConnection.Close();
+            catch (Exception e)
+            {
+                Trace.WriteLine(e.StackTrace.ToString());
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
             return agentList;
         }
         
@@ -62,11 +72,13 @@ namespace SNMPManager.DataLayer
                 {
                     monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
                 }
-                _myConnection.Close();
             } catch (Exception e)
             {
-                _myConnection.Close();
                 Trace.WriteLine(e.StackTrace.ToString());
+            }
+            finally
+            {
+                _myConnection.Close();
             }
             return monitoringTypeList;
         }
@@ -87,12 +99,14 @@ namespace SNMPManager.DataLayer
                 {
                     typeList.Add(new TypeDataModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
                 }
-                _myConnection.Close();
             }
             catch (Exception e)
             {
-                _myConnection.Close();
                 Console.WriteLine(e.StackTrace.ToString());
+            }
+            finally
+            {
+                _myConnection.Close();
             }
             return typeList;
         }
@@ -102,7 +116,8 @@ namespace SNMPManager.DataLayer
             try
             {
                 _myConnection.Open();
-                foreach(KeyValuePair<string, string> result in resultSet) {
+                foreach (KeyValuePair<string, string> result in resultSet)
+                {
                     SqlCommand saveMonitorDataCommand = new SqlCommand("addMonitorData", _myConnection);
                     saveMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     saveMonitorDataCommand.Parameters.Add(new SqlParameter("@MonitoringTypeNr", result.Key));
@@ -111,12 +126,14 @@ namespace SNMPManager.DataLayer
 
                     saveMonitorDataCommand.ExecuteNonQuery();
                 }
-                _myConnection.Close();
             }
             catch (Exception e)
             {
-                _myConnection.Close();
                 Console.WriteLine(e.StackTrace.ToString());
+            }
+            finally
+            {
+                _myConnection.Close();
             }
         }
 
@@ -135,12 +152,14 @@ namespace SNMPManager.DataLayer
                 saveAgentCommand.Parameters.Add(new SqlParameter("@StatusNr", agent.Status));
                 saveAgentCommand.ExecuteNonQuery();
 
-                _myConnection.Close();
             }
             catch (Exception e)
             {
-                _myConnection.Close();
                 Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                _myConnection.Close();
             }
         }
 
@@ -160,12 +179,14 @@ namespace SNMPManager.DataLayer
                 addEventCommand.Parameters.Add(new SqlParameter("@Stacktrace", stackTrace));
                 addEventCommand.ExecuteNonQuery();
                 
-                _myConnection.Close();
             }
             catch (Exception e)
             {
-                _myConnection.Close();
                 Console.WriteLine(e.StackTrace.ToString());
+            }
+            finally
+            {
+                _myConnection.Close();
             }
         }
     }
