@@ -13,19 +13,24 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return View();
         }
 
-        public ActionResult Monitor()
+        public PartialViewResult Dashboard()
         {
-            return View();
+            return PartialView();
         }
 
-        public ActionResult Logs()
+        public PartialViewResult Monitor()
         {
-            return View();
+            return PartialView();
         }
 
-        public ActionResult AddAgent()
+        public PartialViewResult Logs()
         {
-            return View();
+            return PartialView();
+        }
+
+        public PartialViewResult AddAgent()
+        {
+            return PartialView();
         }
 
         [HttpGet]

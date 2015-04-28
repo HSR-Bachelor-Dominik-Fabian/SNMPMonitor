@@ -14,7 +14,7 @@
             connection.start().done(function () {
                 notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
             }).fail(function (e) {
-                alert(e);
+                alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
             });
 
         });

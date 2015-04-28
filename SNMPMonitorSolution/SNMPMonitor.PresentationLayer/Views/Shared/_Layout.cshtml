@@ -16,17 +16,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="@Url.Action("Index","Home")" class="navbar-brand">
+                <a href="#/" class="navbar-brand">
                     <img src="~/Content/img/LogoSNMPMonitorWhite.png" style="width:60px" alt="SNMP Monitor" />
                 </a>
             </div>
             <div id="navigationBar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Dashboard", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Monitor", "Monitor", "Home")</li>
-                    <li>@Html.ActionLink("Logs", "Logs", "Home")</li>
+                    <li><a href="#/">Dashboard</a></li>
+                    <li><a href="#/Monitor">Monitor</a></li>
+                    <li><a href="#/Logs">Logs</a></li>
                     <li>
-                        <button type="button" class="btn btn-labeled btn-success navbar-btn btn-sm navbar-btn-margin" onclick="location.href='@Url.Action("AddAgent", "Home")'">
+                        <button type="button" class="btn btn-labeled btn-success navbar-btn btn-sm navbar-btn-margin" onclick="location.href='#/AddAgent'">
                             <span class="btn-label"><i class="glyphicon glyphicon-plus"></i></span>Hinzufügen
                         </button>
                     </li>

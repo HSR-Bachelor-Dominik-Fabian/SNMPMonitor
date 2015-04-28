@@ -28,7 +28,8 @@ namespace SNMPMonitor.PresentationLayer
                 "~/Scripts/jquery.inputmask/jquery.inputmask.js",
                 "~/Scripts/jquery.inputmask/jquery.inputmask.extensions.js",
                 "~/Scripts/jquery.inputmask/jquery.inputmask.regex.extensions.js",
-                "~/Scripts/jquery.inputmask/jquery.inputmask.numeric.extensions.js"));
+                "~/Scripts/jquery.inputmask/jquery.inputmask.numeric.extensions.js",
+                "~/Scripts/sammy-latest.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/bootstrap/theme/theme.less",
                       "~/Content/site.css",

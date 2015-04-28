@@ -1,29 +1,45 @@
 ﻿@{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Title = "SNMP Monitor";
 }
-
-@Styles.Render("~/Content/dasboardStyles")
 
 @section Scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
-            $.ajax({
-                url: "@Url.Action("Monitor_Agent_Small", "MonitorTemplate")",
-                method: "GET",
-                success: function (data) {
-                    $("#dataContainer").append(data);
-                    $("#dataContainer").append(data);
-                    $("#dataContainer").append(data);
-                    $("#dataContainer").append(data);
-                    $("#dataContainer").append(data);
-                    $("#dataContainer").append(data);
-                }
+    $(document).ready(function () {
+        var app = $.sammy(function () {
+            this.element_selector = '#contentContainer';
+            this.get('#/', function (context) {
+                context.load("@Url.Action("Dashboard","Home")").swap();
+                SetActiveLink("");
+            });
+            this.get('#/Monitor', function (context) {
+                context.load("@Url.Action("Monitor","Home")").swap();
+                SetActiveLink("Monitor");
+            });
+            this.get('#/Logs', function (context) {
+                context.load("@Url.Action("Logs","Home")").swap();
+                SetActiveLink("Logs");
+            });
+            this.get('#/AddAgent', function (context) {
+                context.load("@Url.Action("AddAgent","Home")").swap();
+                var ul = $('ul')
+                ul.children().removeClass('active')
             });
         });
-    </script>
+
+        app.run("#/");
+    });
+
+    function SetActiveLink(name) {
+        var ul = $('#navigationBar ul');
+
+        ul.children().removeClass('active')
+
+        ul.find('a[href="#/' + name + '"]').parent().addClass('active')
+    }
+</script>
 }
 
-<div id="dataContainer" class="container-fluid">
+<div id="contentContainer">
 
 </div>
 
