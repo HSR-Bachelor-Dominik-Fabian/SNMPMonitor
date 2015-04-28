@@ -1,6 +1,7 @@
 ﻿<div>
     <h3>Agent {{=it.Key.Name}}</h3>
-    {{~it.Value:item}}
+    <div class="container-fluid">
+        {{~it.Value:item}}
         <script type="text/javascript">
             $(document).ready(function () {
                 var ObjNr = '{{=item.ObjectIDReplaced}}';
@@ -9,7 +10,7 @@
                     method: "GET",
                     success: function (data) {
                         var monitor = doT.template(data);
-                        
+
                         var jsonForMonitor = { "AgentNr": {{=it.Key.AgentNr}}};
                         $("#Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}").html(monitor(jsonForMonitor));
                     },
@@ -18,9 +19,10 @@
                 });
             });
         </script>
-    <div id="Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}">
+        <div id="Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}" class="col-xs-12 col-lg-4 col-md-6">
 
+        </div>
+        {{~}}
     </div>
-    {{~}}
 </div>
 
