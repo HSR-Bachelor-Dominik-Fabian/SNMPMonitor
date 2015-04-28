@@ -33,14 +33,25 @@ namespace SNMPMonitor.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getAgents", _myConnection);
-                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlCommand getAgents = new SqlCommand("getAgents", _myConnection);
+                getAgents.CommandType = System.Data.CommandType.StoredProcedure;
 
-                SqlDataReader myAgentsSet = getMonitoringTypesForAgent.ExecuteReader();
+                SqlDataReader myAgentsSet = getAgents.ExecuteReader();
+
+                List<TypeDataModel> typeSet = new DatabaseConnectionMonitor(Properties.Settings.Default.ProdDatabase).GetTypesFromDatabase();
 
                 while (myAgentsSet.Read())
                 {
-                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"], myAgentsSet["sysDesc"].ToString(), myAgentsSet["sysName"].ToString()));
+                    TypeDataModel type = null;
+                    int tempTypeNr = (int)myAgentsSet["TypeNr"];
+                    foreach (TypeDataModel temp in typeSet)
+                    {
+                        if (temp.TypeNr == tempTypeNr)
+                        {
+                            type = temp;
+                        }
+                    }
+                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), type, (int)myAgentsSet["Port"], (int)myAgentsSet["Status"], myAgentsSet["sysDesc"].ToString(), myAgentsSet["sysName"].ToString(), myAgentsSet["sysUptime"].ToString()));
                 }
             }
             catch (Exception e)
@@ -122,7 +133,7 @@ namespace SNMPMonitor.DataLayer
                 saveAgentCommand.Parameters.Add(new SqlParameter("@Name", agent.Name));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@IPAddress", agent.IPAddress));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@Port", agent.Port));
-                saveAgentCommand.Parameters.Add(new SqlParameter("@TypeNr", agent.TypeNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@TypeNr", agent.Type.TypeNr));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@StatusNr", agent.Status));
                 saveAgentCommand.ExecuteNonQuery();
             }

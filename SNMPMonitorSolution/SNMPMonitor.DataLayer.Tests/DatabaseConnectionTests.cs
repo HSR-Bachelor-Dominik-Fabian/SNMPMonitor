@@ -20,7 +20,7 @@ namespace SNMPMonitor.DataLayer.Tests
 
             if (agents.Count == 0)
             {
-                AgentDataModel agent = new AgentDataModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", 1, 40001, 1, "Test-Client", "sinv-56075");
+                AgentDataModel agent = new AgentDataModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", new TypeDataModel(1, "Server"), 40001, 1, "Test-Client", "sinv-56075", "");
                 databaseConnection.AddAgentToDatabase(agent);
             }
         }

@@ -16,5 +16,21 @@ namespace SNMPManager.DataLayer
             _typeNr = typeNr;
             _name = name;
         }
+
+        public int TypeNr
+        {
+            get
+            {
+                return _typeNr;
+            }
+        }
+
+        public String Name
+        {
+            get
+            {
+                return _name;
+            }
+        }
     }
 }
