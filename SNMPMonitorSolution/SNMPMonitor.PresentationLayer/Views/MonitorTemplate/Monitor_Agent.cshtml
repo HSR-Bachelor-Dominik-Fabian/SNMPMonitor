@@ -1,5 +1,21 @@
 ﻿<div>
-    <h3>Agent {{=it.Key.Name}}</h3>
+    <div class="bs-callout-success">
+        <h3>{{=it.Key.Name}}</h3>
+        <div class="container">
+            <div class="row">
+                <p class="col-xs-4 col-sm-2"><strong>IP Adresse</strong></p>
+                <p class="col-xs-8 col-sm-4">{{=it.Key.IPAddress}}</p>
+            </div>
+            <div class="row">
+                <p class="col-xs-4 col-sm-2"><strong>Port</strong></p>
+                <p class="col-xs-8 col-sm-4">{{=it.Key.Port}}</p>
+            </div>
+            <div class="row">
+                <p class="col-xs-4 col-sm-2"><strong>Status</strong></p>
+                <p class="col-xs-8 col-sm-4">{{=it.Key.Status}}</p>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid">
         {{~it.Value:item}}
         <script type="text/javascript">
