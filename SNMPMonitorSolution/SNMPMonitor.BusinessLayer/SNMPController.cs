@@ -66,7 +66,7 @@ namespace SNMPMonitor.BusinessLayer
 
         public void AddAgentToDatabase(Agent agent)
         {
-            AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, agent.TypeNr, agent.Port, agent.Status);
+            AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, agent.TypeNr, agent.Port, agent.Status, "", "");
             _databaseConnection.AddAgentToDatabase(agentData);
         }
 

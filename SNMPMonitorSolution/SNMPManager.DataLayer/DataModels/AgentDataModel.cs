@@ -9,13 +9,15 @@ namespace SNMPManager.DataLayer
     public class AgentDataModel
     {
         private readonly int _agentNr;
-        private readonly String _name;
-        private readonly String _iPAddress;
+        private readonly string _name;
+        private readonly string _iPAddress;
         private readonly int _typeNr;
         private readonly int _port;
         private readonly int _status;
+        private readonly string _sysDesc;
+        private readonly string _sysName;
 
-        public AgentDataModel(int agentNr, String name, String iPAddress, int typeNr, int port, int status)
+        public AgentDataModel(int agentNr, string name, string iPAddress, int typeNr, int port, int status, string sysDesc, string sysName)
         {
             _agentNr = agentNr;
             _name = name;
@@ -23,6 +25,24 @@ namespace SNMPManager.DataLayer
             _typeNr = typeNr;
             _port = port;
             _status = status;
+            _sysDesc = sysDesc;
+            _sysName = sysName;
+        }
+
+        public string SysName
+        {
+            get
+            {
+                return _sysName;
+            }
+        }
+
+        public string SysDescription
+        {
+            get
+            {
+                return _sysDesc;
+            }
         }
 
         public int AgentNr
@@ -33,7 +53,7 @@ namespace SNMPManager.DataLayer
             }
         }
 
-        public String Name
+        public string Name
         {
             get
             {
@@ -41,7 +61,7 @@ namespace SNMPManager.DataLayer
             }
         }
 
-        public String IPAddress
+        public string IPAddress
         {
             get
             {
