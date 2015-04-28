@@ -300,6 +300,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sammy-latest.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -323,6 +324,7 @@
     <Content Include="Views\Home\AddAgent.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Agent_Small.cshtml" />
     <Content Include="Views\Home\SideBarContent.cshtml" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

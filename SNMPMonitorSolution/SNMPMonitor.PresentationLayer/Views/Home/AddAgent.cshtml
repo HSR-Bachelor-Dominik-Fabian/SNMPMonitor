@@ -1,9 +1,4 @@
-﻿
-@{
-    ViewBag.Title = "AddAgent";
-}
-
-<h2>Neuer Agent hinzufügen</h2>
+﻿<h2>Neuer Agent hinzufügen</h2>
 <div class="container" id="MonitorForm">
     <form class="form-horizontal" id="MonitorInputForm" action="@Url.Action("AddAgentToMonitor","Data")" method="post">
         <div class="form-group">
@@ -41,32 +36,30 @@
 </div>
 <div id="dataContainer">
 </div>
-@section scripts{
-    <script type="text/javascript">
-            $(document).ready(function () {
-                $("#MonitorInputForm").on("submit", function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: this.action,
-                        type: "POST",
-                        data: {
-                            "inputAgentName": this.inputAgentName.value,
-                            "inputIpAddress": this.inputIpAddress.value,
-                            "inputPortNr": this.inputPortNr.value
-                        },
-                        success: function (data) {
-                            $("#MonitorInputForm").trigger("reset");
-                            $(".alertBox").html("<div class='alert alert-success' role='alert'><strong>Success!</strong> Monitor erfolgreich hinzugefügt</div>");
-                        },
-                        error: function (data, textStatus, errorThrown) {
-                            $(".alertBox").html("<div class='alert alert-error' role='alert'><strong>" + textStatus + "!</strong> " + errorThrown + "</div>");
-                        }
-                    });
-                });
-                
-                $("#inputIpAddress").inputmask({
-                    alias: "ip"
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#MonitorInputForm").on("submit", function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: this.action,
+                    type: "POST",
+                    data: {
+                        "inputAgentName": this.inputAgentName.value,
+                        "inputIpAddress": this.inputIpAddress.value,
+                        "inputPortNr": this.inputPortNr.value
+                    },
+                    success: function (data) {
+                        $("#MonitorInputForm").trigger("reset");
+                        $(".alertBox").html("<div class='alert alert-success' role='alert'><strong>Success!</strong> Monitor erfolgreich hinzugefügt</div>");
+                    },
+                    error: function (data, textStatus, errorThrown) {
+                        $(".alertBox").html("<div class='alert alert-error' role='alert'><strong>" + textStatus + "!</strong> " + errorThrown + "</div>");
+                    }
                 });
             });
-    </script>
-}
+                
+            $("#inputIpAddress").inputmask({
+                alias: "ip"
+            });
+        });
+</script>
