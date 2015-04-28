@@ -33,15 +33,5 @@ namespace SNMPManager.DataLayer.Tests
 
             Assert.AreEqual(expected, actual);
         }
-
-        [TestMethod]
-        public void TestDatabaseConnectionGetMonitoringTypes()
-        {
-            int actual = databaseConnection.GetMonitoringTypesForAgentForCheckFromDatabase(1).Count;
-
-            int expected = 4;
-
-            Assert.AreEqual(expected, actual);
-        }
     }
 }
