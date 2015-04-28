@@ -40,7 +40,7 @@ namespace SNMPMonitor.DataLayer
 
                 while (myAgentsSet.Read())
                 {
-                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"]));
+                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"], myAgentsSet["sysDesc"].ToString(), myAgentsSet["sysName"].ToString()));
                 }
             }
             catch (Exception e)
