@@ -8,6 +8,7 @@ using SnmpSharpNet;
 using SNMPManager.DataLayer;
 using System.Diagnostics;
 using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace SNMPManager.BusinessLayer
 {
@@ -24,7 +25,6 @@ namespace SNMPManager.BusinessLayer
         {
             DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
             List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
-
             Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent));
         }
 
@@ -38,48 +38,25 @@ namespace SNMPManager.BusinessLayer
 
             IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
             UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
-
-            Pdu pdu = GetPduForAgent(agent, connection);
-
-            SnmpV2Packet result = (SnmpV2Packet)target.Request(pdu, param);
-
-            if (result != null)
+            try
             {
-                if (result.Pdu.ErrorStatus != 0)
-                {
-                    Console.WriteLine("Error in SNMP reply. Error {0} index {1}", result.Pdu.ErrorStatus, result.Pdu.ErrorIndex);
-                }
-                else
-                {
-                    SendDataToDataLayer(agent, result, connection);
-                }
+                this.WalkThroughOid(target, connection, agent);
             }
-            else
+            finally
             {
-                Console.WriteLine("No response recieved from SNMP Agent");
+                target.Close();
             }
-
-            target.Close();
         }
 
-        private Pdu GetPduForAgent(AgentDataModel agent, DatabaseConnectionManager connection)
+        private void WalkThroughOid(UdpTarget target, DatabaseConnectionManager connection, AgentDataModel agent)
         {
             List<MonitoringTypeDataModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentForCheckFromDatabase(agent.AgentNr);
-
-            Pdu pdu = new Pdu(PduType.Get);
-            foreach (MonitoringTypeDataModel MonitoringType in MonitoringTypeList)
-            {
-                pdu.VbList.Add(MonitoringType.ObjectID);
-            }
-            return pdu;
-        }
-
-        private void SendDataToDataLayer(AgentDataModel agent, SnmpV2Packet result, DatabaseConnectionManager connection)
-        {
             List<KeyValuePair<string, string>> resultList = new List<KeyValuePair<string, string>>();
-            for (int i = 0; i < result.Pdu.VbList.Count(); i++)
+            foreach (MonitoringTypeDataModel type in MonitoringTypeList)
             {
-                resultList.Add(new KeyValuePair<string, string>(result.Pdu.VbList[i].Oid.ToString(), result.Pdu.VbList[i].Value.ToString()));
+                SNMPWalk walk = new SNMPWalk(target, type.ObjectID);
+                JObject results = walk.Walk();
+                resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
             }
             connection.AddMonitorDataToDatabase(agent, resultList);
         }

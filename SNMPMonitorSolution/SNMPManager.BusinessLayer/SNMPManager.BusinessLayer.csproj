@@ -72,6 +72,7 @@
     </Compile>
     <Compile Include="SNMPController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SNMPWalk.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SNMPManager.DataLayer\SNMPManager.DataLayer.csproj">
