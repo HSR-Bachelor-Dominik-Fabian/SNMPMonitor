@@ -9,6 +9,8 @@ using SNMPManager.DataLayer;
 using System.Diagnostics;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using System.Data.SqlClient;
+using SNMPManager.BusinessLayer.ExceptionHandling;
 
 namespace SNMPManager.BusinessLayer
 {
@@ -44,7 +46,7 @@ namespace SNMPManager.BusinessLayer
             }
             finally
             {
-                target.Close();
+            target.Close();
             }
         }
 

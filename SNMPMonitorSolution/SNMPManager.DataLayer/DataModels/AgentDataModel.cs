@@ -16,8 +16,9 @@ namespace SNMPManager.DataLayer
         private readonly int _status;
         private readonly string _sysDesc;
         private readonly string _sysName;
+        private readonly string _sysUptime;
 
-        public AgentDataModel(int agentNr, string name, string iPAddress, int typeNr, int port, int status, string sysDesc, string sysName)
+        public AgentDataModel(int agentNr, string name, string iPAddress, int typeNr, int port, int status, string sysDesc, string sysName, string sysUptime)
         {
             _agentNr = agentNr;
             _name = name;
@@ -27,6 +28,15 @@ namespace SNMPManager.DataLayer
             _status = status;
             _sysDesc = sysDesc;
             _sysName = sysName;
+            _sysUptime = sysUptime;
+        }
+
+        public string SysUptime
+        {
+            get
+            {
+                return _sysUptime;
+            }
         }
 
         public string SysName

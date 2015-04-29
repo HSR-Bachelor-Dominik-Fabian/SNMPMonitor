@@ -11,22 +11,32 @@ namespace SNMPMonitor.DataLayer
         private readonly int _agentNr;
         private readonly String _name;
         private readonly String _iPAddress;
-        private readonly int _typeNr;
+        private readonly TypeDataModel _type;
         private readonly int _port;
         private readonly int _status;
         private readonly string _sysDesc;
         private readonly string _sysName;
+        private readonly string _sysUptime;
 
-        public AgentDataModel(int agentNr, String name, String iPAddress, int typeNr, int port, int status, string sysDesc, string sysName)
+        public AgentDataModel(int agentNr, String name, String iPAddress, TypeDataModel type, int port, int status, string sysDesc, string sysName, string sysUptime)
         {
             _agentNr = agentNr;
             _name = name;
             _iPAddress = iPAddress;
-            _typeNr = typeNr;
+            _type = type;
             _port = port;
             _status = status;
             _sysDesc = sysDesc;
             _sysName = sysName;
+            _sysUptime = sysUptime;
+        }
+
+        public string SysUptime
+        {
+            get
+            {
+                return _sysUptime;
+            }
         }
 
         public string SysName
@@ -69,11 +79,11 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
-        public int TypeNr
+        public TypeDataModel Type
         {
             get
             {
-                return _typeNr;
+                return _type;
             }
         }
 

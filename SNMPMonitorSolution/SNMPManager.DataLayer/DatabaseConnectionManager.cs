@@ -41,12 +41,8 @@ namespace SNMPManager.DataLayer
 
                 while (myAgentsSet.Read())
                 {
-                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"], myAgentsSet["sysDesc"].ToString(), myAgentsSet["sysName"].ToString()));
+                    agentList.Add(new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), (int)myAgentsSet["TypeNr"], (int)myAgentsSet["Port"], (int)myAgentsSet["Status"], myAgentsSet["sysDesc"].ToString(), myAgentsSet["sysName"].ToString(), myAgentsSet["sysUptime"].ToString()));
                 }
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine(e.StackTrace.ToString());
             }
             finally
             {
@@ -72,9 +68,6 @@ namespace SNMPManager.DataLayer
                 {
                     monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
                 }
-            } catch (Exception e)
-            {
-                Trace.WriteLine(e.StackTrace.ToString());
             }
             finally
             {
@@ -100,10 +93,6 @@ namespace SNMPManager.DataLayer
                     typeList.Add(new TypeDataModel((int)myTypesSet["TypeNr"], myTypesSet["Name"].ToString()));
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace.ToString());
-            }
             finally
             {
                 _myConnection.Close();
@@ -127,10 +116,6 @@ namespace SNMPManager.DataLayer
                     saveMonitorDataCommand.ExecuteNonQuery();
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace.ToString());
-            }
             finally
             {
                 _myConnection.Close();
@@ -153,17 +138,13 @@ namespace SNMPManager.DataLayer
                 saveAgentCommand.ExecuteNonQuery();
 
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
             finally
             {
                 _myConnection.Close();
             }
         }
 
-        public void AddEventToDatabase(string exceptionType, string category, string timestamp, string hResult, string message, string stackTrace)
+        public void AddEventToDatabase(string exceptionType, string category, DateTime timestamp, int hResult, string message, string stackTrace)
         {
             try
             {
@@ -179,10 +160,6 @@ namespace SNMPManager.DataLayer
                 addEventCommand.Parameters.Add(new SqlParameter("@Stacktrace", stackTrace));
                 addEventCommand.ExecuteNonQuery();
                 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace.ToString());
             }
             finally
             {
