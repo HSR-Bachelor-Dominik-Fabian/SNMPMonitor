@@ -9,24 +9,24 @@ using Newtonsoft.Json.Linq;
 using SNMPMonitor.PresentationLayer.Models;
 using System.Web.Helpers;
 using Newtonsoft.Json;
+using SNMPMonitor.BusinessLayer;
 
 namespace SNMPMonitor.PresentationLayer.Hubs
 {
     [HubName("snmpDataHub")]
     public class SNMPDataHub : Hub
     {
-        [Obsolete]
-        public void SendSNMPData()
-        {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            Random rnd = new Random();
-            context.Clients.Group("Agent_1").receiveData(rnd.Next(100));
-        }
         public void SendSNMPData(MonitorDataModel dataToShow)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             
             context.Clients.Group("Agent_" + dataToShow.AgentID).receiveData(JObject.FromObject(dataToShow));
+        }
+
+        public void SendUpdatedAgent(Agent agent)
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
+            context.Clients.Group("Agent_" + agent.AgentNr).recieveUpdatedAgent(JObject.FromObject(agent));
         }
 
         public Task JoinDataGroup(string groupName)

@@ -25,28 +25,54 @@ namespace SNMPManager.BusinessLayer
 
         public void GetSNMPDataFromAgents()
         {
-            DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
-            List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
-            Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent));
+            try
+            {
+                DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
+                List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
+                Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent));
+            }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
+            }
         }
 
         private void GetSNMPDataFromSingleAgent(AgentDataModel agent)
         {
-            DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
-
-            OctetString community = new OctetString("public");
-            AgentParameters param = new AgentParameters(community);
-            param.Version = SnmpVersion.Ver2;
-
-            IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
-            UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
             try
             {
-                this.WalkThroughOid(target, connection, agent);
+                DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
+
+                OctetString community = new OctetString("public");
+                AgentParameters param = new AgentParameters(community);
+                param.Version = SnmpVersion.Ver2;
+
+                IpAddress agentIpAddress = new IpAddress(agent.IPAddress);
+                UdpTarget target = new UdpTarget((IPAddress)agentIpAddress, agent.Port, 2000, 1);
+                try
+                {
+                    this.WalkThroughOid(target, connection, agent);
+                }
+                finally
+                {
+                    target.Close();
+                }
             }
-            finally
+            catch (SnmpException e)
             {
-            target.Close();
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
         }
 

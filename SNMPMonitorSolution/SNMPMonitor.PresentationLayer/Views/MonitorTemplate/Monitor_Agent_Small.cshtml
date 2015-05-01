@@ -1,20 +1,95 @@
-﻿<div class="agentSmallContainer col-xs-8 col-sm-6 col-lg-3">
+﻿{{function loadHostname(json){
+    var output;
+    var object = JSON.parse(json);
+    if(object.Results.length > 0){
+        output = object.Results[0].Value;
+    }
+    else{
+        output = "undefined";
+    }
+    return output;
+  }
+}}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var connection = $.hubConnection();
+        connection.logging = true;
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("recieveUpdatedAgent", function (dataValue) {
+            $("#agentSmall_{{=it.AgentNr}} .agentName").html(dataValue.Name);
+            $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress);
+            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
+            if (dataValue.Status == 1) {
+                if(!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-success")){
+                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
+                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-danger");
+                    $("#agentSmall_{{=it.AgentNr}} table").addClass("ma-success");
+                }
+            }
+            else if (dataValue.Status == 2) {
+                if (!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-warning")) {
+                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-success");
+                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-danger");
+                    $("#agentSmall_{{=it.AgentNr}} table").addClass("ma-warning");
+                }
+            }
+            else {
+                if (!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-danger")) {
+                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
+                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-success");
+                    $("#agentSmall_{{=it.AgentNr}} table").addClass("ma-danger");
+                }
+            }
+        });
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
+        }).fail(function (e) {
+            alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
+        });
+    });
+
+    function loadHostname(json) {
+        var output;
+        try{
+            var object = JSON.parse(json);
+            if (object.Results.length > 0) {
+                output = object.Results[0].Value;
+            }
+            else {
+                output = "undefined";
+            }
+        }
+        catch (e) {
+            output = "Bad Format";
+        }
+        
+        return output;
+    }
+</script>
+
+<div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-8 col-sm-6 col-lg-3">
     <div class="agentSmallWrapper">
-        <table class="ma-danger">
-            <tr>
-                <td>
-                    <div class="ma-small-padding agentSmallIcon">
-                        <img src="~/Content/img/servericon.png" style="height:60px" alt="ServerIcon" class="img-rounded" />
-                    </div>
-                </td>
-                <td>
-                    <div class="ma-small-padding agentSmallText">
-                        <h4 class="ma-small-h4">Server1</h4>
-                        <span class="ma-small-text">Hostname</span><br />
-                        <span class="ma-small-text">192.168.10.12</span>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+        {{? it.Status == 1}}
+            <table class="ma-success">
+        {{?? it.Status == 2}}
+            <table class="ma-warning">
+        {{??}}
+            <table class="ma-danger">
+        {{?}}
+        <tr>
+            <td>
+                <div class="ma-small-padding agentSmallIcon">
+                    <img src="~/Content/img/servericon.png" style="height:60px" alt="ServerIcon" class="img-rounded" />
+                </div>
+            </td>
+            <td>
+                <div class="ma-small-padding agentSmallText">
+                    <h4 class="ma-small-h4 agentName">{{=it.Name}}</h4>
+                    <span class="ma-small-text hostname">{{=loadHostname(it.SysName)}}</span><br />
+                    <span class="ma-small-text ipAddress">{{=it.IPAddress}}:{{=it.Port}}</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
 </div>

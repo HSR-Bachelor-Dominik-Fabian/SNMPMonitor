@@ -6,12 +6,17 @@
             url: "@Url.Action("Monitor_Agent_Small", "MonitorTemplate")",
             method: "GET",
             success: function (data) {
-                $("#dataContainer").append(data);
-                $("#dataContainer").append(data);
-                $("#dataContainer").append(data);
-                $("#dataContainer").append(data);
-                $("#dataContainer").append(data);
-                $("#dataContainer").append(data);
+                var templateFunc = doT.template(data);
+                $.ajax({
+                    url: "@Url.Action("GetAgents", "Data")",
+                    method: "GET",
+                    success: function (agentData) {
+                        $.each(agentData, function (index, value) {
+                            $("#dataContainer").append(templateFunc(value));
+                        });
+                    }
+                });
+                
             }
         });
     });

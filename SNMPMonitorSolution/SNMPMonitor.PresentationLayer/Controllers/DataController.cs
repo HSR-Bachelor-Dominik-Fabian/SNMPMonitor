@@ -34,6 +34,16 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
 
+        public HttpStatusCodeResult AgentUpdatedTrigger(string param)
+        {
+            SNMPDataHub Hub = new SNMPDataHub();
+            BusinessLayer.Type type = new BusinessLayer.Type(1,"Server");
+            Agent AgentToSend = new Agent(1,"TEst","192.120.215.122",type,120,2,"asdf","asdf","123");
+            Hub.SendUpdatedAgent(AgentToSend);
+            return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+            //TODO: Agent vom Trigger empfangen
+        }
+
         [HttpGet]
         public JsonResult HistoryDataForOID(string id, string oid)
         {
@@ -73,6 +83,15 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             }
 
             return output;
+        }
+
+        [HttpGet]
+        public JsonResult GetAgents()
+        {
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            List<Agent> agents = controller.GetAgents();
+            JsonResult test = Json(agents, JsonRequestBehavior.AllowGet);
+            return test;
         }
     }
 }
