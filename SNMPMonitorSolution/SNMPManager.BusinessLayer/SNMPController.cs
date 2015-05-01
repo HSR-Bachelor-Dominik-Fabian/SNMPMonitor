@@ -79,14 +79,16 @@ namespace SNMPManager.BusinessLayer
         private void WalkThroughOid(UdpTarget target, DatabaseConnectionManager connection, AgentDataModel agent)
         {
             List<MonitoringTypeDataModel> MonitoringTypeList = connection.GetMonitoringTypesForAgentForCheckFromDatabase(agent.AgentNr);
-            List<KeyValuePair<string, string>> resultList = new List<KeyValuePair<string, string>>();
-            foreach (MonitoringTypeDataModel type in MonitoringTypeList)
-            {
-                SNMPWalk walk = new SNMPWalk(target, type.ObjectID);
-                JObject results = walk.Walk();
-                resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
+            if (MonitoringTypeList.Count > 0) {
+                List<KeyValuePair<string, string>> resultList = new List<KeyValuePair<string, string>>();
+                foreach (MonitoringTypeDataModel type in MonitoringTypeList)
+                {
+                    SNMPWalk walk = new SNMPWalk(target, type.ObjectID);
+                    JObject results = walk.Walk();
+                    resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
+                }
+                connection.AddMonitorDataToDatabase(agent, resultList);
             }
-            connection.AddMonitorDataToDatabase(agent, resultList);
         }
     }
 }
