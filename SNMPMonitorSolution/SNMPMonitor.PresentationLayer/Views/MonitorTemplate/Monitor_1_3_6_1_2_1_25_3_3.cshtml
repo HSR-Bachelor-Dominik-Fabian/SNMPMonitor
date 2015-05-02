@@ -4,7 +4,7 @@
             connection.logging = true;
             var notifications = connection.createHubProxy("snmpDataHub");
             notifications.on("receiveData", function (dataValue) {
-                if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3.1.2.8") {
+                if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3") {
                     appendPoint{{=it.AgentNr}}(dataValue);
                 }
             });
@@ -20,7 +20,7 @@
         });
                     
         function appendPoint{{=it.AgentNr}}(json) {
-            var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8").highcharts();
+            var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3").highcharts();
             var shift = chart.series[0].data.length >= 10;
             chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y: parseInt(json.Result) }, true, shift);
         }
@@ -31,7 +31,7 @@
                     useUTC: false
                 }
             });
-            $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8").highcharts({
+            $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3").highcharts({
                 chart: {
                     type: 'line',
                     height: 300,
@@ -65,7 +65,7 @@
                         var newdata = [];
                         $.ajax({
                             url: '@Url.Action("HistoryDataForOID","Data")',
-                            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3.1.2.8',
+                            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3',
                             async: false,
                             cache: false,
                             method: 'Get',
@@ -81,6 +81,6 @@
             });     
         }
     </script>
-    <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3_1_2_8" class="col-xs-12 col-lg-4 col-md-6">
+    <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3" class="col-xs-12 col-lg-4 col-md-6">
 
 </div>

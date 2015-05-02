@@ -1,0 +1,176 @@
+﻿  <script type="text/javascript">
+    $(document).ready(function () {
+        var connection = $.hubConnection();
+        connection.logging = true;
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveData", function (dataValue) {
+            if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
+                appendPointLine{{=it.AgentNr}}(dataValue);
+                addValuesToPie{{=it.AgentNr}}(getArrayFromJSONForPie(dataValue));
+            }
+        });
+
+        createChartLine{{=it.AgentNr}}();
+        createChartPie{{=it.AgentNr}}();
+
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
+        }).fail(function (e) {
+            alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
+        });
+
+    });
+
+    function addValuesToPie{{=it.AgentNr}}(newdata) {
+        var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie").highcharts();
+        console.log(newdata);
+        chart.series[0].setData(newdata, true);
+    }
+
+    function getValuesForPie{{=it.AgentNr}}(){
+        var newdata = [];
+        $.ajax({
+            url: '@Url.Action("HistoryDataForOID", "Data")',
+            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3',
+            async: false,
+            cache: false,
+            method: 'Get',
+            success: function (data) {
+                newdata = getArrayFromJSONForPie(data.History[0].Result);
+            }
+        });
+        return newdata;
+    }
+
+    function getArrayFrpmJSONForPie(result){
+        var newdata = [];
+        var usedSpacePers;
+        var freeSpacePers;
+        try {
+            var diskResult = JSON.parse(result);
+            console.log(diskResult);
+            if(diskResult.Results.length > 0)
+            {
+                var fullSpace = ((diskResult["Results"])[21]).Value;
+                var usedSpace = ((diskResult["Results"])[26]).Value;
+                var freeSpace = fullSpace - usedSpace;
+                var usedSpacePers = (usedSpace / fullSpace) * 100;
+                var freeSpacePers = (freeSpace / fullSpace) * 100;
+                newdata.push(['Used', parseInt(usedSpacePers)]);
+                newdata.push(['Free', parseInt(freeSpacePers)]);
+            } else {
+                console.log("no disk data");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        return newdata;
+    }
+
+    function appendPointLine{{=it.AgentNr}}(json) {
+        var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line").highcharts();
+        var shift = chart.series[0].data.length >= 10;
+        chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y: parseInt(json.Result) }, true, shift);
+    }
+
+    function createChartPie{{=it.AgentNr}}(){
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie").highcharts({
+            colors: ["#7cb5ec", "#f7a35c", "#90ee7e", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+                "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+            chart: {
+                backgroundColor: null,
+                height: 300,
+                animation: Highcharts.svg
+            },
+            title: {
+                text: 'Disk Auslastung Status'
+            },
+            yAxis: {
+                title: {
+                    text: 'in %'
+                },
+                min: 0,
+                max: 100
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: "Disk Auslastung Status",
+                data: []
+            }]
+        });
+        
+        var newdata = getValuesForPie{{=it.AgentNr}}();
+        addValuesToPie{{=it.AgentNr}}(newdata);
+    }
+
+    function createChartLine{{=it.AgentNr}}() {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line").highcharts({
+            chart: {
+                type: 'line',
+                height: 300,
+                animation: Highcharts.svg
+            },
+            title: {
+                text: 'Disk Auslastung Verlauf'
+            },
+            yAxis: {
+                title: {
+                    text: 'in %'
+                },
+                min: 0,
+                max: 100
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: "Disk Auslastung",
+                data: (function () {
+                    var newdata = [];
+                    $.ajax({
+                        url: '@Url.Action("HistoryDataForOID","Data")',
+                        data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3',
+                        async: false,
+                        cache: false,
+                        method: 'Get',
+                        success: function (data) {
+
+                        }
+                    });
+                    return newdata;
+                }())
+            }]
+        });
+    }
+</script>
+<div>
+    <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie" class="col-xs-12 col-lg-4 col-md-6">
+    </div>
+    <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line" class="col-xs-12 col-lg-4 col-md-6">
+    </div>
+</div>
