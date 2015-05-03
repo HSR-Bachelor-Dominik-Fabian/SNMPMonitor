@@ -148,6 +148,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\SNMPDataHub.cs" />
+    <Compile Include="Models\AgentModel.cs" />
     <Compile Include="Models\HistoryMonitorDataModel.cs" />
     <Compile Include="Models\MonitorDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

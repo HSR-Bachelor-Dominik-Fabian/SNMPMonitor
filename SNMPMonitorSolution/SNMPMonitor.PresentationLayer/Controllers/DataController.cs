@@ -33,15 +33,25 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             Hub.SendSNMPData(monitor);
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
         }
-
+        [HttpPost]
         public HttpStatusCodeResult AgentUpdatedTrigger(string param)
         {
-            SNMPDataHub Hub = new SNMPDataHub();
-            BusinessLayer.Type type = new BusinessLayer.Type(1,"Server");
-            Agent AgentToSend = new Agent(1,"TEst","192.120.215.122",type,120,2,"asdf","asdf","123");
-            Hub.SendUpdatedAgent(AgentToSend);
+            //BusinessLayer.Type type = new BusinessLayer.Type(1,"Server");
+            //Agent AgentToSend = new Agent(1,"TEst","192.120.215.122",type,120,2,"asdf","asdf","123");
+            //Hub.SendUpdatedAgent(AgentToSend);
+            try
+            {
+                SNMPDataHub Hub = new SNMPDataHub();
+                JObject jobject = JObject.Parse(param);
+                Models.AgentModel agent = new Models.AgentModel(jobject);
+                Hub.SendUpdatedAgent(agent);
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Low, exc);
+            }
+            
             return new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
-            //TODO: Agent vom Trigger empfangen
         }
 
         [HttpGet]
