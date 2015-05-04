@@ -1,4 +1,5 @@
-﻿<h2>Neuer Agent hinzufügen</h2>
+﻿<div class="alertBox"></div>
+<h2>Neuer Agent hinzufügen</h2>
 <div class="container" id="MonitorForm">
     <form class="form-horizontal" id="MonitorInputForm" action="@Url.Action("AddAgentToMonitor","Data")" method="post">
         <div class="form-group">
@@ -6,7 +7,7 @@
             <input type="text" class="form-control col-sm-10" name="inputAgentName" placeholder="Name">
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="inputIpAddress">IP Adress</label>
+            <label class="control-label col-sm-2" for="inputIpAddress">IP Adresse</label>
             <input id="inputIpAddress" class="form-control col-sm-10" name="inputIpAddress" placeholder="192.168.1.1">
         </div>
         <div class="form-group">

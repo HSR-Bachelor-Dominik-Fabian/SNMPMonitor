@@ -1,12 +1,24 @@
-﻿<script type="text/javascript">
+﻿{{function loadHostname(json){
+    var output;
+    var object = JSON.parse(json);
+    if(object.Results.length > 0){
+        output = object.Results[0].Value;
+    }
+    else{
+        output = "undefined";
+    }
+    return output;
+  }
+}}
+<script type="text/javascript">
     $(document).ready(function () {
         var connection = $.hubConnection();
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
-        notifications.on("recieveUpdatedAgent", function (dataValue) {
+        notifications.on("receiveUpdatedAgent", function (dataValue) {
             $("#agentSmall_{{=it.AgentNr}} .agentName").html(dataValue.Name);
-            $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress);
-            $("#agentSmall_{{=it.AgentNr}} .hostname").html(dataValue.SysName);
+            $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress + ':' + dataValue.Port);
+            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
             if (dataValue.Status == 1) {
                 if(!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-success")){
                     $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
@@ -35,9 +47,26 @@
             alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
         });
     });
+    function loadHostname(json) {
+        var output;
+        try {
+            var object = JSON.parse(json);
+            if (object.Results.length > 0) {
+                output = object.Results[0].Value;
+            }
+            else {
+                output = "undefined";
+            }
+        }
+        catch (e) {
+            output = "Bad Format";
+        }
+
+        return output;
+    }
 </script>
 
-<div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-8 col-sm-6 col-lg-3">
+<div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-8 col-sm-8 col-lg-4">
     <div class="agentSmallWrapper">
         {{? it.Status == 1}}
             <table class="ma-success">
@@ -55,7 +84,7 @@
             <td>
                 <div class="ma-small-padding agentSmallText">
                     <h4 class="ma-small-h4 agentName">{{=it.Name}}</h4>
-                    <span class="ma-small-text hostname">{{=it.SysName}}</span><br />
+                    <span class="ma-small-text hostname">{{=loadHostname(it.SysName)}}</span><br />
                     <span class="ma-small-text ipAddress">{{=it.IPAddress}}:{{=it.Port}}</span>
                 </div>
             </td>
