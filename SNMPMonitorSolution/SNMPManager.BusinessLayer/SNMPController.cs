@@ -85,17 +85,7 @@ namespace SNMPManager.BusinessLayer
                 {
                     SNMPWalk walk = new SNMPWalk(target, type.ObjectID);
                     JObject results = walk.Walk();
-                    if (type.ObjectID.Equals("1.3.6.1.2.1.1.1") || type.ObjectID.Equals("1.3.6.1.2.1.1.5") || type.ObjectID.Equals("1.3.6.1.2.1.25.1.1"))
-                    {
-                        if ((results["Results"]).Count() > 0)
-                        {
-                            resultList.Add(new KeyValuePair<string, string>(type.ObjectID, ((results["Results"])[0])["Value"].ToString()));
-                        }
-                    }
-                    else
-                    {
-                        resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
-                    }
+                    resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
                 }
                 connection.AddMonitorDataToDatabase(agent, resultList);
             }
