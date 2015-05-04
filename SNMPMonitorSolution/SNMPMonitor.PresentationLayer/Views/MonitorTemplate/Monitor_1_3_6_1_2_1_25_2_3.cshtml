@@ -4,11 +4,9 @@
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
         notifications.on("receiveData", function (dataValue) {
-            console.log("disk");
-            console.log(dataValue);
             if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
                 appendPointLine{{=it.AgentNr}}(dataValue);
-                addValuesToPie{{=it.AgentNr}}(getArrayFromJSONForPie(dataValue));
+                addValuesToPie{{=it.AgentNr}}(getArrayFromJSONForPie(dataValue["Result"]));
             }
         });
 
@@ -20,7 +18,6 @@
         }).fail(function (e) {
             alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
         });
-
     });
 
     function addValuesToPie{{=it.AgentNr}}(newdata) {
@@ -32,7 +29,7 @@
         var newdata = [];
         $.ajax({
             url: '@Url.Action("HistoryDataForOID", "Data")',
-            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3',
+            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3&count=1',
             async: false,
             cache: false,
             method: 'Get',
@@ -68,17 +65,20 @@
     }
 
     function appendPointLine{{=it.AgentNr}}(json) {
+        console.log(json);
         var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line").highcharts();
-        var shift = chart.series[0].data.length >= 10;
+        var shift = chart.series[0].data.length >= 20;
         var usedSpacePers;
         try {
-            var diskResult = JSON.parse(value.Result);
-            if(diskResult.Results.length > 0)
+            var diskResult = JSON.parse(json.Result);
+            if(diskResult["Results"].length > 0)
             {
-                var fullSpace = ((diskResult["Results"])[21]).Value;
-                var usedSpace = ((diskResult["Results"])[26]).Value;
+                var fullSpace = parseInt(((diskResult["Results"])[21]).Value);
+                var usedSpace = parseInt(((diskResult["Results"])[26]).Value);
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
-                chart.series[0].addPoint({ x:new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedSpacePers))}, true, shift);
+                console.log(usedSpacePers + ': ' + new Date(json.MonitorTimestamp));
+                chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y:Math.round(usedSpacePers)}, true, shift);
+                console.log(chart.series[0].data);
             } else {
                 console.log("no disk data");
             }
@@ -146,6 +146,9 @@
             title: {
                 text: 'Disk Auslastung Verlauf'
             },
+            xAxis: {
+                type: 'datetime'
+            },
             yAxis: {
                 title: {
                     text: 'in %'
@@ -168,7 +171,7 @@
                     var newdata = [];
                     $.ajax({
                         url: '@Url.Action("HistoryDataForOID","Data")',
-                        data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3',
+                        data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3&count=20',
                         async: false,
                         cache: false,
                         method: 'Get',
