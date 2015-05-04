@@ -1,4 +1,5 @@
-﻿using SNMPMonitor.DataLayer;
+﻿using SNMPMonitor.BusinessLayer.ExceptionHandling;
+using SNMPMonitor.DataLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,17 @@ namespace SNMPMonitor.BusinessLayer
         public List<MonitoringType> GetMonitoringTypesForAgent(int agentNr)
         {
             List<MonitoringType> monitoringTypeList = new List<MonitoringType>();
-            List<MonitoringTypeDataModel> resultList = _databaseConnection.GetMonitoringTypesForAgentFromDatabase(agentNr);
-            foreach (MonitoringTypeDataModel monitoringType in resultList)
+            try
             {
-                monitoringTypeList.Add(new MonitoringType(monitoringType.MonitoringTypeNr, monitoringType.Description, monitoringType.ObjectID));
+                List<MonitoringTypeDataModel> resultList = _databaseConnection.GetMonitoringTypesForAgentFromDatabase(agentNr);
+                foreach (MonitoringTypeDataModel monitoringType in resultList)
+                {
+                    monitoringTypeList.Add(new MonitoringType(monitoringType.MonitoringTypeNr, monitoringType.Description, monitoringType.ObjectID));
+                }
+            }
+            catch (Exception e)
+            { 
+                ExceptionCore.HandleException(ExceptionCategory.High, e); 
             }
             return monitoringTypeList;
         }
@@ -29,37 +37,57 @@ namespace SNMPMonitor.BusinessLayer
         public List<MonitorData> GetHistoryOfOIDForAgent(int agentNr, string ObjectID)
         {
             List<MonitorData> monitoringDataList = new List<MonitorData>();
-            List<MonitorDataDataModel> resultList = _databaseConnection.GetHistoryOfOIDForAgent(agentNr, ObjectID);
-            foreach (MonitorDataDataModel monitoringData in resultList)
+            try
             {
-                monitoringDataList.Add(new MonitorData(monitoringData.Timestamp, monitoringData.Result, monitoringData.AgentNr, monitoringData.ObjectID));
+                List<MonitorDataDataModel> resultList = _databaseConnection.GetHistoryOfOIDForAgent(agentNr, ObjectID);
+                foreach (MonitorDataDataModel monitoringData in resultList)
+                {
+                    monitoringDataList.Add(new MonitorData(monitoringData.Timestamp, monitoringData.Result, monitoringData.AgentNr, monitoringData.ObjectID));
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
             }
             return monitoringDataList;
         }
 
         public void AddAgentToDatabaseForDemo(string name, string iPAddress, int port)
         {
-            _databaseConnection.AddAgentToDatabaseForDemo(name, iPAddress, port);
+            try
+            {
+                _databaseConnection.AddAgentToDatabaseForDemo(name, iPAddress, port);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
         }
 
         public List<Agent> GetAgents()
         {
             List<Agent> agentList = new List<Agent>();
-            List<AgentDataModel> resultList = _databaseConnection.GetAgentsFromDatabase();
-
-            List<Type> typeList = GetTypes();
-
-            foreach (AgentDataModel agentData in resultList) 
+            try
             {
-                Type type = null;
-                foreach (Type temp in typeList)
+                List<AgentDataModel> resultList = _databaseConnection.GetAgentsFromDatabase();
+                List<Type> typeList = GetTypes();
+
+                foreach (AgentDataModel agentData in resultList)
                 {
-                    if (temp.TypeNr == agentData.Type.TypeNr)
+                    Type type = null;
+                    foreach (Type temp in typeList)
                     {
-                        type = temp;
+                        if (temp.TypeNr == agentData.Type.TypeNr)
+                        {
+                            type = temp;
+                        }
                     }
+                    agentList.Add(new Agent(agentData.AgentNr, agentData.Name, agentData.IPAddress, type, agentData.Port, agentData.Status, agentData.SysDescription, agentData.SysName, agentData.SysUptime));
                 }
-                agentList.Add(new Agent(agentData.AgentNr, agentData.Name, agentData.IPAddress, type, agentData.Port, agentData.Status, agentData.SysDescription, agentData.SysName, agentData.SysUptime));
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
             }
             return agentList;
         }
@@ -67,10 +95,17 @@ namespace SNMPMonitor.BusinessLayer
         public List<Type> GetTypes()
         {
             List<Type> typeList = new List<Type>();
-            List<TypeDataModel> resultList = _databaseConnection.GetTypesFromDatabase();
-            foreach (TypeDataModel typeData in resultList)
+            try
             {
-                typeList.Add(new Type(typeData.TypeNr, typeData.Name));
+                List<TypeDataModel> resultList = _databaseConnection.GetTypesFromDatabase();
+                foreach (TypeDataModel typeData in resultList)
+                {
+                    typeList.Add(new Type(typeData.TypeNr, typeData.Name));
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
             }
             return typeList;
         }
@@ -78,17 +113,32 @@ namespace SNMPMonitor.BusinessLayer
         public void AddAgentToDatabase(Agent agent)
         {
             AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, new TypeDataModel(agent.Type.TypeNr, agent.Type.Name), agent.Port, agent.Status, "undefined", "undefined", "undefined");
-            _databaseConnection.AddAgentToDatabase(agentData);
+            try
+            {
+                _databaseConnection.AddAgentToDatabase(agentData);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+
         }
 
         public List<KeyValuePair<Agent, List<MonitoringType>>> GetMonitoringSummary()
         {
             List<KeyValuePair<Agent, List<MonitoringType>>> returnList = new List<KeyValuePair<Agent, List<MonitoringType>>>();
-            List<Agent> agentList = GetAgents();
-            foreach (Agent agent in agentList)
+            try
             {
-                List<MonitoringType> monitoringTypes = GetMonitoringTypesForAgent(agent.AgentNr);
-                returnList.Add(new KeyValuePair<Agent, List<MonitoringType>>(agent, monitoringTypes));
+                List<Agent> agentList = GetAgents();
+                foreach (Agent agent in agentList)
+                {
+                    List<MonitoringType> monitoringTypes = GetMonitoringTypesForAgent(agent.AgentNr);
+                    returnList.Add(new KeyValuePair<Agent, List<MonitoringType>>(agent, monitoringTypes));
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
             }
             return returnList;
         }

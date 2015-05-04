@@ -96,7 +96,8 @@ namespace SNMPMonitor.PresentationLayer.Models
             }
             catch(Exception exc)
             {
-                throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}\nException thrown: " + exc.Message);
+                //throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}\nException thrown: " + exc.Message);
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, exc);
             }
         }
     }
