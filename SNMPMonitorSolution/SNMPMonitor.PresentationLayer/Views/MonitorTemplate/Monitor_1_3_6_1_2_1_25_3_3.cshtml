@@ -4,6 +4,8 @@
             connection.logging = true;
             var notifications = connection.createHubProxy("snmpDataHub");
             notifications.on("receiveData", function (dataValue) {
+                console.log("cpu");
+                console.log(dataValue);
                 if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3") {
                     appendPoint{{=it.AgentNr}}(dataValue);
                 }

@@ -4,6 +4,8 @@
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
         notifications.on("receiveData", function (dataValue) {
+            console.log("disk");
+            console.log(dataValue);
             if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
                 appendPointLine{{=it.AgentNr}}(dataValue);
                 addValuesToPie{{=it.AgentNr}}(getArrayFromJSONForPie(dataValue));
@@ -23,7 +25,6 @@
 
     function addValuesToPie{{=it.AgentNr}}(newdata) {
         var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie").highcharts();
-        console.log(newdata);
         chart.series[0].setData(newdata, true);
     }
 
@@ -42,13 +43,12 @@
         return newdata;
     }
 
-    function getArrayFrpmJSONForPie(result){
+    function getArrayFromJSONForPie(result){
         var newdata = [];
         var usedSpacePers;
         var freeSpacePers;
         try {
             var diskResult = JSON.parse(result);
-            console.log(diskResult);
             if(diskResult.Results.length > 0)
             {
                 var fullSpace = ((diskResult["Results"])[21]).Value;
@@ -56,8 +56,8 @@
                 var freeSpace = fullSpace - usedSpace;
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
                 var freeSpacePers = (freeSpace / fullSpace) * 100;
-                newdata.push(['Used', parseInt(usedSpacePers)]);
-                newdata.push(['Free', parseInt(freeSpacePers)]);
+                newdata.push(['Used', parseInt(Math.round(usedSpacePers))]);
+                newdata.push(['Free', parseInt(Math.round(freeSpacePers))]);
             } else {
                 console.log("no disk data");
             }
@@ -70,7 +70,21 @@
     function appendPointLine{{=it.AgentNr}}(json) {
         var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line").highcharts();
         var shift = chart.series[0].data.length >= 10;
-        chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y: parseInt(json.Result) }, true, shift);
+        var usedSpacePers;
+        try {
+            var diskResult = JSON.parse(value.Result);
+            if(diskResult.Results.length > 0)
+            {
+                var fullSpace = ((diskResult["Results"])[21]).Value;
+                var usedSpace = ((diskResult["Results"])[26]).Value;
+                var usedSpacePers = (usedSpace / fullSpace) * 100;
+                chart.series[0].addPoint({ x:new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedSpacePers))}, true, shift);
+            } else {
+                console.log("no disk data");
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     function createChartPie{{=it.AgentNr}}(){
@@ -159,7 +173,23 @@
                         cache: false,
                         method: 'Get',
                         success: function (data) {
-
+                            $.each(data.History, function(index, value) {
+                                var usedSpacePers;
+                                try {
+                                    var diskResult = JSON.parse(value.Result);
+                                    if(diskResult.Results.length > 0)
+                                    {
+                                        var fullSpace = ((diskResult["Results"])[21]).Value;
+                                        var usedSpace = ((diskResult["Results"])[26]).Value;
+                                        var usedSpacePers = (usedSpace / fullSpace) * 100;
+                                        newdata.push({ x:new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedSpacePers))});
+                                    } else {
+                                        console.log("no disk data");
+                                    }
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            });
                         }
                     });
                     return newdata;
