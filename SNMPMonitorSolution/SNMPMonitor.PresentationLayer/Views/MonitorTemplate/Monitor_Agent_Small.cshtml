@@ -18,7 +18,7 @@
         notifications.on("recieveUpdatedAgent", function (dataValue) {
             $("#agentSmall_{{=it.AgentNr}} .agentName").html(dataValue.Name);
             $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress);
-            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
+            $("#agentSmall_{{=it.AgentNr}} .hostname").html(dataValue.SysName);
             if (dataValue.Status == 1) {
                 if(!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-success")){
                     $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
