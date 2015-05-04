@@ -25,7 +25,7 @@ public partial class Triggers
                 {
                     connection.Open();
                     //, i.sysDesc, i.sysName, i.sysUptime
-                    command = new SqlCommand(@"SELECT i.AgentNr, i.Name, i.IPAddress, i.Status, i.Port FROM INSERTED i;",
+                    command = new SqlCommand(@"SELECT i.AgentNr, i.Name, i.IPAddress, i.Status, i.Port i.sysDesc, i.sysName, i.sysUptime FROM INSERTED i;",
                        connection);
                     reader = command.ExecuteReader();
                     while (reader.Read())
