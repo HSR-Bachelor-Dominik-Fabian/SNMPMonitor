@@ -133,7 +133,7 @@ namespace SNMPMonitor.PresentationLayer.Models
                     }
 
                     int portParse = 0;
-                    if (int.TryParse(statusProperty.Value.ToString(), out statusParse))
+                    if (int.TryParse(portProperty.Value.ToString(), out portParse))
                     {
                         this._port = portParse;
                     }
