@@ -1,16 +1,4 @@
-﻿{{function loadHostname(json){
-    var output;
-    var object = JSON.parse(json);
-    if(object.Results.length > 0){
-        output = object.Results[0].Value;
-    }
-    else{
-        output = "undefined";
-    }
-    return output;
-  }
-}}
-<script type="text/javascript">
+﻿<script type="text/javascript">
     $(document).ready(function () {
         var connection = $.hubConnection();
         connection.logging = true;
@@ -47,24 +35,6 @@
             alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
         });
     });
-
-    function loadHostname(json) {
-        var output;
-        try{
-            var object = JSON.parse(json);
-            if (object.Results.length > 0) {
-                output = object.Results[0].Value;
-            }
-            else {
-                output = "undefined";
-            }
-        }
-        catch (e) {
-            output = "Bad Format";
-        }
-        
-        return output;
-    }
 </script>
 
 <div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-8 col-sm-6 col-lg-3">
