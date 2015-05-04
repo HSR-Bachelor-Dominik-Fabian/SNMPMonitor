@@ -173,7 +173,7 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
-        public List<MonitorDataDataModel> GetHistoryOfOIDForAgent(int agentNr, string ObjectID)
+        public List<MonitorDataDataModel> GetHistoryOfOIDForAgent(int agentNr, string ObjectID, int count)
         {
             List<MonitorDataDataModel> monitorDataList = new List<MonitorDataDataModel>();
             try
@@ -184,6 +184,7 @@ namespace SNMPMonitor.DataLayer
                 getHistoryOfOIDForAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
                 getHistoryOfOIDForAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
                 getHistoryOfOIDForAgentCommand.Parameters.Add(new SqlParameter("@ObjectID", ObjectID));
+                getHistoryOfOIDForAgentCommand.Parameters.Add(new SqlParameter("@Count", count));
 
                 SqlDataReader myHistoryOfOidForAgentSet = getHistoryOfOIDForAgentCommand.ExecuteReader();
 

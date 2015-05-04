@@ -26,10 +26,10 @@ namespace SNMPMonitor.BusinessLayer
             return monitoringTypeList;
         }
 
-        public List<MonitorData> GetHistoryOfOIDForAgent(int agentNr, string ObjectID)
+        public List<MonitorData> GetHistoryOfOIDForAgent(int agentNr, string ObjectID, int count)
         {
             List<MonitorData> monitoringDataList = new List<MonitorData>();
-            List<MonitorDataDataModel> resultList = _databaseConnection.GetHistoryOfOIDForAgent(agentNr, ObjectID);
+            List<MonitorDataDataModel> resultList = _databaseConnection.GetHistoryOfOIDForAgent(agentNr, ObjectID, count);
             foreach (MonitorDataDataModel monitoringData in resultList)
             {
                 monitoringDataList.Add(new MonitorData(monitoringData.Timestamp, monitoringData.Result, monitoringData.AgentNr, monitoringData.ObjectID));

@@ -36,9 +36,6 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         [HttpPost]
         public HttpStatusCodeResult AgentUpdatedTrigger(string param)
         {
-            //BusinessLayer.Type type = new BusinessLayer.Type(1,"Server");
-            //Agent AgentToSend = new Agent(1,"TEst","192.120.215.122",type,120,2,"asdf","asdf","123");
-            //Hub.SendUpdatedAgent(AgentToSend);
             try
             {
                 SNMPDataHub Hub = new SNMPDataHub();
@@ -55,14 +52,14 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public JsonResult HistoryDataForOID(string id, string oid)
+        public JsonResult HistoryDataForOID(string id, string oid, int count)
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             int agentId;
             HistoryMonitorDataModel history = null;
             if (int.TryParse(id, out agentId))
             {
-                List<MonitorData> businessLayerHistory = controller.GetHistoryOfOIDForAgent(agentId, oid);
+                List<MonitorData> businessLayerHistory = controller.GetHistoryOfOIDForAgent(agentId, oid, count);
                 businessLayerHistory.Sort((item1, item2) => item1.Timestamp.CompareTo(item2.Timestamp));
                 history = new HistoryMonitorDataModel(businessLayerHistory);
             }
