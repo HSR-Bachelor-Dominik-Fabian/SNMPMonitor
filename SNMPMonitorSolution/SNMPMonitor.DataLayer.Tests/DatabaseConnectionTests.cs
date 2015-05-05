@@ -28,7 +28,7 @@ namespace SNMPMonitor.DataLayer.Tests
         [TestMethod]
         public void getHistoryOfOIDForAgent()
         {
-            List<MonitorDataDataModel> monitorDataList = databaseConnection.GetHistoryOfOIDForAgent(1, "1.3.6.1.2.1.1.5.0");
+            List<MonitorDataDataModel> monitorDataList = databaseConnection.GetHistoryOfOIDForAgent(1, "1.3.6.1.2.1.1.5.0", 10);
 
             int expected = 10;
 
