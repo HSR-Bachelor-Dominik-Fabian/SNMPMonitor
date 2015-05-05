@@ -62,6 +62,29 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         }
 
         [HttpPost]
+        public HttpStatusCodeResult NewEventTrigger(string param)
+        {
+            HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
+            try
+            {
+                SNMPDataHub Hub = new SNMPDataHub();
+                JObject jobject = JObject.Parse(param);
+                Models.EventModel eventModel = new Models.EventModel(jobject);
+                Hub.SendNewEvent(eventModel);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+            }
+            catch (FormatException e)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
+            }
+            return output;
+        }
+
+        [HttpPost]
         public HttpStatusCodeResult AgentUpdatedTrigger(string param)
         {
             HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
