@@ -18,26 +18,28 @@
     </div>
     <div class="container-fluid">
         {{~it.Value:item}}
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var ObjNr = '{{=item.ObjectIDReplaced}}';
-                $.ajax({
-                    url: "@Url.Action("Monitor_","MonitorTemplate")" + ObjNr,
-                    method: "GET",
-                    success: function (data) {
-                        var monitor = doT.template(data);
+            {{?item.ObjectIDReplaced != '1_3_6_1_2_1_1_1' && item.ObjectIDReplaced != '1_3_6_1_2_1_1_5' && item.ObjectIDReplaced != '1_3_6_1_2_1_25_1_1'}}
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var ObjNr = '{{=item.ObjectIDReplaced}}';
+                    $.ajax({
+                        url: "@Url.Action("Monitor_","MonitorTemplate")" + ObjNr,
+                        method: "GET",
+                        success: function (data) {
+                            var monitor = doT.template(data);
 
-                        var jsonForMonitor = { "AgentNr": {{=it.Key.AgentNr}}};
-                        $("#Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}").html(monitor(jsonForMonitor));
-                    },
-                    error: function(data, error, thrownerror){
-                    }
+                            var jsonForMonitor = { "AgentNr": {{=it.Key.AgentNr}}};
+                            $("#Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}").html(monitor(jsonForMonitor));
+                        },
+                        error: function(data, error, thrownerror){
+                        }
+                    });
                 });
-            });
-        </script>
-        <div id="Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}">
+            </script>
+            <div id="Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}">
 
-        </div>
+            </div>
+            {{?}}
         {{~}}
     </div>
 </div>

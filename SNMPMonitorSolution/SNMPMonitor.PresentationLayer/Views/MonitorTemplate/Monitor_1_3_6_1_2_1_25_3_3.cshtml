@@ -79,7 +79,7 @@
                                     var firstCPU = parseInt(((object["Results"])[2])["Value"]);
                                     var secondCPU = parseInt(((object["Results"])[3])["Value"]);
                                     var cpuLoad = (firstCPU + secondCPU) / 2;
-                                    newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: cpuLoad });
+                                    newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: Math.round(cpuLoad) });
                                 });
                             }
                         });
