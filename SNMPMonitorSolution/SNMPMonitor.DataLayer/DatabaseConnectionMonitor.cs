@@ -229,5 +229,29 @@ namespace SNMPMonitor.DataLayer
                 _myConnection.Close();
             }
         }
+
+        public List<EventDataModel> GetAllEvents()
+        {
+            List<EventDataModel> eventList= new List<EventDataModel>();
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand getEvents = new SqlCommand("getAllEvents", _myConnection);
+                getEvents.CommandType = System.Data.CommandType.StoredProcedure;
+
+                SqlDataReader myEventsSet = getEvents.ExecuteReader();
+
+                while (myEventsSet.Read())
+                {
+                    eventList.Add(new EventDataModel((int)myEventsSet["EventNr"], myEventsSet["ExceptionType"].ToString(), myEventsSet["Category"].ToString(), (DateTime)myEventsSet["EventTimestamp"], (int)myEventsSet["HResult"], myEventsSet["Message"].ToString(), myEventsSet["Stacktrace"].ToString()));
+                }
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
+            return eventList;
+        }
     }
 }

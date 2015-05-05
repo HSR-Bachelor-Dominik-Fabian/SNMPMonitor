@@ -92,5 +92,16 @@ namespace SNMPMonitor.BusinessLayer
             }
             return returnList;
         }
+
+        public List<Event> GetAllEvents()
+        {
+            List<Event> eventList = new List<Event>();
+            List<EventDataModel> resultList = _databaseConnection.GetAllEvents();
+            foreach (EventDataModel eventData in resultList)
+            {
+                eventList.Add(new Event(eventData.EventNr, eventData.ExceptionType, eventData.Category, eventData.EventTimestamp, eventData.HResult, eventData.Message, eventData.Stacktrace));
+            }
+            return eventList;
+        }
     }
 }
