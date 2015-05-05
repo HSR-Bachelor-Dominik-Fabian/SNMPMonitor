@@ -57,47 +57,39 @@ namespace SNMPMonitor.PresentationLayer.Models
 
         public MonitorDataModel(JObject json)
         {
-            try
+            JArray array = json.Descendants().OfType<JProperty>().First(x => x.Name == "param").Value.ToObject<JArray>();
+            if (array != null)
             {
-                JArray array = json.Descendants().OfType<JProperty>().First(x => x.Name == "param").Value.ToObject<JArray>();
-                if (array != null)
+                JProperty agentNrProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "AgentNr");
+                JProperty monitorTimestampProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "MonitorTimestamp");
+                JProperty objectIDProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "ObjectID");
+                JProperty resultProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Result");
+
+                this._result = resultProperty.Value.ToString();
+                this._objectID = objectIDProperty.Value.ToString();
+                int agentNr = 0;
+                if (int.TryParse(agentNrProperty.Value.ToString(), out agentNr))
                 {
-                    JProperty agentNrProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "AgentNr");
-                    JProperty monitorTimestampProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "MonitorTimestamp");
-                    JProperty objectIDProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "ObjectID");
-                    JProperty resultProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Result");
-
-                    this._result = resultProperty.Value.ToString();
-                    this._objectID = objectIDProperty.Value.ToString();
-                    int agentNr = 0;
-                    if (int.TryParse(agentNrProperty.Value.ToString(), out agentNr))
-                    {
-                        this._agentID = agentNr;
-                    }
-                    else
-                    {
-                        throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}");
-                    }
-                    DateTime monitorTimestamp;
-                    if (DateTime.TryParse(monitorTimestampProperty.Value.ToString(), out monitorTimestamp))
-                    {
-                        this._monitorTimestamp = monitorTimestamp;
-                    }
-                    else
-                    {
-                        throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}");
-                    }
-
+                    this._agentID = agentNr;
                 }
                 else
                 {
                     throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}");
                 }
+                DateTime monitorTimestamp;
+                if (DateTime.TryParse(monitorTimestampProperty.Value.ToString(), out monitorTimestamp))
+                {
+                    this._monitorTimestamp = monitorTimestamp;
+                }
+                else
+                {
+                    throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}");
+                }
+
             }
-            catch(Exception exc)
+            else
             {
-                //throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}\nException thrown: " + exc.Message);
-                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, exc);
+                throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'MonitorTimestamp','<value>'},{'ObjectID','<value>'},{'Result','<value>'}]}");
             }
         }
     }

@@ -2,6 +2,7 @@
 using SNMPMonitor.DataLayer;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,27 +28,43 @@ namespace SNMPMonitor.BusinessLayer
                     monitoringTypeList.Add(new MonitoringType(monitoringType.MonitoringTypeNr, monitoringType.Description, monitoringType.ObjectID));
                 }
             }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
             catch (Exception e)
-            { 
-                ExceptionCore.HandleException(ExceptionCategory.High, e); 
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
             return monitoringTypeList;
         }
 
-        public List<MonitorData> GetHistoryOfOIDForAgent(int agentNr, string ObjectID)
+        public List<MonitorData> GetHistoryOfOIDForAgent(int agentNr, string ObjectID, int count)
         {
             List<MonitorData> monitoringDataList = new List<MonitorData>();
             try
             {
-                List<MonitorDataDataModel> resultList = _databaseConnection.GetHistoryOfOIDForAgent(agentNr, ObjectID);
+                List<MonitorDataDataModel> resultList = _databaseConnection.GetHistoryOfOIDForAgent(agentNr, ObjectID, count);
                 foreach (MonitorDataDataModel monitoringData in resultList)
                 {
                     monitoringDataList.Add(new MonitorData(monitoringData.Timestamp, monitoringData.Result, monitoringData.AgentNr, monitoringData.ObjectID));
                 }
             }
-            catch (Exception e)
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
             {
                 ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
             return monitoringDataList;
         }
@@ -58,9 +75,13 @@ namespace SNMPMonitor.BusinessLayer
             {
                 _databaseConnection.AddAgentToDatabaseForDemo(name, iPAddress, port);
             }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
             catch (Exception e)
             {
-                ExceptionCore.HandleException(ExceptionCategory.High, e);
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
         }
 
@@ -72,7 +93,7 @@ namespace SNMPMonitor.BusinessLayer
                 List<AgentDataModel> resultList = _databaseConnection.GetAgentsFromDatabase();
                 List<Type> typeList = GetTypes();
 
-                foreach (AgentDataModel agentData in resultList)
+                foreach (AgentDataModel agentData in resultList) 
                 {
                     Type type = null;
                     foreach (Type temp in typeList)
@@ -85,9 +106,17 @@ namespace SNMPMonitor.BusinessLayer
                     agentList.Add(new Agent(agentData.AgentNr, agentData.Name, agentData.IPAddress, type, agentData.Port, agentData.Status, agentData.SysDescription, agentData.SysName, agentData.SysUptime));
                 }
             }
-            catch (Exception e)
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
             {
                 ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
             return agentList;
         }
@@ -103,9 +132,17 @@ namespace SNMPMonitor.BusinessLayer
                     typeList.Add(new Type(typeData.TypeNr, typeData.Name));
                 }
             }
-            catch (Exception e)
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
             {
                 ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
             return typeList;
         }
@@ -117,9 +154,13 @@ namespace SNMPMonitor.BusinessLayer
             {
                 _databaseConnection.AddAgentToDatabase(agentData);
             }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
             catch (Exception e)
             {
-                ExceptionCore.HandleException(ExceptionCategory.High, e);
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
 
         }
@@ -136,9 +177,17 @@ namespace SNMPMonitor.BusinessLayer
                     returnList.Add(new KeyValuePair<Agent, List<MonitoringType>>(agent, monitoringTypes));
                 }
             }
-            catch (Exception e)
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
             {
                 ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
             return returnList;
         }

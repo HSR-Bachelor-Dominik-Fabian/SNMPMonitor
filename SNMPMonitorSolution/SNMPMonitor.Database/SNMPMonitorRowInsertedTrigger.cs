@@ -32,8 +32,14 @@ public partial class Triggers
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
-
-                            values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                            if (reader.GetName(i).Equals("sysDesc") || reader.GetName(i).Equals("sysName") || reader.GetName(i).Equals("sysUptime"))
+                            {
+                                values += "{\"" + reader.GetName(i) + "\":" + reader.GetValue(i) + "},";
+                            }
+                            else
+                            {
+                                values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                            }
                         }
                     }
 
@@ -83,8 +89,13 @@ public partial class Triggers
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
-
-                            values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                            if(reader.GetName(i).Equals("Result")) {
+                                values += "{\"" + reader.GetName(i) + "\":" + reader.GetValue(i) + "},";
+                            }
+                            else
+                            {
+                                values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                            }
                         }
                     } 
                     

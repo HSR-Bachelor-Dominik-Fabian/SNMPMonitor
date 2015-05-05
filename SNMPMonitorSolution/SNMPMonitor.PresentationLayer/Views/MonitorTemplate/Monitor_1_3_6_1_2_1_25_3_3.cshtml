@@ -4,8 +4,6 @@
             connection.logging = true;
             var notifications = connection.createHubProxy("snmpDataHub");
             notifications.on("receiveData", function (dataValue) {
-                console.log("cpu");
-                console.log(dataValue);
                 if (dataValue.ObjectID == "1.3.6.1.2.1.25.3.3") {
                     appendPoint{{=it.AgentNr}}(dataValue);
                 }
@@ -21,10 +19,14 @@
 
         });
                     
-        function appendPoint{{=it.AgentNr}}(json) {
+        function appendPoint{{=it.AgentNr}}(value) {
             var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3").highcharts();
-            var shift = chart.series[0].data.length >= 10;
-            chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y: parseInt(json.Result) }, true, shift);
+            var shift = chart.series[0].data.length >= 15;
+            var object = JSON.parse(value["Result"]);
+            var firstCPU = parseInt(((object["Results"])[2])["Value"]);
+            var secondCPU = parseInt(((object["Results"])[3])["Value"]);
+            var cpuLoad = (firstCPU + secondCPU) / 2;
+            chart.series[0].addPoint({ x:Date.parse(value.MonitorTimestamp + "+02:00"), y: cpuLoad }, true, shift);
         }
 
         function createChart{{=it.AgentNr}}() {
@@ -67,13 +69,17 @@
                         var newdata = [];
                         $.ajax({
                             url: '@Url.Action("HistoryDataForOID","Data")',
-                            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3',
+                            data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.3.3&count=15',
                             async: false,
                             cache: false,
                             method: 'Get',
                             success: function (data) {
                                 $.each(data.History, function (index, value) {
-                                    newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: parseInt(value.Result) });
+                                    var object = JSON.parse(value["Result"]);
+                                    var firstCPU = parseInt(((object["Results"])[2])["Value"]);
+                                    var secondCPU = parseInt(((object["Results"])[3])["Value"]);
+                                    var cpuLoad = (firstCPU + secondCPU) / 2;
+                                    newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: cpuLoad });
                                 });
                             }
                         });

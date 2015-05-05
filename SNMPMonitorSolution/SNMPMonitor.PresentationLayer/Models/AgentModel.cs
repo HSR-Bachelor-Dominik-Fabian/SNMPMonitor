@@ -92,66 +92,58 @@ namespace SNMPMonitor.PresentationLayer.Models
 
         public AgentModel(JObject json)
         {
-            try
+            JArray array = json.Descendants().OfType<JProperty>().First(x => x.Name == "param").Value.ToObject<JArray>();
+            if (array != null)
             {
-                JArray array = json.Descendants().OfType<JProperty>().First(x => x.Name == "param").Value.ToObject<JArray>();
-                if (array != null)
+                JProperty agentNrProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "AgentNr");
+                JProperty nameProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Name");
+                JProperty ipAddressProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "IPAddress");
+                JProperty statusProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Status");
+                JProperty portProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Port");
+                JProperty sysDescProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysDesc");
+                JProperty sysNameProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysName");
+                JProperty sysUptimeProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysUptime");
+
+                this._name = nameProperty.Value.ToString();
+                this._ipAddress = ipAddressProperty.Value.ToString();
+                this._sysDesc = sysDescProperty.Value.ToString();
+                this._sysName = sysNameProperty.Value.ToString();
+                this._sysUptime = sysNameProperty.Value.ToString();
+
+                int agentNrParse = 0;
+                if (int.TryParse(agentNrProperty.Value.ToString(), out agentNrParse))
                 {
-                    JProperty agentNrProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "AgentNr");
-                    JProperty nameProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Name");
-                    JProperty ipAddressProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "IPAddress");
-                    JProperty statusProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Status");
-                    JProperty portProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Port");
-                    JProperty sysDescProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysDesc");
-                    JProperty sysNameProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysName");
-                    JProperty sysUptimeProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysUptime");
-
-                    this._name = nameProperty.Value.ToString();
-                    this._ipAddress = ipAddressProperty.Value.ToString();
-                    this._sysDesc = sysDescProperty.Value.ToString();
-                    this._sysName = sysNameProperty.Value.ToString();
-                    this._sysUptime = sysNameProperty.Value.ToString();
-
-                    int agentNrParse = 0;
-                    if (int.TryParse(agentNrProperty.Value.ToString(), out agentNrParse))
-                    {
-                        this._agentNr = agentNrParse;
-                    }
-                    else
-                    {
-                        throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
-                    }
-
-                    int statusParse = 0;
-                    if (int.TryParse(statusProperty.Value.ToString(), out statusParse))
-                    {
-                        this._status = statusParse;
-                    }
-                    else
-                    {
-                        throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
-                    }
-
-                    int portParse = 0;
-                    if (int.TryParse(statusProperty.Value.ToString(), out statusParse))
-                    {
-                        this._port = portParse;
-                    }
-                    else
-                    {
-                        throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
-                    }
-
+                    this._agentNr = agentNrParse;
                 }
                 else
                 {
                     throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
                 }
+
+                int statusParse = 0;
+                if (int.TryParse(statusProperty.Value.ToString(), out statusParse))
+                {
+                    this._status = statusParse;
+                }
+                else
+                {
+                    throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
+                }
+
+                int portParse = 0;
+                if (int.TryParse(portProperty.Value.ToString(), out portParse))
+                {
+                    this._port = portParse;
+                }
+                else
+                {
+                    throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
+                }
+
             }
-            catch(Exception exc)
+            else
             {
-                //throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}\nException thrown: " + exc.Message);
-                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, exc);
+                throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
             }
         }
     }
