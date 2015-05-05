@@ -19,7 +19,7 @@ namespace SNMPMonitor.BusinessLayer.Tests
         [TestMethod]
         public void GetMonitoringTypesFromAgentTest()
         {
-            // In Testdatenbank sind 4 MonitoringTypes für Agent 1 hinterlegt
+            // In Testdatenbank sind 5 MonitoringTypes für Agent 1 hinterlegt
             List<MonitoringType> list = controller.GetMonitoringTypesForAgent(1);
             Assert.AreEqual(5, list.Count);
         }
@@ -38,10 +38,31 @@ namespace SNMPMonitor.BusinessLayer.Tests
             List<KeyValuePair<Agent, List<MonitoringType>>> list = controller.GetMonitoringSummary();
             Assert.AreEqual(1, list.Count);
             
-            // 4 MonitoringTypes für Agent 1 hinterlegt
+            // 5 MonitoringTypes für Agent 1 hinterlegt
             KeyValuePair<Agent, List<MonitoringType>> kvp = list[0];
             List<MonitoringType> monitoringTypeList = kvp.Value;
             Assert.AreEqual(5, monitoringTypeList.Count);
+        }
+
+        [TestMethod]
+        public void GetAllEventsTest()
+        {
+            List<Event> eventList = controller.GetAllEvents();
+            Assert.AreEqual(1, eventList.Count);
+        }
+
+        [TestMethod]
+        public void GetAgentsTest()
+        {
+            List<Agent> agentList = controller.GetAgents();
+            Assert.AreEqual(1, agentList.Count);
+        }
+
+        [TestMethod]
+        public void GetTypesTest()
+        {
+            List<Type> typeList = controller.GetTypes();
+            Assert.AreEqual(2, typeList.Count);
         }
         
     }

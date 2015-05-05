@@ -36,9 +36,9 @@ namespace SNMPMonitor.DataLayer.Tests
         }
 
         [TestMethod]
-        public void GetAllEventsTest()
+        public void GetAllEventsFromDatabaseTest()
         {
-            List<EventDataModel> eventDataList = databaseConnection.GetAllEvents();
+            List<EventDataModel> eventDataList = databaseConnection.GetAllEventsFromDatabase();
             Assert.AreEqual(1, eventDataList.Count);
         }
 
