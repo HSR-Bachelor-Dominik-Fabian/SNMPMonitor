@@ -195,10 +195,25 @@ namespace SNMPMonitor.BusinessLayer
         public List<Event> GetAllEvents()
         {
             List<Event> eventList = new List<Event>();
-            List<EventDataModel> resultList = _databaseConnection.GetAllEvents();
-            foreach (EventDataModel eventData in resultList)
+            try
             {
-                eventList.Add(new Event(eventData.EventNr, eventData.ExceptionType, eventData.Category, eventData.EventTimestamp, eventData.HResult, eventData.Message, eventData.Stacktrace));
+                List<EventDataModel> resultList = _databaseConnection.GetAllEvents();
+                foreach (EventDataModel eventData in resultList)
+                {
+                    eventList.Add(new Event(eventData.EventNr, eventData.ExceptionType, eventData.Category, eventData.EventTimestamp, eventData.HResult, eventData.Message, eventData.Stacktrace));
+                }
+            }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
             }
             return eventList;
         }
