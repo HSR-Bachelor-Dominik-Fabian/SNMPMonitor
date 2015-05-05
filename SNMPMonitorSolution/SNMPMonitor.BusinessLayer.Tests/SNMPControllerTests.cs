@@ -27,7 +27,7 @@ namespace SNMPMonitor.BusinessLayer.Tests
         [TestMethod]
         public void GetHistoryOfOIDForAgentTest()
         {
-            List<MonitorData> list = controller.GetHistoryOfOIDForAgent(1, "1.3.6.1.2.1.1.5.0");
+            List<MonitorData> list = controller.GetHistoryOfOIDForAgent(1, "1.3.6.1.2.1.1.5.0", 10);
             Assert.IsTrue(list.Count <= 10);
         }
 

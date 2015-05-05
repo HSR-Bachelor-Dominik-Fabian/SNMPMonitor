@@ -49,6 +49,7 @@
     <Compile Include="ExceptionHandling\ExceptionCategory.cs" />
     <Compile Include="ExceptionHandling\ExceptionCore.cs" />
     <Compile Include="Models\Agent.cs" />
+    <Compile Include="Models\Event.cs" />
     <Compile Include="Models\MonitorData.cs" />
     <Compile Include="Models\MonitoringType.cs" />
     <Compile Include="Models\Type.cs" />

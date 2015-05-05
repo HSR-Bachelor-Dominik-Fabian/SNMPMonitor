@@ -166,5 +166,24 @@ namespace SNMPManager.DataLayer
                 _myConnection.Close();
             }
         }
+
+        public void UpdateStatusOfAgent(AgentDataModel agent, int status)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand addEventCommand = new SqlCommand("updateStatusOfAgent", _myConnection);
+                addEventCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                addEventCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
+                addEventCommand.Parameters.Add(new SqlParameter("@Status", status));
+                addEventCommand.ExecuteNonQuery();
+
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
+        }
     }
 }

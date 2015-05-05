@@ -42,6 +42,7 @@
     <Compile Include="DatabaseConnectionMonitor.cs" />
     <Compile Include="DatabaseSettings.cs" />
     <Compile Include="DataModels\AgentDataModel.cs" />
+    <Compile Include="DataModels\EventDataModel.cs" />
     <Compile Include="DataModels\MonitorDataDataModel.cs" />
     <Compile Include="DataModels\MonitoringTypeDataModel.cs" />
     <Compile Include="DataModels\TypeDataModel.cs" />

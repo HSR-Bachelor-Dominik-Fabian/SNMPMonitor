@@ -111,6 +111,14 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return Json(monitorSummary,JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetAllEvents()
+        {
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            List<Event> monitorSummary = controller.GetAllEvents();
+            return Json(monitorSummary, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public HttpStatusCodeResult AddAgentToMonitor(string inputAgentName, string inputIpAddress, string inputPortNr)
         {

@@ -34,7 +34,9 @@
             cache: false,
             method: 'Get',
             success: function (data) {
-                newdata = getArrayFromJSONForPie(data.History[0].Result);
+                if(data.History[0] != undefined) {
+                    newdata = getArrayFromJSONForPie(data.History[0].Result);
+                }
             }
         });
         return newdata;
@@ -71,6 +73,11 @@
         var usedSpacePers;
         try {
             var diskResult = JSON.parse(json.Result);
+            var index = 0;
+            for(var i = 0; i < diskResult["Results"].length; i++)
+            {
+                
+            }
             if(diskResult["Results"].length > 0)
             {
                 var fullSpace = parseInt(((diskResult["Results"])[21]).Value);
@@ -126,9 +133,11 @@
                 data: []
             }]
         });
-        
+        console.log('test1');
         var newdata = getValuesForPie{{=it.AgentNr}}();
+        console.log('test2');
         addValuesToPie{{=it.AgentNr}}(newdata);
+        console.log('test3');
     }
 
     function createChartLine{{=it.AgentNr}}() {
