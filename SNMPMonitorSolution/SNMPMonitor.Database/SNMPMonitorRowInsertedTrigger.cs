@@ -24,7 +24,6 @@ public partial class Triggers
                 using (SqlConnection connection = new SqlConnection(@"context connection=true"))
                 {
                     connection.Open();
-                    //, i.sysDesc, i.sysName, i.sysUptime
                     command = new SqlCommand(@"SELECT i.AgentNr, i.Name, i.IPAddress, i.Status, i.Port, i.sysDesc, i.sysName, i.sysUptime FROM INSERTED i;",
                        connection);
                     reader = command.ExecuteReader();
@@ -126,6 +125,48 @@ public partial class Triggers
                 /*SqlPipe sqlP = SqlContext.Pipe;
                 sqlP.Send(myContext.EventData.Value);*/
                 //client.OpenRead(uri).Close();
+            }
+        }
+        catch (Exception exc)
+        {
+            SqlPipe sqlP = SqlContext.Pipe;
+            sqlP.Send("Fehler: " + exc.Message);
+        }
+    }
+
+    public static void NewEventTrigger()
+    {
+        try
+        {
+            SqlTriggerContext myContext = SqlContext.TriggerContext;
+            if (myContext.TriggerAction == TriggerAction.Insert)
+            {
+                Uri uri = new Uri("http://152.96.56.75/Data/NewEventTrigger");
+                WebClient client = new WebClient();
+                SqlCommand command;
+                SqlDataReader reader;
+                string values = "{param:[";
+                using (SqlConnection connection
+                   = new SqlConnection(@"context connection=true"))
+                {
+                    connection.Open();
+                    command = new SqlCommand(@"SELECT * FROM INSERTED i;",
+                       connection);
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                        }
+                    }
+                    reader.Close();
+                }
+                values += "]}";
+
+                string param = "param=" + values;
+                client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                client.UploadString(uri, "POST", param);
             }
         }
         catch (Exception exc)

@@ -1,12 +1,18 @@
 ﻿<script type="text/javascript">
+    var connection = $.hubConnection();
+    connection.logging = true;
+    var notifications = connection.createHubProxy("snmpDataHub");
+    notifications.on("receiveNewEvent", function (dataValue) {
+        $("#logTable").prepend(createLineForTable(dataValue));
+    });
+
     $(document).ready(function () {
         $.ajax({
             url: "@Url.Action("GetAllEvents", "Data")",
             type: "GET",
             success: function (data) {
                 $.each(data, function (index, value) {
-                    var line = "<tr><td>" + value.EventNr + "</td><td>" + value.ExceptionType + "</td><td>" + value.Category + "</td><td>" + new Date(parseInt(value.EventTimestamp.replace("/Date(", "").replace(")/", ""))) + "</td><td>" + value.HResult + "</td><td>" + value.Message + "</td><td>" + value.Stacktrace + "</td></tr>";
-                    $("#logTable").append(line);
+                    $("#logTable").append(createLineForTable(value));
                 });
             },
             error: function () {
@@ -14,6 +20,14 @@
             }
         });
     });
+
+    connection.start().fail(function (e) {
+        alert("SignalRError for AgentNr:{{=it.AgentNr}} " +e);
+    });
+
+    function createLineForTable(value) {
+        return "<tr><td>" + value.EventNr + "</td><td>" + value.ExceptionType + "</td><td>" + value.Category + "</td><td>" + new Date(parseInt(value.EventTimestamp.replace("/Date(", "").replace(")/", ""))) + "</td><td>" + value.HResult + "</td><td>" + value.Message + "</td><td>" + value.Stacktrace + "</td></tr>";
+    }
 </script>
 
 <h2>Logs</h2>
