@@ -20,25 +20,13 @@
             $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress + ':' + dataValue.Port);
             $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
             if (dataValue.Status == 1) {
-                if(!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-success")){
-                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
-                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-danger");
-                    $("#agentSmall_{{=it.AgentNr}} table").addClass("ma-success");
-                }
+                useClass("ma-success");
             }
             else if (dataValue.Status == 2) {
-                if (!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-warning")) {
-                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-success");
-                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-danger");
-                    $("#agentSmall_{{=it.AgentNr}} table").addClass("ma-warning");
-                }
+                useClass("ma-warning");
             }
             else {
-                if (!$("#agentSmall_{{=it.AgentNr}} table").hasClass("ma-danger")) {
-                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
-                    $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-success");
-                    $("#agentSmall_{{=it.AgentNr}} table").addClass("ma-danger");
-                }
+                useClass("ma-danger");
             }
         });
         connection.start().done(function () {
@@ -47,6 +35,15 @@
             alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
         });
     });
+
+    function useClass(className) {
+        if (!$("#agentSmall_{{=it.AgentNr}} table").hasClass(className)) {
+            $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-success");
+            $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-danger");
+            $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
+            $("#agentSmall_{{=it.AgentNr}} table").addClass(className);
+        }
+    }
     function loadHostname(json) {
         var output;
         try {
