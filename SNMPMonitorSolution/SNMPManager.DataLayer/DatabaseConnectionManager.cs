@@ -34,10 +34,10 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getAgents", _myConnection);
-                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlCommand getAgents = new SqlCommand("getAgents", _myConnection);
+                getAgents.CommandType = System.Data.CommandType.StoredProcedure;
 
-                SqlDataReader myAgentsSet = getMonitoringTypesForAgent.ExecuteReader();
+                SqlDataReader myAgentsSet = getAgents.ExecuteReader();
 
                 while (myAgentsSet.Read())
                 {
@@ -49,6 +49,31 @@ namespace SNMPManager.DataLayer
                 _myConnection.Close();
             }
             return agentList;
+        }
+
+        public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
+        {
+            List<MonitoringTypeDataModel> monitoringTypeList = new List<MonitoringTypeDataModel>();
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand getMonitoringTypesForAgent = new SqlCommand("getMonitoringTypesForAgent", _myConnection);
+                getMonitoringTypesForAgent.CommandType = System.Data.CommandType.StoredProcedure;
+                getMonitoringTypesForAgent.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+
+                SqlDataReader myMonitoringTypeSet = getMonitoringTypesForAgent.ExecuteReader();
+
+                while (myMonitoringTypeSet.Read())
+                {
+                    monitoringTypeList.Add(new MonitoringTypeDataModel((int)myMonitoringTypeSet["MonitoringTypeNr"], myMonitoringTypeSet["Description"].ToString(), myMonitoringTypeSet["ObjectID"].ToString()));
+                }
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
+            return monitoringTypeList;
         }
         
         public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentForCheckFromDatabase(int agentNr)
@@ -167,17 +192,35 @@ namespace SNMPManager.DataLayer
             }
         }
 
-        public void UpdateStatusOfAgent(AgentDataModel agent, int status)
+        public void UpdateStatusOfAgent(int agentNr, int status)
         {
             try
             {
                 _myConnection.Open();
 
-                SqlCommand addEventCommand = new SqlCommand("updateStatusOfAgent", _myConnection);
-                addEventCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                addEventCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
-                addEventCommand.Parameters.Add(new SqlParameter("@Status", status));
-                addEventCommand.ExecuteNonQuery();
+                SqlCommand updateStatusOfAgentCommand = new SqlCommand("updateStatusOfAgent", _myConnection);
+                updateStatusOfAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                updateStatusOfAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+                updateStatusOfAgentCommand.Parameters.Add(new SqlParameter("@Status", status));
+                updateStatusOfAgentCommand.ExecuteNonQuery();
+
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
+        }
+
+        public void DeleteAgentInDatabase(int agentNr)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand saveAgentCommand = new SqlCommand("deleteAgent", _myConnection);
+                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+                saveAgentCommand.ExecuteNonQuery();
 
             }
             finally

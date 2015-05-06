@@ -64,13 +64,13 @@ namespace SNMPManager.BusinessLayer
                 finally
                 {
                     target.Close();
-                    connection.UpdateStatusOfAgent(agent, 1);
+                    connection.UpdateStatusOfAgent(agent.AgentNr, 1);
                 }
             }
             catch (SnmpException e)
             {
                 DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
-                connection.UpdateStatusOfAgent(agent, 3);
+                connection.UpdateStatusOfAgent(agent.AgentNr, 3);
                 ExceptionCore.HandleException(ExceptionCategory.High, e);
             }
             catch (Exception e)
