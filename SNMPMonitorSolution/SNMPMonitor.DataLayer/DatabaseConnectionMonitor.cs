@@ -202,7 +202,7 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
-        public List<EventDataModel> GetAllEvents()
+        public List<EventDataModel> GetAllEventsFromDatabase()
         {
             List<EventDataModel> eventList= new List<EventDataModel>();
             try

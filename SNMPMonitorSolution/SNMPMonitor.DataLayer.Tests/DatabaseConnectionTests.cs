@@ -34,5 +34,33 @@ namespace SNMPMonitor.DataLayer.Tests
 
             Assert.IsTrue(monitorDataList.Count <= expected);
         }
+
+        [TestMethod]
+        public void GetAllEventsFromDatabaseTest()
+        {
+            List<EventDataModel> eventDataList = databaseConnection.GetAllEventsFromDatabase();
+            Assert.AreEqual(1, eventDataList.Count);
+        }
+
+        [TestMethod]
+        public void GetTypesFromDatabaseTest()
+        {
+            List<TypeDataModel> typeDataList = databaseConnection.GetTypesFromDatabase();
+            Assert.AreEqual(2, typeDataList.Count);
+        }
+
+        [TestMethod]
+        public void GetMonitoringTypesForAgentFromDatabaseTest() 
+        {
+            List<MonitoringTypeDataModel> monitoringTypeDataModelList = databaseConnection.GetMonitoringTypesForAgentFromDatabase(1);
+            Assert.AreEqual(5, monitoringTypeDataModelList.Count);
+        }
+
+        [TestMethod]
+        public void GetAgentsFromDatabaseTest()
+        {
+            List<AgentDataModel> agentDataModelList = databaseConnection.GetAgentsFromDatabase();
+            Assert.AreEqual(1, agentDataModelList.Count);
+        }
     }
 }
