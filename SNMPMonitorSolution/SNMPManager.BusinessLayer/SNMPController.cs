@@ -90,7 +90,7 @@ namespace SNMPManager.BusinessLayer
                     JObject results = walk.Walk();
                     resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
                 }
-                connection.AddMonitorDataToDatabase(agent, resultList);
+                connection.AddMonitorDataToDatabase(agent.AgentNr, resultList);
             }
         }
     }

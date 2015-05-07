@@ -38,8 +38,6 @@ namespace SNMPManager.DataLayer.Tests
                 Assert.AreEqual(1, testAgent.TypeNr);
                 Assert.AreEqual(40001, testAgent.Port);
                 Assert.AreEqual(1, testAgent.Status);
-                Assert.AreEqual("{\n  \"Results\": [\n    {\n      \"OID\": \"1.3.6.1.2.1.1.1.0\",\n      \"Type\": \"OctetString\",\n      \"Value\": \"Hardware: Intel64 Family 6 Model 62 Stepping 4 AT/AT COMPATIBLE - Software: Windows Version 6.3 (Build 9600 Multiprocessor Free)\"\n    }\n  ]\n}".Replace("\n", Environment.NewLine), testAgent.SysDescription);
-                Assert.AreEqual("{\n  \"Results\": [\n    {\n      \"OID\": \"1.3.6.1.2.1.1.5.0\",\n      \"Type\": \"OctetString\",\n      \"Value\": \"sinv-56075\"\n    }\n  ]\n}".Replace("\n", Environment.NewLine), testAgent.SysName);
             }
 
             Assert.AreEqual(1, agents.Count);
@@ -72,7 +70,7 @@ namespace SNMPManager.DataLayer.Tests
         public void TestGetMonitoringTypesForAgent()
         {
             List<MonitoringTypeDataModel> monitoringTypesExpected = new List<MonitoringTypeDataModel>();
-            monitoringTypesExpected.Add(new MonitoringTypeDataModel(1, "sysDescr", "1.3.6.1.2.1.1.1"));
+            monitoringTypesExpected.Add(new MonitoringTypeDataModel(1, "sysDesc", "1.3.6.1.2.1.1.1"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(4, "hrMemorySize", "1.3.6.1.2.1.25.2.2"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(9, "sysName", "1.3.6.1.2.1.1.5"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(10, "sysUptime", "1.3.6.1.2.1.25.1.1"));
@@ -181,5 +179,56 @@ namespace SNMPManager.DataLayer.Tests
             // Clean up
             databaseConnection.UpdateStatusOfAgent(1, oldStatus);
         }
+
+        [TestMethod]
+        public void TestAddMonitorDataToDatabase()
+        {
+            // Get Agents before adding data for clean up
+            string sysDescOld = string.Empty;
+            string sysNameOld = string.Empty;
+            string sysUptimeOld = string.Empty;
+            List<AgentDataModel> agents = databaseConnection.GetAgentsFromDatabase();
+            foreach(AgentDataModel agent in agents) {
+                if(agent.AgentNr == 1) {
+                    sysDescOld = agent.SysDescription;
+                    sysNameOld = agent.SysName;
+                    sysUptimeOld = agent.SysUptime;
+                }
+            }
+
+            // Set new data
+            string sysDescNew = "Test-SysDesc: windows 2008 Server R2";
+            string sysNameNew = "Test-SysName: testserver";
+            string sysUptimeNew = "Test-SysUptime: 2d 3h 5m";
+
+            List<KeyValuePair<string, string>> monitorData = new List<KeyValuePair<string, string>>();
+            monitorData.Add(new KeyValuePair<string, string>("1.3.6.1.2.1.1.1", sysDescNew));
+            monitorData.Add(new KeyValuePair<string, string>("1.3.6.1.2.1.1.5", sysNameNew));
+            monitorData.Add(new KeyValuePair<string, string>("1.3.6.1.2.1.25.1.1", sysUptimeNew));
+
+            databaseConnection.AddMonitorDataToDatabase(1, monitorData);
+
+            // Check new data
+            List<AgentDataModel> agentsNew = databaseConnection.GetAgentsFromDatabase();
+            foreach (AgentDataModel agent in agentsNew)
+            {
+                if (agent.AgentNr == 1)
+                {
+                    Assert.AreEqual(sysDescNew, agent.SysDescription);
+                    Assert.AreEqual(sysNameNew, agent.SysName);
+                    Assert.AreEqual(sysUptimeNew, agent.SysUptime);
+                }
+            }
+
+            //CLean up
+            List<KeyValuePair<string, string>> monitorDataOld = new List<KeyValuePair<string, string>>();
+            monitorData.Add(new KeyValuePair<string, string>("1.3.6.1.2.1.1.1", sysDescOld));
+            monitorData.Add(new KeyValuePair<string, string>("1.3.6.1.2.1.1.5", sysNameOld));
+            monitorData.Add(new KeyValuePair<string, string>("1.3.6.1.2.1.25.1.1", sysUptimeOld));
+
+            databaseConnection.AddMonitorDataToDatabase(1, monitorData);
+        }
+
+
     }
 }

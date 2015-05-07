@@ -125,7 +125,7 @@ namespace SNMPManager.DataLayer
             return typeList;
         }
 
-        public void AddMonitorDataToDatabase(AgentDataModel agent, List<KeyValuePair<string, string>> resultSet)
+        public void AddMonitorDataToDatabase(int agentNr, List<KeyValuePair<string, string>> resultSet)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace SNMPManager.DataLayer
                     saveMonitorDataCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     saveMonitorDataCommand.Parameters.Add(new SqlParameter("@MonitoringTypeNr", result.Key));
                     saveMonitorDataCommand.Parameters.Add(new SqlParameter("@Result", result.Value));
-                    saveMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
+                    saveMonitorDataCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
 
                     saveMonitorDataCommand.ExecuteNonQuery();
                 }
