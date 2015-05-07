@@ -1,0 +1,127 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        var connection = $.hubConnection();
+        connection.logging = true;
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveData", function (dataValue) {
+            if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
+                appendPointLine{{=it.AgentNr}}(dataValue);
+            }
+        });
+
+        createChartLine{{=it.AgentNr}}();
+
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
+        }).fail(function (e) {
+            alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
+        });
+    });
+
+    function appendPointLine{{=it.AgentNr}}(json) {
+        console.log(json);
+        var chart = $("#Chart{{=it.AgentNr}}_Memory").highcharts();
+        var shift = chart.series[0].data.length >= 20;
+        var usedMemoryPers;
+        try {
+            var memoryResult = JSON.parse(json.Result);
+            var index = 0;
+            for(var i = 0; i < memoryResult["Results"].length; i++)
+            {
+
+            }
+            if(memoryResult["Results"].length > 0)
+            {
+                
+                var totalMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[24]).Value;
+                
+                var usedMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[29]).Value;
+
+                var usedMemoryPers = (usedMemory / totalMemory) * 100;
+                console.log(usedMemoryPers + ': ' + new Date(json.MonitorTimestamp));
+                chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y:Math.round(usedMemoryPers)}, true, shift);
+                console.log(chart.series[0].data);
+            } else {
+                console.log("no memory data");
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    function createChartLine{{=it.AgentNr}}() {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        $("#Chart{{=it.AgentNr}}_Memory").highcharts({
+            chart: {
+                type: 'line',
+                height: 300,
+                animation: Highcharts.svg
+            },
+            title: {
+                text: 'RAM Auslastung'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: 'in %'
+                },
+                min: 0,
+                max: 100
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            series: [{
+                name: "RAM Auslastung",
+                data: (function () {
+                    var newdata = [];
+                    $.ajax({
+                        url: '@Url.Action("HistoryDataForOID","Data")',
+                        data: 'id={{=it.AgentNr}}&oid=1.3.6.1.2.1.25.2.3&count=20',
+                        async: false,
+                        cache: false,
+                        method: 'Get',
+                        success: function (data) {
+                            $.each(data.History, function(index, value) {
+                                var usedMemoryPers;
+                                try {
+                                    var memoryResult = JSON.parse(value.Result);
+                                    if(memoryResult.Results.length > 0)
+                                    {
+                                        
+                                        var totalMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[24]).Value;
+                                        
+                                        var usedMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[29]).Value;
+
+                                        var usedMemoryPers = (usedMemory / totalMemory) * 100;
+                                        newdata.push({ x:new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedMemoryPers))});
+                                    } else {
+                                        console.log("no memory data");
+                                    }
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    });
+                    return newdata;
+                }())
+            }]
+        });
+    }
+</script>
+<div id="Chart{{=it.AgentNr}}_Memory" class="col-xs-12 col-lg-4 col-md-6">
+
+</div>

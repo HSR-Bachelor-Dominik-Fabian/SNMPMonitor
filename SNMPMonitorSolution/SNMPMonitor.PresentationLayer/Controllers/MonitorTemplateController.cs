@@ -28,5 +28,15 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         {
             return PartialView();
         }
+
+        public PartialViewResult Monitor_Harddisk()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult Monitor_Memory()
+        {
+            return PartialView();
+        }
     }
 }

@@ -328,6 +328,9 @@
     <Content Include="Views\Home\SideBarContent.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_1_3_6_1_2_1_25_2_3.cshtml" />
+    <Content Include="Views\MonitorTemplate\Monitor_Harddisk.cshtml" />
+    <Content Include="Views\MonitorTemplate\Monitor_Memory.cshtml" />
+    <Content Include="Views\MonitorTemplate\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
