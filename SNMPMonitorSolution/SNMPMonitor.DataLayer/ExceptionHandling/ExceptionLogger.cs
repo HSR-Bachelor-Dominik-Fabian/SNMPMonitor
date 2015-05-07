@@ -40,7 +40,7 @@ namespace SNMPMonitor.DataLayer.ExceptionHandling
         public static void SaveExceptionToDB(string category, Exception exc)
         {
             DatabaseConnectionMonitor connectionManager = new DatabaseConnectionMonitor(Properties.Settings.Default.ProdDatabase);
-            connectionManager.AddEventToDatabase(exc.GetType().ToString(), category, DateTime.Now.ToString(), exc.HResult.ToString(), exc.Message, exc.StackTrace);
+            connectionManager.AddEventToDatabase(exc.GetType().ToString(), category, DateTime.Now, exc.HResult.ToString(), exc.Message, exc.StackTrace);
         }
     }
 }

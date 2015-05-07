@@ -45,13 +45,6 @@ namespace SNMPMonitor.BusinessLayer.Tests
         }
 
         [TestMethod]
-        public void GetAllEventsTest()
-        {
-            List<Event> eventList = controller.GetAllEvents();
-            Assert.AreEqual(1, eventList.Count);
-        }
-
-        [TestMethod]
         public void GetAgentsTest()
         {
             List<Agent> agentList = controller.GetAgents();

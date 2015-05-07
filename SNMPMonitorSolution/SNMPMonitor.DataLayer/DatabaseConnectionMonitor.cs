@@ -180,7 +180,7 @@ namespace SNMPMonitor.DataLayer
             return monitorDataList;
         }
 
-        public void AddEventToDatabase(string exceptionType, string category, string timestamp, string hResult, string message, string stackTrace)
+        public void AddEventToDatabase(string exceptionType, string category, DateTime timestamp, string hResult, string message, string stackTrace)
         {
             try
             {
@@ -224,6 +224,24 @@ namespace SNMPMonitor.DataLayer
                 _myConnection.Close();
             }
             return eventList;
+        }
+
+        public void DeleteAgentInDatabase(int agentNr)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand saveAgentCommand = new SqlCommand("deleteAgent", _myConnection);
+                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+                saveAgentCommand.ExecuteNonQuery();
+
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
         }
     }
 }
