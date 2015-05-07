@@ -108,7 +108,7 @@ namespace SNMPMonitor.PresentationLayer.Models
                 this._ipAddress = ipAddressProperty.Value.ToString();
                 this._sysDesc = sysDescProperty.Value.ToString();
                 this._sysName = sysNameProperty.Value.ToString();
-                this._sysUptime = sysNameProperty.Value.ToString();
+                this._sysUptime = sysUptimeProperty.Value.ToString();
 
                 int agentNrParse = 0;
                 if (int.TryParse(agentNrProperty.Value.ToString(), out agentNrParse))
