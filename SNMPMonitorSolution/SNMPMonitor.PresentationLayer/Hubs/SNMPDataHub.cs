@@ -27,7 +27,7 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
 
-            context.Clients.All.receiveNewEvent(JObject.FromObject(eventModel));
+            context.Clients.Group("Events").receiveNewEvent(JObject.FromObject(eventModel));
         }
 
         public void SendUpdatedAgent(AgentModel agent)
