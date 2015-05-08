@@ -6,7 +6,7 @@
             success: function (data) {
                 var harddiskTemplateFunc = doT.template(data);
                 var jsonForMonitor = { "AgentNr": {{=it.AgentNr}}};
-                $("#Monitor_Harddisk").append(harddiskTemplateFunc(jsonForMonitor));
+                $("#Monitor{{=it.AgentNr}}_Harddisk").append(harddiskTemplateFunc(jsonForMonitor));
             },
             error: function(data, error, thrownerror){
             }
@@ -17,7 +17,7 @@
             success: function (data) {
                 var memoryTemplateFunc = doT.template(data);
                 var jsonForMonitor = { "AgentNr": {{=it.AgentNr}}};
-                $("#Monitor_Memory").append(memoryTemplateFunc(jsonForMonitor));
+                $("#Monitor{{=it.AgentNr}}_Memory").append(memoryTemplateFunc(jsonForMonitor));
             },
             error: function(data, error, thrownerror){
             }
@@ -25,8 +25,8 @@
     });
 </script>
 <div>
-    <div id="Monitor_Harddisk">
+    <div id="Monitor{{=it.AgentNr}}_Harddisk">
     </div>
-    <div id="Monitor_Memory">
+    <div id="Monitor{{=it.AgentNr}}_Memory">
     </div>
 </div>

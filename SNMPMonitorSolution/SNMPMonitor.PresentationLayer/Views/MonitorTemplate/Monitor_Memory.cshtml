@@ -18,6 +18,22 @@
         });
     });
 
+    function findStartOfPhysicalMemory(json) {
+        var output = -1;
+        var indexFound = false;
+        var index = 0;
+        while (!indexFound) {
+            var string = ((json["Results"])[index]).Value;
+            if (string.indexOf("Physical") >= 0) {
+                output = index;
+                indexFound = true;
+            } else {
+                index++;
+            }
+        }
+        return output;
+    }
+
     function appendPointToMemoryLine{{=it.AgentNr}}(json) {
         console.log(json);
         var chart = $("#Chart{{=it.AgentNr}}_Memory").highcharts();
@@ -32,12 +48,17 @@
             }
             if(memoryResult["Results"].length > 0)
             {
-                
-                var totalMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[24]).Value;
-                
-                var usedMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[29]).Value;
+                var startMemory = findStartOfPhysicalMemory(memoryResult);
 
+                var memoryIndex = (startMemory + 1) / 3;
+                var memoryAllocationUnits = startMemory + memoryIndex;
+                var memoryStorage = startMemory + (2 * memoryIndex);
+                var memoryUsedStorage = startMemory + (3 * memoryIndex);
+
+                var totalMemory = ((memoryResult["Results"])[memoryAllocationUnits]).Value * ((memoryResult["Results"])[memoryStorage]).Value;               
+                var usedMemory = ((memoryResult["Results"])[memoryAllocationUnits]).Value * ((memoryResult["Results"])[memoryUsedStorage]).Value;
                 var usedMemoryPers = (usedMemory / totalMemory) * 100;
+
                 console.log(usedMemoryPers + ': ' + new Date(json.MonitorTimestamp));
                 chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y:Math.round(usedMemoryPers)}, true, shift);
                 console.log(chart.series[0].data);
@@ -94,17 +115,21 @@
                         cache: false,
                         method: 'Get',
                         success: function (data) {
+                            var tmp = JSON.parse(data.History[0].Result);
+                            var startMemory = findStartOfPhysicalMemory(tmp);
                             $.each(data.History, function(index, value) {
                                 var usedMemoryPers;
                                 try {
                                     var memoryResult = JSON.parse(value.Result);
                                     if(memoryResult.Results.length > 0)
                                     {
+                                        var memoryIndex = (startMemory + 1) / 3;
+                                        var memoryAllocationUnits = startMemory + memoryIndex;
+                                        var memoryStorage = startMemory + (2 * memoryIndex);
+                                        var memoryUsedStorage = startMemory + (3 * memoryIndex);
                                         
-                                        var totalMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[24]).Value;
-                                        
-                                        var usedMemory = ((memoryResult["Results"])[19]).Value * ((memoryResult["Results"])[29]).Value;
-
+                                        var totalMemory = ((memoryResult["Results"])[memoryAllocationUnits]).Value * ((memoryResult["Results"])[memoryStorage]).Value;               
+                                        var usedMemory = ((memoryResult["Results"])[memoryAllocationUnits]).Value * ((memoryResult["Results"])[memoryUsedStorage]).Value;
                                         var usedMemoryPers = (usedMemory / totalMemory) * 100;
                                         newdata.push({ x:new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedMemoryPers))});
                                     } else {
