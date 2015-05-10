@@ -224,6 +224,30 @@ namespace SNMPMonitor.BusinessLayer
             return returnList;
         }
 
+        public KeyValuePair<Agent, List<MonitoringType>> GetMonitorSummaryForAgent(int agentNr)
+        {
+            KeyValuePair<Agent, List<MonitoringType>> monitorSummary = new KeyValuePair<Agent, List<MonitoringType>>();
+            try
+            {
+                Agent agent = GetAgent(agentNr);
+                List<MonitoringType> monitoringTypes = GetMonitoringTypesForAgent(agent.AgentNr);
+                monitorSummary = new KeyValuePair<Agent, List<MonitoringType>>(agent, monitoringTypes);
+            }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
+            }
+            return monitorSummary;
+        }
+
         public List<Event> GetAllEvents()
         {
             List<Event> eventList = new List<Event>();
