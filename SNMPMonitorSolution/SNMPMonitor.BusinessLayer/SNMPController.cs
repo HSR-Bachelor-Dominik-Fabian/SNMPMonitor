@@ -121,6 +121,38 @@ namespace SNMPMonitor.BusinessLayer
             return agentList;
         }
 
+        public Agent GetAgent(int agentNr)
+        {
+            Agent agent = null;
+            try
+            {
+                List<Type> typeList = GetTypes();
+                AgentDataModel agentData = _databaseConnection.GetAgentFromDatabase(agentNr);
+                Type type = null;
+                foreach (Type temp in typeList)
+                {
+                    if (temp.TypeNr == agentData.Type.TypeNr)
+                    {
+                        type = temp;
+                    }
+                }
+                agent = new Agent(agentData.AgentNr, agentData.Name, agentData.IPAddress, type, agentData.Port, agentData.Status, agentData.SysDescription, agentData.SysName, agentData.SysUptime);
+            }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (InvalidCastException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.High, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
+            }
+            return agent;
+        }
+
         public List<Type> GetTypes()
         {
             List<Type> typeList = new List<Type>();
