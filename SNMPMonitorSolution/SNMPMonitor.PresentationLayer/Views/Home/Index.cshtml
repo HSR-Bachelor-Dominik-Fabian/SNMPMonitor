@@ -12,7 +12,10 @@
                 SetActiveLink("");
             });
             this.get('#/Monitor', function (context) {
-                context.load("@Url.Action("Monitor","Home")").swap();
+                this.redirect("#/Monitor/0");
+            });
+            this.get('#/Monitor/:id', function (context) {
+                context.load("@Url.Action("Monitor","Home")/" + this.params["id"]).swap();
                 SetActiveLink("Monitor");
             });
             this.get('#/Logs', function (context) {

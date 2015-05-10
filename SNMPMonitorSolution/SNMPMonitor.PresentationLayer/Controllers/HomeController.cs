@@ -18,9 +18,9 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return PartialView();
         }
 
-        public PartialViewResult Monitor()
+        public PartialViewResult Monitor(int id = 0)
         {
-            return PartialView();
+            return PartialView(id);
         }
 
         public PartialViewResult Logs()

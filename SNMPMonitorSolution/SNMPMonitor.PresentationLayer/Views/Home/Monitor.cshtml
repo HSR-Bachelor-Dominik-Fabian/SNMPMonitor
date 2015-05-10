@@ -1,21 +1,33 @@
-﻿<script type="text/javascript">
+﻿@model int
+<script type="text/javascript">
     $(document).ready(function () {
+        var model = @Model;
         $.ajax({
-            url: "@Url.Action("GetMonitorSummary", "Data")",
+            url: "@Url.Action("GetAgents", "Data")",
             type: "GET",
             success: function (data) {
-
-                $.each(data, function (index, value) {
-                    createAgent(value);
-                });
-                //TODO: createAgent for every json
-                    
-            },
-            error: function () {
-
+                $.each(data, function(index, value){
+                    var selected="";
+                    if(value.AgentNr == model){
+                        selected = "selected = 'selected'";
+                    }
+                    addAgentToDropdown(value, selected);   
+                });                 
+            }
+        });
+        $.ajax({
+            url: "@Url.Action("GetMonitorSummaryForAgent", "Data")/" + model,
+            type: "GET",
+            success: function (data) {
+                createAgent(data);                    
             }
         });
     });
+
+    function addAgentToDropdown(json, selected){
+        $("#AgentDropdown select").append('<option value='+ json.AgentNr +' ' + selected + '>'+ json.Name +'</option>');
+
+    }
 
     function createAgent(json) {
         var def = {
@@ -39,14 +51,21 @@
             method: "GET",
             success: function (data) {
                 var monitorTest = doT.template(data, undefined, def);
-                    
-                $("#dataContainer").append(monitorTest(json));
+                if(json.Key != null){
+                    $("#dataContainer").html(monitorTest(json));
+                }
+                else{
+                    $("#dataContainer").html("Not Found");
+                }
             }
         });
     }
 </script>
 
 <h2>Monitor</h2>
-
+<div id="AgentDropdown" class="col-xs-11">
+    <select class="form-control">
+    </select>
+</div>
 <div id="dataContainer" class="col-xs-11">
 </div>
