@@ -2,12 +2,19 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var model = @Model;
+        $("#AgentDropdown select").on( "change", function(){
+            window.location = "#/Monitor/" + $(this).val();
+        });
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
             type: "GET",
+            async: false,
             success: function (data) {
                 $.each(data, function(index, value){
                     var selected="";
+                    if(model == 0&& index == 0){
+                        window.location = "#/Monitor/" + value.AgentNr;
+                    }
                     if(value.AgentNr == model){
                         selected = "selected = 'selected'";
                     }
@@ -23,6 +30,7 @@
             }
         });
     });
+
 
     function addAgentToDropdown(json, selected){
         $("#AgentDropdown select").append('<option value='+ json.AgentNr +' ' + selected + '>'+ json.Name +'</option>');
