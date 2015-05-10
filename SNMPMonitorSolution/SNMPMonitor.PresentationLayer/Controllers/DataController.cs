@@ -127,12 +127,21 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return Json(history,JsonRequestBehavior.AllowGet);
         }
 
+        [Obsolete]
         [HttpGet]
         public JsonResult GetMonitorSummary()
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             List<KeyValuePair<Agent, List<MonitoringType>>> monitorSummary = controller.GetMonitoringSummary();
             return Json(monitorSummary,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetMonitorSummaryForAgent(int id)
+        {
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            KeyValuePair<Agent, List<MonitoringType>> monitorSummary = controller.GetMonitorSummaryForAgent(id);
+            return Json(monitorSummary, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
