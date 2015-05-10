@@ -121,6 +121,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             }
             else
             {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, new FormatException("HistoryDataForOID: id not Integer"));
                 //TODO: Return Error
             }
             return Json(history,JsonRequestBehavior.AllowGet);

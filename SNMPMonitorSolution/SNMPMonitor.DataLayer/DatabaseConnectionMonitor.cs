@@ -60,6 +60,42 @@ namespace SNMPMonitor.DataLayer
             }
             return agentList;
         }
+
+        public AgentDataModel GetAgentFromDatabase(int agentNr)
+        {
+            AgentDataModel agentList = null;
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand getAgent = new SqlCommand("getAgent", _myConnection);
+                getAgent.CommandType = System.Data.CommandType.StoredProcedure;
+                getAgent.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+
+                SqlDataReader myAgentsSet = getAgent.ExecuteReader();
+
+                List<TypeDataModel> typeSet = new DatabaseConnectionMonitor(Properties.Settings.Default.ProdDatabase).GetTypesFromDatabase();
+
+                while (myAgentsSet.Read())
+                {
+                    TypeDataModel type = null;
+                    int tempTypeNr = (int)myAgentsSet["TypeNr"];
+                    foreach (TypeDataModel temp in typeSet)
+                    {
+                        if (temp.TypeNr == tempTypeNr)
+                        {
+                            type = temp;
+                        }
+                    }
+                    agentList = new AgentDataModel((int)myAgentsSet["AgentNr"], myAgentsSet["Name"].ToString(), myAgentsSet["IPAddress"].ToString(), type, (int)myAgentsSet["Port"], (int)myAgentsSet["Status"], myAgentsSet["sysDesc"].ToString(), myAgentsSet["sysName"].ToString(), myAgentsSet["sysUptime"].ToString());
+                }
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
+            return agentList;
+        }
         
         public List<MonitoringTypeDataModel> GetMonitoringTypesForAgentFromDatabase(int agentNr)
         {
