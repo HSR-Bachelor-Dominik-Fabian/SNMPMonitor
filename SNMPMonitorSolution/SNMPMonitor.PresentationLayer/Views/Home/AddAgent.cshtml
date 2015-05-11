@@ -4,7 +4,7 @@
     <form class="form-horizontal" id="MonitorInputForm" action="@Url.Action("AddAgentToMonitor","Data")" method="post">
         <div class="form-group">
             <label class="control-label col-sm-2" for="inputAgentName">Name</label>
-            <input type="text" class="form-control col-sm-10" name="inputAgentName" placeholder="Name">
+            <input type="text" class="form-control col-sm-10" name="inputAgentName" placeholder="Name" id="inputAgentName">
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="inputIpAddress">IP Adresse</label>
@@ -16,7 +16,7 @@
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="inputType">Typ</label>
-            <select class="form-control col-sm-10" name="inputType">
+            <select class="form-control col-sm-10" name="inputType" id="inputType">
                 <option>Server</option>
                 <option>Switch</option>
             </select>
@@ -25,10 +25,10 @@
             <label class="control-label col-sm-2">Optionen</label>
             <div class="col-sm-10">
                 <div class="checkbox">
-                    <label><input type="checkbox">CPU</label>
+                    <label><input type="checkbox" id="cpuCheckbox">CPU</label>
                 </div>
                 <div class="checkbox">
-                    <label><input type="checkbox">RAM</label>
+                    <label><input type="checkbox" id="discCheckbox">Disc / RAM</label>
                 </div>
             </div>
         </div>
@@ -45,9 +45,12 @@
                     url: this.action,
                     type: "POST",
                     data: {
-                        "inputAgentName": this.inputAgentName.value,
-                        "inputIpAddress": this.inputIpAddress.value,
-                        "inputPortNr": this.inputPortNr.value
+                        "inputAgentName": $("inputAgentName").value,
+                        "inputIpAddress": $("#inputIpAddress").val,
+                        "inputPortNr": $("#inputPortNr").value,
+                        "typeName": $("#inputType").value,
+                        "cpuCheck": $("#cpuCheckbox").is(":checked"),
+                        "discCheck": $("#discCheckbox").is(":checked")
                     },
                     success: function (data) {
                         $("#MonitorInputForm").trigger("reset");

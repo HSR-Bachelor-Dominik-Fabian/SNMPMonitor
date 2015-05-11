@@ -127,7 +127,6 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return Json(history,JsonRequestBehavior.AllowGet);
         }
 
-        [Obsolete]
         [HttpGet]
         public JsonResult GetMonitorSummary()
         {
@@ -153,14 +152,24 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         }
 
         [HttpPost]
-        public HttpStatusCodeResult AddAgentToMonitor(string inputAgentName, string inputIpAddress, string inputPortNr)
+        public HttpStatusCodeResult AddAgentToMonitor(string inputAgentName, string inputIpAddress, string inputPortNr, string typeName, bool cpuCheck, bool discCheck)
         {
             HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             int portNr;
             if (int.TryParse(inputPortNr, out portNr))
             {
-                controller.AddAgentToDatabaseForDemo(inputAgentName, inputIpAddress, portNr);
+                List<SNMPMonitor.BusinessLayer.Type> types = controller.GetTypes();
+                SNMPMonitor.BusinessLayer.Type type = null;
+                foreach (SNMPMonitor.BusinessLayer.Type temp in types)
+                {
+                    if (temp.Name == typeName)
+                    {
+                        type = temp;
+                    }
+                }
+                Agent newAgent = new Agent(0, inputAgentName, inputIpAddress, type, portNr, 1, "", "", "");
+                controller.AddAgentToDatabase(newAgent, cpuCheck, discCheck);
                 output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
             }
             return output;

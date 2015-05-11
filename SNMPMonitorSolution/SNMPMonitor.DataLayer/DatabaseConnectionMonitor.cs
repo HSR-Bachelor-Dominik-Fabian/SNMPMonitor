@@ -146,7 +146,7 @@ namespace SNMPMonitor.DataLayer
             return typeList;
         }
 
-        public void AddAgentToDatabase(AgentDataModel agent)
+        public void AddAgentToDatabase(AgentDataModel agent, bool cpuCheck, bool discCheck)
         {
             try
             {
@@ -159,6 +159,8 @@ namespace SNMPMonitor.DataLayer
                 saveAgentCommand.Parameters.Add(new SqlParameter("@Port", agent.Port));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@TypeNr", agent.Type.TypeNr));
                 saveAgentCommand.Parameters.Add(new SqlParameter("@StatusNr", agent.Status));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@CPUCheck", cpuCheck));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@DiscCheck", discCheck));
                 saveAgentCommand.ExecuteNonQuery();
             }
             finally

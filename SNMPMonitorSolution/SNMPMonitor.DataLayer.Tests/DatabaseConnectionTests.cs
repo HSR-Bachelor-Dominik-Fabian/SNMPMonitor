@@ -21,7 +21,7 @@ namespace SNMPMonitor.DataLayer.Tests
             if (agents.Count == 0)
             {
                 //AgentDataModel agent = new AgentDataModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", new TypeDataModel(1, "Server"), 40001, 1, "Test-Client", "sinv-56075", "");
-                databaseConnection.AddAgentToDatabase(agent);
+                databaseConnection.AddAgentToDatabase(agent, false, false);
             }
         }
 
@@ -107,7 +107,7 @@ namespace SNMPMonitor.DataLayer.Tests
             List<AgentDataModel> agentsBeforeAdd = databaseConnection.GetAgentsFromDatabase();
             AgentDataModel newAgent = new AgentDataModel(1, "Test-Server", "10.10.10.10", new TypeDataModel(1, "Server"), 161, 1, "", "", "");
 
-            databaseConnection.AddAgentToDatabase(newAgent);
+            databaseConnection.AddAgentToDatabase(newAgent, false, false);
 
             List<AgentDataModel> agentsAfterAdd = databaseConnection.GetAgentsFromDatabase();
 
