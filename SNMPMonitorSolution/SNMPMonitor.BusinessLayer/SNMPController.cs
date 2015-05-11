@@ -179,12 +179,12 @@ namespace SNMPMonitor.BusinessLayer
             return typeList;
         }
 
-        public void AddAgentToDatabase(Agent agent)
+        public void AddAgentToDatabase(Agent agent, bool cpuCheck, bool discCheck)
         {
             AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, new TypeDataModel(agent.Type.TypeNr, agent.Type.Name), agent.Port, agent.Status, "undefined", "undefined", "undefined");
             try
             {
-                _databaseConnection.AddAgentToDatabase(agentData);
+                _databaseConnection.AddAgentToDatabase(agentData, cpuCheck, discCheck);
             }
             catch (SqlException e)
             {
