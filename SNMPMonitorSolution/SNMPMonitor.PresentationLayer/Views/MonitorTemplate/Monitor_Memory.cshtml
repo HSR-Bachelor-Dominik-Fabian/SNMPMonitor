@@ -34,6 +34,23 @@
         return output;
     }
 
+    function findIndexForStorage(json, storageDescr) {
+        var output = -1;
+        var tmpArray = new Array();
+        $.each(json["Results"], function(index, value) {
+            var oid = value.OID;
+            if (oid.indexOf("1.3.6.1.2.1.25.2.3.1.3") >= 0) {
+                tmpArray.push(value);
+            }
+        });
+        $.each(tmpArray, function(index, value) {
+            if (value.Value.indexOf(storageDescr) >= 0) {
+                output = index + 1;
+            }
+        });
+        return output;
+    }
+
     function appendPointToMemoryLine{{=it.AgentNr}}(json) {
         console.log(json);
         var chart = $("#Chart{{=it.AgentNr}}_Memory").highcharts();
