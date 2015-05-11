@@ -51,12 +51,19 @@
             var diskResult = JSON.parse(result);
             if(diskResult.Results.length > 0)
             {
-                var startIndexOfDisc = findIndexOfDisc(diskResult);
-                var countOfDiscs = (diskResult.Results.length) / 7;
-                var indexFullSpace = startIndexOfDisc + (2 * countOfDiscs);
-                var indexUsedSpace = startIndexOfDisc + (3 * countOfDiscs);
-                var fullSpace = ((diskResult["Results"])[indexFullSpace]).Value;
-                var usedSpace = ((diskResult["Results"])[indexUsedSpace]).Value;
+                var indexOfCDisc = findIndexForStorage(diskResult, 'C:\\');
+                var fullSpace;
+                $.each(diskResult["Results"], function(index, value) {
+                    if (value.OID.indexOf("1.3.6.1.2.1.25.2.3.1.5." + indexOfCDisc) >= 0) {
+                        fullSpace = value.Value;
+                    }
+                });
+                var usedSpace;
+                $.each(diskResult["Results"], function(index, value) {
+                    if (value.OID.indexOf("1.3.6.1.2.1.25.2.3.1.6." + indexOfCDisc) >= 0) {
+                        usedSpace = value.Value;
+                    }
+                });
                 var freeSpace = fullSpace - usedSpace;
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
                 var freeSpacePers = (freeSpace / fullSpace) * 100;
@@ -77,12 +84,19 @@
             var diskResult = JSON.parse(result);
             if(diskResult.Results.length > 0)
             {
-                var startIndexOfDisc = findIndexOfDisc(diskResult);
-                var countOfDiscs = (diskResult.Results.length) / 7;
-                var indexFullSpace = startIndexOfDisc + (2 * countOfDiscs);
-                var indexUsedSpace = startIndexOfDisc + (3 * countOfDiscs);
-                var fullSpace = ((diskResult["Results"])[indexFullSpace]).Value;
-                var usedSpace = ((diskResult["Results"])[indexUsedSpace]).Value;
+                var indexOfCDisc = findIndexForStorage(diskResult, 'C:\\');
+                var fullSpace;
+                $.each(diskResult["Results"], function(index, value) {
+                    if (value.OID.indexOf("1.3.6.1.2.1.25.2.3.1.5." + indexOfCDisc) >= 0) {
+                        fullSpace = value.Value;
+                    }
+                });
+                var usedSpace;
+                $.each(diskResult["Results"], function(index, value) {
+                    if (value.OID.indexOf("1.3.6.1.2.1.25.2.3.1.6." + indexOfCDisc) >= 0) {
+                        usedSpace = value.Value;
+                    }
+                });
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
                 newdata.push({ x:new Date(parseInt(timestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedSpacePers))});
             } else {
@@ -101,12 +115,19 @@
             var diskResult = JSON.parse(json.Result);
             if(diskResult["Results"].length > 0)
             {
-                var startIndexOfDisc = findIndexOfDisc(diskResult);
-                var countOfDiscs = (diskResult.Results.length) / 7;
-                var indexFullSpace = startIndexOfDisc + (2 * countOfDiscs);
-                var indexUsedSpace = startIndexOfDisc + (3 * countOfDiscs);
-                var fullSpace = ((diskResult["Results"])[indexFullSpace]).Value;
-                var usedSpace = ((diskResult["Results"])[indexUsedSpace]).Value;
+                var indexOfCDisc = findIndexForStorage(diskResult, 'C:\\');
+                var fullSpace;
+                $.each(diskResult["Results"], function(index, value) {
+                    if (value.OID.indexOf("1.3.6.1.2.1.25.2.3.1.5." + indexOfCDisc) >= 0) {
+                        fullSpace = value.Value;
+                    }
+                });
+                var usedSpace;
+                $.each(diskResult["Results"], function(index, value) {
+                    if (value.OID.indexOf("1.3.6.1.2.1.25.2.3.1.6." + indexOfCDisc) >= 0) {
+                        usedSpace = value.Value;
+                    }
+                });
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
                 chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y:parseInt(Math.round(usedSpacePers))}, true, shift);
             } else {
@@ -115,6 +136,23 @@
         } catch (e) {
             console.log(e);
         }
+    }
+
+    function findIndexForStorage(json, storageDescr) {
+        var output = -1;
+        var tmpArray = new Array();
+        $.each(json["Results"], function(index, value) {
+            var oid = value.OID;
+            if (oid.indexOf("1.3.6.1.2.1.25.2.3.1.3") >= 0) {
+                tmpArray.push(value);
+            }
+        });
+        $.each(tmpArray, function(index, value) {
+            if (value.Value.indexOf(storageDescr) >= 0) {
+                output = index + 1;
+            }
+        });
+        return output;
     }
 
     function createChartPie{{=it.AgentNr}}(){
