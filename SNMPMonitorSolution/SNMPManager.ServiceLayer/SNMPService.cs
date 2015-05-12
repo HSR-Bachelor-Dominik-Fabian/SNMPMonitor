@@ -15,7 +15,7 @@ namespace SNMPManager.ServiceLayer
         public static void Start()
         {
             _shortTimer.Elapsed += new ElapsedEventHandler(OnShortTimedEvent);
-            _shortTimer.Interval = 5000;
+            _shortTimer.Interval = 60000;
             _shortTimer.Enabled = true;
         }
 

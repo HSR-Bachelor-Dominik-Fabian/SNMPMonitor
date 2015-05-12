@@ -19,7 +19,7 @@ namespace SNMPManager.DataLayer.Tests
             List<AgentDataModel> agents = databaseConnection.GetAgentsFromDatabase();
             
             if(agents.Count == 0) {
-                databaseConnection.AddAgentToDatabase(agent);
+                databaseConnection.AddAgentToDatabase(agent, false, false);
             }
         }
 
@@ -113,7 +113,7 @@ namespace SNMPManager.DataLayer.Tests
             List<AgentDataModel> agentsBeforeAdd = databaseConnection.GetAgentsFromDatabase();
             AgentDataModel newAgent = new AgentDataModel(1, "Test-Server", "10.10.10.10", 1, 161, 1, "", "", "");
 
-            databaseConnection.AddAgentToDatabase(newAgent);
+            databaseConnection.AddAgentToDatabase(newAgent, false, false);
 
             List<AgentDataModel> agentsAfterAdd = databaseConnection.GetAgentsFromDatabase();
 

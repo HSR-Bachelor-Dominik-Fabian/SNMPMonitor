@@ -29,7 +29,11 @@ namespace SNMPManager.BusinessLayer
             {
                 DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
                 List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
-                Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent));
+                //Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent));
+                foreach (AgentDataModel agent in AgentList)
+                {
+                    GetSNMPDataFromSingleAgent(agent);
+                }
             }
             catch (SqlException e)
             {
