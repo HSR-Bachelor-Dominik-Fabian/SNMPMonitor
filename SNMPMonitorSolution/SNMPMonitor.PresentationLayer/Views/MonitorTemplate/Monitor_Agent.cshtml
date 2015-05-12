@@ -10,6 +10,18 @@
     return output;
   }
 }}
+{{function loadHostname(json){
+    var output;
+    var object = JSON.parse(json);
+    if(object.Results.length > 0){
+        output = object.Results[0].Value;
+    }
+    else{
+        output = "undefined";
+    }
+    return output;
+  }
+}}
 {{function getStatus(status){
     var output;
     switch(status) {
@@ -28,48 +40,156 @@
     return output;
   }
 }}
-<div>
-    <div class="bs-callout-success">
-        <h3>{{=it.Key.Name}}</h3>
-        <div class="container">
-            <div class="row">
-                <p class="col-xs-4 col-sm-2"><strong>IP Adresse</strong></p>
-                <p class="col-xs-8 col-sm-4">{{=it.Key.IPAddress}}</p>
-            </div>
-            <div class="row">
-                <p class="col-xs-4 col-sm-2"><strong>Port</strong></p>
-                <p class="col-xs-8 col-sm-4">{{=it.Key.Port}}</p>
-            </div>
-            <div class="row">
-                <p class="col-xs-4 col-sm-2"><strong>Uptime</strong></p>
-                <p class="col-xs-8 col-sm-4">{{=loadSysUptime(it.Key.SysUptime)}}</p>
-            </div>
-            <div class="row">
-                <p class="col-xs-4 col-sm-2"><strong>Status</strong></p>
-                <p class="col-xs-8 col-sm-4">{{=getStatus(it.Key.Status)}}</p>
+{{function getStatusClass(status){
+    var output;
+    switch(status) {
+    case 1:
+        output = 'bs-callout-success';
+        break;
+    case 2:
+        output = 'bs-callout-warning';
+        break;
+    case 3:
+        output = 'bs-callout-danger';
+        break;
+    default:
+        output = 'bs-callout-danger'
+    }
+    return output;
+  }
+}}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var connection = $.hubConnection();
+        connection.logging = true;
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveUpdatedAgent", function (dataValue) {
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .agentName").html(dataValue.Name);
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .ipAddress").html(dataValue.IPAddress);
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .port").html(dataValue.Port);
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .sysUptime").html(loadSysUptime(dataValue.SysUptime));
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .status").html(getStatus(dataValue.Status));
+            if (dataValue.Status == 1) {
+                useClass("bs-callout-success");
+            }
+            else if (dataValue.Status == 2) {
+                useClass("bs-callout-warning");
+            }
+            else {
+                useClass("bs-callout-danger");
+            }
+        });
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup","Agent_{{=it.Key.AgentNr}}");
+        }).fail(function (e) {
+            alert("SignalRError for AgentNR:{{=it.Key.AgentNr}} " +e);
+        });
+    });
+
+    function useClass(className) {
+        if (!$("#Monitor_Agent_{{=it.Key.AgentNr}}").hasClass(className)) {
+            $("#Monitor_Agent_{{=it.Key.AgentNr}}").removeClass("bs-callout-success");
+            $("#Monitor_Agent_{{=it.Key.AgentNr}}").removeClass("bs-callout-danger");
+            $("#Monitor_Agent_{{=it.Key.AgentNr}}").removeClass("bs-callout-warning");
+            $("#Monitor_Agent_{{=it.Key.AgentNr}}").addClass(className);
+        }
+    }
+
+    function loadHostname(json) {
+        var output;
+        try {
+            var object = JSON.parse(json);
+            if (object.Results.length > 0) {
+                output = object.Results[0].Value;
+            }
+            else {
+                output = "undefined";
+            }
+        }
+        catch (e) {
+            output = "Bad Format";
+        }
+
+        return output;
+    }
+
+    function getStatus(status){
+        var output;
+        switch(status) {
+            case 1:
+                output = 'OK';
+                break;
+            case 2:
+                output = 'Warning';
+                break;
+            case 3:
+                output = 'Error';
+                break;
+            default:
+                output = 'undefined'
+        }
+        return output;
+    }
+    function loadSysUptime(json){
+        var output;
+        var object = JSON.parse(json);
+        if(object.Results.length > 0){
+            output = object.Results[0].Value;
+        }
+        else{
+            output = "undefined";
+        }
+        return output;
+    }
+</script>
+    <div>
+        <div id="Monitor_Agent_{{=it.Key.AgentNr}}" class="{{=getStatusClass(it.Key.Status)}}">
+            <h3 class="agentName">{{=it.Key.Name}}</h3>
+            <div class="container">
+                <div class="row">
+                    <p class="col-xs-4 col-sm-2"><strong>Hostname</strong></p>
+                    <p class="hostname col-xs-8 col-sm-4">{{=loadHostname(it.Key.SysName)}}</p>
+                </div>
+                <div class="row">
+                    <p class="col-xs-4 col-sm-2"><strong>IP Adresse</strong></p>
+                    <p class="ipAddress col-xs-8 col-sm-4">{{=it.Key.IPAddress}}</p>
+                </div>
+                <div class="row">
+                    <p class="col-xs-4 col-sm-2"><strong>Port</strong></p>
+                    <p class="port col-xs-8 col-sm-4">{{=it.Key.Port}}</p>
+                </div>
+                <div class="row">
+                    <p class="col-xs-4 col-sm-2"><strong>Uptime</strong></p>
+                    <p class="sysUptime col-xs-8 col-sm-4">{{=loadSysUptime(it.Key.SysUptime)}}</p>
+                </div>
+                <div class="row">
+                    <p class="col-xs-4 col-sm-2"><strong>Status</strong></p>
+                    <p class="status col-xs-8 col-sm-4">{{=getStatus(it.Key.Status)}}</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid">
-        {{~it.Value:item}}
-            {{?item.ObjectIDReplaced != '1_3_6_1_2_1_1_1' && item.ObjectIDReplaced != '1_3_6_1_2_1_1_5' && item.ObjectIDReplaced != '1_3_6_1_2_1_25_1_1'}}
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    var ObjNr = '{{=item.ObjectIDReplaced}}';
-                    $.ajax({
-                        url: "@Url.Action("Monitor_","MonitorTemplate")" + ObjNr,
-                        method: "GET",
-                        success: function (data) {
-                            var monitor = doT.template(data);
+        <div class="container-fluid">
+            {{~it.Value:item}}
+    {{?item.ObjectIDReplaced != '1_3_6_1_2_1_1_1' && item.ObjectIDReplaced != '1_3_6_1_2_1_1_5' && item.ObjectIDReplaced != '1_3_6_1_2_1_25_1_1'}}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var ObjNr = '{{=item.ObjectIDReplaced}}';
+            $.ajax({
+                url: "@Url.Action("Monitor_","MonitorTemplate")" + ObjNr,
+                method: "GET",
+                success: function (data) {
+                    var monitor = doT.template(data);
 
-                            var jsonForMonitor = { "AgentNr": {{=it.Key.AgentNr}}};
-                            $("#Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}").html(monitor(jsonForMonitor));
-                        },
-                        error: function(data, error, thrownerror){
-                        }
-                    });
-                });
-            </script>
+                    var jsonForMonitor = { "AgentNr": {{=it.Key.AgentNr}}};
+                    $("#Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}").html(monitor(jsonForMonitor));
+                },
+                error: function(data, error, thrownerror){
+                }
+            });
+        });
+</script>
+
             <div id="Monitor{{=it.Key.AgentNr}}_{{=item.ObjectIDReplaced}}">
 
             </div>
