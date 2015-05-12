@@ -22,13 +22,15 @@
                 });                 
             }
         });
-        $.ajax({
-            url: "@Url.Action("GetMonitorSummaryForAgent", "Data")/" + model,
-            type: "GET",
-            success: function (data) {
-                createAgent(data);                    
-            }
-        });
+        if(model > 0){
+            $.ajax({
+                url: "@Url.Action("GetMonitorSummaryForAgent", "Data")/" + model,
+                type: "GET",
+                success: function (data) {
+                    createAgent(data);                    
+                }
+            });
+        }
     });
 
 
