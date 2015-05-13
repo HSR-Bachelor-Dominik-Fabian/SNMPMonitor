@@ -5,6 +5,11 @@
         $("#AgentDropdown select").on( "change", function(){
             window.location = "#/Monitor/" + $(this).val();
         });
+        $("#editAgentBtn").on("click", function(){
+            window.location = "#/ModifyAgent/" + model;
+        });
+        $("#removeAgentBtn").on("click", function(){
+        });
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
             type: "GET",
@@ -73,9 +78,14 @@
 </script>
 
 <h2>Monitor</h2>
-<div id="AgentDropdown" class="col-xs-11">
-    <select class="form-control">
-    </select>
+<div class="container-fluid">
+    <div id="AgentDropdown" class="col-xs-10 col-sm-5">
+        <select class="form-control"></select>
+    </div>
+    <div class="col-xs-10 col-sm-7">
+        <button id="editAgentBtn" class="btn btn-default">Bearbeiten</button>
+        <button id="removeAgentBtn" class="btn btn-default">Löschen</button>
+    </div>
 </div>
 <div id="dataContainer" class="col-xs-11">
 </div>
