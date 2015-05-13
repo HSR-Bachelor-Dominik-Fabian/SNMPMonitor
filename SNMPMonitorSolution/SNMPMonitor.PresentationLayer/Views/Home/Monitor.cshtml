@@ -9,6 +9,7 @@
             window.location = "#/ModifyAgent/" + model;
         });
         $("#removeAgentBtn").on("click", function(){
+            swal({   title: "Are you sure?",   text: "You will not be able to recover this imaginary file!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Yes, delete it!",   cancelButtonText: "No, cancel plx!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {     swal("Deleted!", "Your imaginary file has been deleted.", "success");   } else {     swal("Cancelled", "Your imaginary file is safe :)", "error");   } });
         });
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
