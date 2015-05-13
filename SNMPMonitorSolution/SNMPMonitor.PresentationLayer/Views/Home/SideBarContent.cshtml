@@ -1,1 +1,63 @@
-﻿<h4>Zustand kritisch</h4>
+﻿@Styles.Render("~/Content/sidebarStyles")
+<div class="container-fluid">
+    <div class="col-xs-4 sidebar-statenumbers">
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-success sidebar-statenumbers-success">-</span>
+    </div>
+    <div class="col-xs-4 sidebar-statenumbers">
+        <span class="glyphicon glyphicon-warning-sign text-warning"></span>
+        <span class="text-warning sidebar-statenumbers-warning">-</span>
+    </div>
+    <div class="col-xs-4 sidebar-statenumbers">
+        <span class="glyphicon glyphicon-remove-sign text-danger"></span>
+        <span class="text-danger sidebar-statenumbers-danger">-</span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var list = [];
+    $(document).ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetAgents", "Data")",
+            method: "GET",
+            success: function (agentData) {
+                loadAgents(agentData);
+            }
+        });
+    });
+
+    function loadAgents(agentData) {
+        $.each(agentData, function (index, value) {
+            if (!idExists(value.AgentNr)) {
+                list.push({ "id": value.AgentNr, "Status": value.Status });
+            }
+        });
+
+        $(".sidebar-statenumbers-success").html(countStatus(1));
+        $(".sidebar-statenumbers-warning").html(countStatus(2));
+        $(".sidebar-statenumbers-danger").html(countStatus(3));
+    }
+
+    function countStatus(statusName) {
+        var output = 0;
+
+        $.each(list, function (index, value) {
+            if (value.Status === statusName) {
+                output++;
+            }
+        });
+
+        return output;
+    }
+
+    function idExists(id) {
+        var output = false;
+        $.each(list, function (index, value) {
+            if (value.id === id) {
+                output = true;
+            }
+        });
+
+        return output;
+    }
+</script>

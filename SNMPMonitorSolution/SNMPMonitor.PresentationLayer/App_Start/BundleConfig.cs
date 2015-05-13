@@ -38,6 +38,7 @@ namespace SNMPMonitor.PresentationLayer
                      "~/Content/sweetalert/sweet-alert-combine.less"));
 
             bundles.Add(new StyleBundle("~/Content/dasboardStyles").Include("~/Content/dashboardLayout.less"));
+            bundles.Add(new StyleBundle("~/Content/sidebarStyles").Include("~/Content/sidebarLayout.less"));
 
         }
     }
