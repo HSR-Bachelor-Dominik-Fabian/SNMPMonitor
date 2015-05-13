@@ -56,11 +56,11 @@
     });
 
     function useClass(className) {
-        if (!$("#agentSmall_{{=it.AgentNr}} table").hasClass(className)) {
-            $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-success");
-            $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-danger");
-            $("#agentSmall_{{=it.AgentNr}} table").removeClass("ma-warning");
-            $("#agentSmall_{{=it.AgentNr}} table").addClass(className);
+        if (!$("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").hasClass(className)) {
+            $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").removeClass("ma-success");
+            $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").removeClass("ma-danger");
+            $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").removeClass("ma-warning");
+            $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").addClass(className);
         }
     }
     function loadHostname(json) {
@@ -82,19 +82,17 @@
     }
 </script>
 
-<div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-8 col-sm-8 col-lg-4">
-    <div class="agentSmallWrapper">
-        <div class="container-fluid {{=getStatusClass(it.Status)}}">
-            <div class="ma-small-padding agentSmallIcon col-xs-2">
-                <a href="#/Monitor/{{=it.AgentNr}}">
-                    <img src="~/Content/img/servericon.png" style="height:60px" alt="ServerIcon" class="img-rounded" />
-                </a>
-            </div>
-            <div class="ma-small-padding agentSmallText col-xs-10">
-                <h4 class="ma-small-h4 agentName">{{=it.Name}}</h4>
-                <span class="ma-small-text hostname">{{=loadHostname(it.SysName)}}</span><br />
-                <span class="ma-small-text ipAddress">{{=it.IPAddress}}:{{=it.Port}}</span>
-            </div>
+<div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-11 col-sm-10 col-md-6 col-lg-4">
+    <div class="agentSmallWrapper container-fluid {{=getStatusClass(it.Status)}}">
+        <div class="agentSmallIcon col-xs-2">
+            <a href="#/Monitor/{{=it.AgentNr}}">
+                <img src="~/Content/img/servericon.png" style="width: 45px;" alt="ServerIcon" class="img-rounded" />
+            </a>
+        </div>
+        <div class="agentSmallText col-xs-10">
+            <h4 class="ma-small-h4 agentName">{{=it.Name}}</h4>
+            <span class="ma-small-text hostname">{{=loadHostname(it.SysName)}}</span><br />
+            <span class="ma-small-text ipAddress">{{=it.IPAddress}}:{{=it.Port}}</span>
         </div>
     </div>
 </div>
