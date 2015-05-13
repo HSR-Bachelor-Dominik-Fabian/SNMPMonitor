@@ -9,7 +9,15 @@
             window.location = "#/ModifyAgent/" + model;
         });
         $("#removeAgentBtn").on("click", function(){
-            swal({   title: "Are you sure?",   text: "You will not be able to recover this imaginary file!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Yes, delete it!",   cancelButtonText: "No, cancel plx!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {     swal("Deleted!", "Your imaginary file has been deleted.", "success");   } else {     swal("Cancelled", "Your imaginary file is safe :)", "error");   } });
+            swal({   title: "Sicher?",   text: "Der Agent und die gesammelten Daten können nicht wiederhergestellt werden!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Ja, löschen",   cancelButtonText: "Nein, abbrechen",   closeOnConfirm: false,   closeOnCancel: false }, 
+                function(isConfirm){  
+                    if (isConfirm) {   
+                        swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer: "4000"});   
+                    }
+                    else {
+                        swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "4000", confirmButtonClass: "btn-danger"});   
+                    } 
+            });
         });
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
