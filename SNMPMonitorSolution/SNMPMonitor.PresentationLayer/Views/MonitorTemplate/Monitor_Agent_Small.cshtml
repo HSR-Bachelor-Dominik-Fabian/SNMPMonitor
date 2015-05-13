@@ -10,6 +10,25 @@
     return output;
   }
 }}
+
+{{function getStatusClass(status){
+    var output;
+    switch(status) {
+    case 1:
+        output = 'ma-success';
+        break;
+    case 2:
+        output = 'ma-warning';
+        break;
+    case 3:
+        output = 'ma-danger';
+        break;
+    default:
+        output = 'ma-danger'
+    }
+    return output;
+  }
+}}
 <script type="text/javascript">
     $(document).ready(function () {
         var connection = $.hubConnection();
@@ -65,29 +84,17 @@
 
 <div id="agentSmall_{{=it.AgentNr}}" class="agentSmallContainer col-xs-8 col-sm-8 col-lg-4">
     <div class="agentSmallWrapper">
-        {{? it.Status == 1}}
-            <table class="ma-success">
-        {{?? it.Status == 2}}
-            <table class="ma-warning">
-        {{??}}
-            <table class="ma-danger">
-        {{?}}
-        <tr>
-            <td>
-                <div class="ma-small-padding agentSmallIcon">
-                    <a href="#/Monitor/{{=it.AgentNr}}">
-                        <img src="~/Content/img/servericon.png" style="height:60px" alt="ServerIcon" class="img-rounded" />
-                    </a>
-                </div>
-            </td>
-            <td>
-                <div class="ma-small-padding agentSmallText">
-                    <h4 class="ma-small-h4 agentName">{{=it.Name}}</h4>
-                    <span class="ma-small-text hostname">{{=loadHostname(it.SysName)}}</span><br />
-                    <span class="ma-small-text ipAddress">{{=it.IPAddress}}:{{=it.Port}}</span>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
+        <div class="container-fluid {{=getStatusClass(it.Status)}}">
+            <div class="ma-small-padding agentSmallIcon col-xs-2">
+                <a href="#/Monitor/{{=it.AgentNr}}">
+                    <img src="~/Content/img/servericon.png" style="height:60px" alt="ServerIcon" class="img-rounded" />
+                </a>
+            </div>
+            <div class="ma-small-padding agentSmallText col-xs-10">
+                <h4 class="ma-small-h4 agentName">{{=it.Name}}</h4>
+                <span class="ma-small-text hostname">{{=loadHostname(it.SysName)}}</span><br />
+                <span class="ma-small-text ipAddress">{{=it.IPAddress}}:{{=it.Port}}</span>
+            </div>
+        </div>
+    </div>
 </div>
