@@ -12,10 +12,21 @@
             swal({   title: "Sicher?",   text: "Der Agent und die gesammelten Daten können nicht wiederhergestellt werden!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Ja, löschen",   cancelButtonText: "Nein, abbrechen",   closeOnConfirm: false,   closeOnCancel: false }, 
                 function(isConfirm){  
                     if (isConfirm) {   
-                        swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer: "4000"});   
+                        
+                        $.ajax({
+                            url:"@Url.Action("DeleteAgent","Data")/" + model,
+                            type:"POST",
+                            success:function(data){
+                                swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer:"3000"}); 
+                                window.location = "#/";
+                            },
+                            error: function (jqXHR, textStatus, errorThrown){
+                                swal({title:"Fehler beim Löschen",text: "Konnte nicht gelöscht werden. Fehler: " + errorThrown, type:"error", confirmButtonClass: "btn-danger"});   
+                            }
+                        });
                     }
                     else {
-                        swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "4000", confirmButtonClass: "btn-danger"});   
+                        swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});   
                     } 
             });
         });
