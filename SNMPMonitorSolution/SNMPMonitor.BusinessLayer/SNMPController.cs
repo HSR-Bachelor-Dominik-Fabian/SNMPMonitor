@@ -273,5 +273,10 @@ namespace SNMPMonitor.BusinessLayer
             }
             return eventList;
         }
+
+        public void DeleteAgent(int agentNr)
+        {
+            _databaseConnection.DeleteAgentInDatabase(agentNr);
+        }
     }
 }

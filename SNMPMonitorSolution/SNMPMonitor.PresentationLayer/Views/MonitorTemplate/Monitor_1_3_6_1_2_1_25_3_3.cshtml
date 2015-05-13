@@ -23,10 +23,26 @@
             var chart = $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_3_3").highcharts();
             var shift = chart.series[0].data.length >= 15;
             var object = JSON.parse(value["Result"]);
-            var firstCPU = parseInt(((object["Results"])[2])["Value"]);
-            var secondCPU = parseInt(((object["Results"])[3])["Value"]);
-            var cpuLoad = (firstCPU + secondCPU) / 2;
+            var cpuLoad = calcCpuLoad(object);
             chart.series[0].addPoint({ x:Date.parse(value.MonitorTimestamp + "+02:00"), y: cpuLoad }, true, shift);
+        }
+
+        function calcCpuLoad(json) {
+            var output = -1;
+            var cpuLoad = 0;
+            var counter = 0;
+            $.each(json["Results"], function(index, value) {
+                var oid = value.OID;
+                if (oid.indexOf("1.3.6.1.2.1.25.3.3.1.2.") >= 0) {
+                    counter++;
+                    var parsedValue = parseInt(value.Value);
+                    cpuLoad += parsedValue;
+                }
+            });
+            if (counter > 0) {
+                output = cpuLoad / counter;
+            }
+            return output;
         }
 
         function createChart{{=it.AgentNr}}() {
@@ -76,9 +92,7 @@
                             success: function (data) {
                                 $.each(data.History, function (index, value) {
                                     var object = JSON.parse(value["Result"]);
-                                    var firstCPU = parseInt(((object["Results"])[2])["Value"]);
-                                    var secondCPU = parseInt(((object["Results"])[3])["Value"]);
-                                    var cpuLoad = (firstCPU + secondCPU) / 2;
+                                    var cpuLoad = calcCpuLoad(object);
                                     newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: Math.round(cpuLoad) });
                                 });
                             }
