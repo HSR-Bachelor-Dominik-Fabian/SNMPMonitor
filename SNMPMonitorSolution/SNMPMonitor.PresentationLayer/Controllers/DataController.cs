@@ -207,5 +207,30 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return output;
         }
 
+        [HttpPost]
+        public HttpStatusCodeResult DeleteAgent(int id)
+        {
+            HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.Conflict);
+            try
+            {
+                if (id > 0)
+                {
+                    SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                    controller.DeleteAgent(id);
+                    output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+                }
+                else
+                {
+                    output = new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+                }
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
+            }
+
+            return output;
+        }
     }
 }

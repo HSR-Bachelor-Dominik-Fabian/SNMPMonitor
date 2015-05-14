@@ -279,6 +279,9 @@
       <DependentUpon>mainLayout.css</DependentUpon>
     </Content>
     <Content Include="Content\dashboardLayout.less" />
+    <Content Include="Content\sweetalert\sweet-alert-animations.less" />
+    <Content Include="Content\sweetalert\sweet-alert-combine.less" />
+    <Content Include="Content\sweetalert\sweet-alert.less" />
     <None Include="Properties\PublishProfiles\SNMPMonitor.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -303,6 +306,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sammy-latest.min.js" />
+    <Content Include="Scripts\sweet-alert.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
