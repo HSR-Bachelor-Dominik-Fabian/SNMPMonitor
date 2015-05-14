@@ -331,6 +331,7 @@
     <Content Include="Views\MonitorTemplate\Monitor_Harddisk.cshtml" />
     <Content Include="Views\MonitorTemplate\Monitor_Memory.cshtml" />
     <Content Include="Views\MonitorTemplate\Test.cshtml" />
+    <Content Include="Views\Home\ModifyAgent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -197,6 +197,24 @@ namespace SNMPMonitor.BusinessLayer
 
         }
 
+        public void UpdateAgentInDatabase(Agent agent, bool cpuCheck, bool discCheck)
+        {
+            AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, new TypeDataModel(agent.Type.TypeNr, agent.Type.Name), agent.Port, agent.Status, "undefined", "undefined", "undefined");
+            try
+            {
+                _databaseConnection.UpdateAgentInDatabase(agentData, cpuCheck, discCheck);
+            }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
+            }
+
+        }
+
         public List<KeyValuePair<Agent, List<MonitoringType>>> GetMonitoringSummary()
         {
             List<KeyValuePair<Agent, List<MonitoringType>>> returnList = new List<KeyValuePair<Agent, List<MonitoringType>>>();

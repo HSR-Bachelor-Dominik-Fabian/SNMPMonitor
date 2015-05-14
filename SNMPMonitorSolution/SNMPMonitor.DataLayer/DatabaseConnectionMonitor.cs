@@ -169,6 +169,29 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
+        public void UpdateAgentInDatabase(AgentDataModel agent, bool cpuCheck, bool discCheck)
+        {
+            try
+            {
+                _myConnection.Open();
+
+                SqlCommand saveAgentCommand = new SqlCommand("updateAgent", _myConnection);
+                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agent.AgentNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@Name", agent.Name));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@IPAddress", agent.IPAddress));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@Port", agent.Port));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@TypeNr", agent.Type.TypeNr));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@CPUCheck", cpuCheck));
+                saveAgentCommand.Parameters.Add(new SqlParameter("@DiscCheck", discCheck));
+                saveAgentCommand.ExecuteNonQuery();
+            }
+            finally
+            {
+                _myConnection.Close();
+            }
+        }
+
         public void AddAgentToDatabaseForDemo(string name, string iPAddress, int port)
         {
             try
