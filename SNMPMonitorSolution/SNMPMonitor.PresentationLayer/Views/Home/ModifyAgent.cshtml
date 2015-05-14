@@ -94,6 +94,7 @@
                     $(".alertBox").html("<div class='alert alert-error' role='alert'><strong>" + textStatus + "!</strong> " + errorThrown + "</div>");
                 }
             });
+            window.location = '#/Monitor/' + agentNr;
         });
 
         $("#inputIpAddress").inputmask({
