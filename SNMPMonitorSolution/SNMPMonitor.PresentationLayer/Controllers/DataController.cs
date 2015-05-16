@@ -180,7 +180,31 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             List<Agent> agents = controller.GetAgents();
-            return Json(agents, JsonRequestBehavior.AllowGet); ;
+            return Json(agents, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public HttpStatusCodeResult UpdateAgentInMonitor(int inputAgentNr, string inputAgentName, string inputIpAddress, string inputPortNr, string typeName, bool cpuCheck, bool discCheck)
+        {
+            HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            int portNr;
+            if (int.TryParse(inputPortNr, out portNr))
+            {
+                List<SNMPMonitor.BusinessLayer.Type> types = controller.GetTypes();
+                SNMPMonitor.BusinessLayer.Type type = null;
+                foreach (SNMPMonitor.BusinessLayer.Type temp in types)
+                {
+                    if (temp.Name == typeName)
+                    {
+                        type = temp;
+                    }
+                }
+                Agent updatedAgent = new Agent(inputAgentNr, inputAgentName, inputIpAddress, type, portNr, 1, "", "", "");
+                controller.UpdateAgentInDatabase(updatedAgent, cpuCheck, discCheck);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+            }
+            return output;
         }
 
         [HttpPost]

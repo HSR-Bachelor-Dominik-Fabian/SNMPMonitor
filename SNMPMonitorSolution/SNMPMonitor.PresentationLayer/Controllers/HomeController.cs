@@ -33,6 +33,11 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return PartialView();
         }
 
+        public PartialViewResult ModifyAgent(int id = 0)
+        {
+            return PartialView(id);
+        }
+
         [HttpGet]
         public PartialViewResult SideBarContent()
         {

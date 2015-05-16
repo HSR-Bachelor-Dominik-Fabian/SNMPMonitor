@@ -1,0 +1,104 @@
+﻿@model int
+<div class="alertBox"></div>
+<h2>Agent verwalten</h2>
+<div class="container" id="MonitorForm">
+    <form class="form-horizontal" id="MonitorInputForm" action="@Url.Action("UpdateAgentInMonitor","Data")" method="post">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="inputAgentName">Name</label>
+            <input type="text" class="form-control col-sm-10" name="inputAgentName" placeholder="Name" id="inputAgentName">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="inputIpAddress">IP Adresse</label>
+            <input id="inputIpAddress" class="form-control col-sm-10" name="inputIpAddress" placeholder="192.168.1.1">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="inputPortNr">Port</label>
+            <input type="number" class="form-control col-sm-10" name="inputPortNr" placeholder="161" id="inputPortNr">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="inputType">Typ</label>
+            <select class="form-control col-sm-10" name="inputType" id="inputType">
+                <option>Server</option>
+                <option>Switch</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Optionen</label>
+            <div class="col-sm-10">
+                <div class="checkbox">
+                    <label><input type="checkbox" id="cpuCheckbox">CPU</label>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox" id="discCheckbox">Disc / RAM</label>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-default" id="cancelButton">Abbrechen</button>
+            <button type="submit" class="btn btn-default">Speichern</button>
+        </div>
+    </form>
+</div>
+<div id="dataContainer">
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var agentNr = @Model;
+        $.ajax({
+            url: "@Url.Action("GetMonitorSummaryForAgent", "Data")",
+            type: "GET",
+            async: false,
+            cache: false,
+            data: {
+                "id": agentNr
+            },
+            success: function(data) {
+                $("#inputAgentName").val(data.Key.Name);
+                $("#inputIpAddress").val(data.Key.IPAddress);
+                $("#inputPortNr").val(data.Key.Port);
+                $("#inputType").val(data.Key.Type.Name);
+                $.each(data.Value, function(index, value){
+                    if(value.Description === "cpuUsage") {
+                        $("#cpuCheckbox").prop('checked', true);
+                    } else if(value.Description === "hrDiskStorageTable") {
+                        $("#discCheckbox").prop('checked', true);
+                    }
+                })
+            }
+        });
+
+        $("#cancelButton").on("click", function() {
+            window.location = '#/Monitor/' + agentNr;
+        });
+
+        $("#MonitorInputForm").on("submit", function (e) {
+            e.preventDefault();
+            console.log(agentNr + ": " + $("#inputAgentName").val() + ": " + $("#inputIpAddress").val() + ": " + $("#inputPortNr").val() + ": " + $("#inputType").val() + ": " + $("#cpuCheckbox").is(":checked") + ": " + $("#discCheckbox").is(":checked"));
+            $.ajax({
+                url: this.action,
+                type: "POST",
+                data: {
+                    "inputAgentNr": agentNr,
+                    "inputAgentName": $("#inputAgentName").val(),
+                    "inputIpAddress": $("#inputIpAddress").val(),
+                    "inputPortNr": $("#inputPortNr").val(),
+                    "typeName": $("#inputType").val(),
+                    "cpuCheck": $("#cpuCheckbox").is(":checked"),
+                    "discCheck": $("#discCheckbox").is(":checked")
+                },
+                success: function (data) {
+                    $("#MonitorInputForm").trigger("reset");
+                    $(".alertBox").html("<div class='alert alert-success' role='alert'><strong>Success!</strong> Agent gespeichert</div>");
+                },
+                error: function (data, textStatus, errorThrown) {
+                    $(".alertBox").html("<div class='alert alert-error' role='alert'><strong>" + textStatus + "!</strong> " + errorThrown + "</div>");
+                }
+            });
+            window.location = '#/Monitor/' + agentNr;
+        });
+
+        $("#inputIpAddress").inputmask({
+            alias: "ip"
+        });
+    });
+</script>
