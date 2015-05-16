@@ -17,6 +17,22 @@
 <script type="text/javascript">
     var list = [];
     $(document).ready(function () {
+        ajaxAgents();
+
+        var connection = $.hubConnection();
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveUpdatedAgent", function () {
+            ajaxAgents();
+        });
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup", "Agent_General");
+        }).fail(function (e) {
+            swal({ title: "SignalRError for sidebar",text: e,type: "error", confirmButtonClass: "btn-danger"});
+        });
+
+    });
+
+    function ajaxAgents() {
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
             method: "GET",
@@ -24,12 +40,15 @@
                 loadAgents(agentData);
             }
         });
-    });
+    }
 
     function loadAgents(agentData) {
         $.each(agentData, function (index, value) {
             if (!idExists(value.AgentNr)) {
                 list.push({ "id": value.AgentNr, "Status": value.Status });
+            }
+            else {
+                getEntry(value.AgentNr).Status = value.Status;
             }
         });
 
@@ -47,6 +66,16 @@
             }
         });
 
+        return output;
+    }
+
+    function getEntry(id) {
+        var output = false;
+        $.each(list, function (index, value) {
+            if (value.id === id) {
+                output = value;
+            }
+        });
         return output;
     }
 
