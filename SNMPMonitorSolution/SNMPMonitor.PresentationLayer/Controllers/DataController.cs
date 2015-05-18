@@ -107,6 +107,23 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             return output;
         }
 
+        [HttpPost]
+        public HttpStatusCodeResult InsertDeleteTrigger()
+        {
+            HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
+            try
+            {
+                SNMPDataHub Hub = new SNMPDataHub();
+                Hub.SendInsertDelete();
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
+            }
+            return output;
+        }
+
         [HttpGet]
         public JsonResult HistoryDataForOID(string id, string oid, int count)
         {

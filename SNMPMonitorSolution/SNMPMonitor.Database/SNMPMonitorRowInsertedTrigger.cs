@@ -21,12 +21,14 @@ public partial class Triggers
                 SqlCommand command;
                 SqlDataReader reader;
                 string values = "{param:[";
+                bool hasRows = false;
                 using (SqlConnection connection = new SqlConnection(@"context connection=true"))
                 {
                     connection.Open();
                     command = new SqlCommand(@"SELECT i.AgentNr, i.Name, i.IPAddress, i.Status, i.Port, i.sysDesc, i.sysName, i.sysUptime FROM INSERTED i;",
                        connection);
                     reader = command.ExecuteReader();
+                    hasRows = reader.HasRows;
                     while (reader.Read())
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
@@ -49,11 +51,12 @@ public partial class Triggers
 
 
 
-
-                string param = "param=" + values;
-                client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                client.UploadString(uri, "POST", param);
-
+                if (hasRows)
+                {
+                    string param = "param=" + values;
+                    client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    client.UploadString(uri, "POST", param);
+                }
             }
         }
         catch (Exception exc)
@@ -63,8 +66,6 @@ public partial class Triggers
         }
     }
     
-    // Enter existing table or view for the target and uncomment the attribute line
-    //[Microsoft.SqlServer.Server.SqlTrigger(Name = "SNMPMonitorRowInsertedTrigger")]
     public static void SNMPMonitorRowInsertedTrigger()
     {
         try
@@ -109,22 +110,6 @@ public partial class Triggers
                 string param = "param=" + values;
                 client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 client.UploadString(uri,"POST", param);
-                /*client.UploadValues(uri, "POST", new NameValueCollection()
-                {
-                    {"param", param}
-                });*/
-                /*
-                SqlPipe sqlP = SqlContext.Pipe;
-                sqlP.Send(myContext.ColumnCount.ToString());
-                */
-
-                /*client.UploadValues(uri,"POST", new NameValueCollection()
-                {
-                    {"param",myContext.EventData.Value}
-                });*/
-                /*SqlPipe sqlP = SqlContext.Pipe;
-                sqlP.Send(myContext.EventData.Value);*/
-                //client.OpenRead(uri).Close();
             }
         }
         catch (Exception exc)
@@ -173,6 +158,27 @@ public partial class Triggers
         {
             SqlPipe sqlP = SqlContext.Pipe;
             sqlP.Send("Fehler: " + exc.Message);
+        }
+    }
+
+    public static void InsertDeleteTrigger()
+    {
+        try
+        {
+            SqlTriggerContext myContext = SqlContext.TriggerContext;
+            if (myContext.TriggerAction == TriggerAction.Insert || myContext.TriggerAction == TriggerAction.Delete)
+            {
+                Uri uri = new Uri("http://152.96.56.75/Data/InsertDeleteTrigger");
+                WebClient client = new WebClient();
+               
+                client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                client.UploadString(uri, "POST", myContext.TriggerAction.ToString());
+            }
+        }
+        catch (Exception exc)
+        {
+            SqlPipe sqlP = SqlContext.Pipe;
+            sqlP.Send("Fehler InsertDeleteTrigger: " + exc.Message);
         }
     }
 }

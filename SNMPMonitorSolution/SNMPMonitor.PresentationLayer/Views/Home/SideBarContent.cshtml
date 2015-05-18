@@ -24,6 +24,9 @@
         notifications.on("receiveUpdatedAgent", function () {
             ajaxAgents();
         });
+        notifications.on("receiveInsertDelete", function () {
+            ajaxAgents();
+        });
         connection.start().done(function () {
             notifications.invoke("joinDataGroup", "Agent_General");
         }).fail(function (e) {

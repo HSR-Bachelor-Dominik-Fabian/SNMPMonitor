@@ -1,6 +1,21 @@
 ﻿@model int
 <script type="text/javascript">
     $(document).ready(function () {
+        loadMonitor();
+
+        var connection = $.hubConnection();
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveInsertDelete", function () {
+            loadMonitor();
+        });
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup", "Agent_General");
+        }).fail(function (e) {
+            swal({ title: "SignalRError for DashboardMain", text: e, type: "error", confirmButtonClass: "btn-danger" });
+        });
+    });
+
+    function loadMonitor() {
         var model = @Model;
         $("#AgentDropdown select").on( "change", function(){
             window.location = "#/Monitor/" + $(this).val();
@@ -25,9 +40,9 @@
                             }
                         });
                     }
-                    else {
-                        swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});   
-                    } 
+                else {
+                            swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});   
+                } 
             });
         });
         $.ajax({
@@ -56,8 +71,7 @@
                 }
             });
         }
-    });
-
+    }
 
     function addAgentToDropdown(json, selected){
         $("#AgentDropdown select").append('<option value='+ json.AgentNr +' ' + selected + '>'+ json.Name +'</option>');

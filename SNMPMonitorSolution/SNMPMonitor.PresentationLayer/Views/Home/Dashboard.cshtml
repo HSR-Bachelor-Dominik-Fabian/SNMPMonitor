@@ -2,6 +2,22 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        loadDashboard();
+
+        var connection = $.hubConnection();
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveInsertDelete", function () {
+            loadDashboard();
+        });
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup", "Agent_General");
+        }).fail(function (e) {
+            swal({ title: "SignalRError for DashboardMain", text: e, type: "error", confirmButtonClass: "btn-danger" });
+        });
+    });
+
+    function loadDashboard() {
+        $("#dataContainer").empty();
         $.ajax({
             url: "@Url.Action("Monitor_Agent_Small", "MonitorTemplate")",
             method: "GET",
@@ -19,7 +35,7 @@
                 
             }
         });
-    });
+    }
 </script>
 
 <div id="dataContainer" class="container-fluid">
