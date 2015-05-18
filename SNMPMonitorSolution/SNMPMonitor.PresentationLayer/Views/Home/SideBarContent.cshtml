@@ -25,6 +25,7 @@
             ajaxAgents();
         });
         notifications.on("receiveInsertDelete", function () {
+            list = [];
             ajaxAgents();
         });
         connection.start().done(function () {
