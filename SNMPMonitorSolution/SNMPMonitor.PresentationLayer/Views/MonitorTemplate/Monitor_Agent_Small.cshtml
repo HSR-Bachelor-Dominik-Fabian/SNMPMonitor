@@ -31,7 +31,7 @@
 }}
 <script type="text/javascript">
     $(document).ready(function () {
-        var connection = $.hubConnection();
+        /*var connection = $.hubConnection();
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
         notifications.on("receiveUpdatedAgent", function (dataValue) {
@@ -52,6 +52,21 @@
             notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
         }).fail(function (e) {
             alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
+        });*/
+
+        $("#agentSmall_{{=it.AgentNr}}").on("receiveUpdatedAgentNr{{=it.AgentNr}}", function (event, dataValue) {
+            $("#agentSmall_{{=it.AgentNr}} .agentName").html(dataValue.Name);
+            $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress + ':' + dataValue.Port);
+            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
+            if (dataValue.Status == 1) {
+                useClass("ma-success");
+            }
+            else if (dataValue.Status == 2) {
+                useClass("ma-warning");
+            }
+            else {
+                useClass("ma-danger");
+            }
         });
     });
 

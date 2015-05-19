@@ -60,7 +60,7 @@
 }}
 <script type="text/javascript">
     $(document).ready(function () {
-        var connection = $.hubConnection();
+        /*var connection = $.hubConnection();
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
         notifications.on("receiveUpdatedAgent", function (dataValue) {
@@ -84,6 +84,23 @@
             notifications.invoke("joinDataGroup","Agent_{{=it.Key.AgentNr}}");
         }).fail(function (e) {
             alert("SignalRError for AgentNR:{{=it.Key.AgentNr}} " +e);
+        });*/
+        $("#Monitor_Agent_{{=it.Key.AgentNr}}").on("receiveUpdatedAgentNr{{=it.Key.AgentNr}}", function(event, dataValue){
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .agentName").html(dataValue.Name);
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .ipAddress").html(dataValue.IPAddress);
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .port").html(dataValue.Port);
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .sysUptime").html(loadSysUptime(dataValue.SysUptime));
+            $("#Monitor_Agent_{{=it.Key.AgentNr}} .status").html(getStatus(dataValue.Status));
+            if (dataValue.Status == 1) {
+                useClass("bs-callout-success");
+            }
+            else if (dataValue.Status == 2) {
+                useClass("bs-callout-warning");
+            }
+            else {
+                useClass("bs-callout-danger");
+            }
         });
     });
 

@@ -34,6 +34,19 @@
             });
         });
 
+        var connection = $.hubConnection();
+        connection.logging = true;
+        var notifications = connection.createHubProxy("snmpDataHub");
+        notifications.on("receiveUpdatedAgentWithValue", function (dataValue) {
+            $("#contentContainer").find("*").trigger("receiveUpdatedAgentNr" + dataValue.AgentNr, dataValue);
+        });
+        connection.start().done(function () {
+            notifications.invoke("joinDataGroup", "Agent_General");
+        }).fail(function (e) {
+            alert("SignalRError: " + e);
+        });
+
+
         app.run("#/");
     });
 
