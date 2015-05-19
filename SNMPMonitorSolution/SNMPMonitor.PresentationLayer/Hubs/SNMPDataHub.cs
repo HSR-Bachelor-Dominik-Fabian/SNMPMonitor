@@ -20,7 +20,7 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             
-            context.Clients.Group("Agent_" + dataToShow.AgentID).receiveData(JObject.FromObject(dataToShow));
+            context.Clients.Group("Agent_General").receiveData(JObject.FromObject(dataToShow));
         }
 
         public void SendNewEvent(EventModel eventModel)

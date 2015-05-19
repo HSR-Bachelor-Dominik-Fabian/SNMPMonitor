@@ -38,14 +38,27 @@
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
         notifications.on("receiveUpdatedAgentWithValue", function (dataValue) {
-            $("body").find("*").trigger("receiveUpdatedAgentGeneral");
-            $("body").find("*").trigger("receiveUpdatedAgentNr" + dataValue.AgentNr, dataValue);
+            $("body").find("*").each(function(index, value){
+                $(this).triggerHandler("receiveUpdatedAgentGeneral");
+            });
+            $("body").find("*").each(function (index, value) {
+                $(this).triggerHandler("receiveUpdatedAgentNr" + dataValue.AgentNr, dataValue);
+            });
         });
         notifications.on("receiveInsertDelete", function () {
-            $("body").find("*").trigger("receiveAgentInsertDelete");
+            $("body").find("*").each(function (index, value) {
+                $(this).triggerHandler("receiveAgentInsertDelete");
+            });
         });
         notifications.on("receiveNewEvent", function () {
-            $("body").find("*").trigger("receiveEvent");
+            $("body").find("*").each(function (index, value) {
+                $(this).triggerHandler("receiveEvent");
+            });
+        });
+        notifications.on("receiveData", function (dataValue) {
+            $("body").find("*").each(function (index, value) {
+                $(this).triggerHandler("receiveDataForNr" + dataValue.AgentID, dataValue);
+            });
         });
         connection.start().done(function () {
             notifications.invoke("joinDataGroup", "Agent_General");

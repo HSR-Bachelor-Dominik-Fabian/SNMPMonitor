@@ -2,7 +2,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         loadMonitor();
-        $(".receiveAgentInsertDelete").on("receiveAgentInsertDelete", function () {
+        $("#dataContainer").on("receiveAgentInsertDelete", function () {
             loadMonitor();
         });
     });
@@ -105,7 +105,7 @@
 
 <h2>Monitor</h2>
 <div class="container-fluid">
-    <div id="AgentDropdown" class="col-xs-10 col-sm-5 receiveAgentInsertDelete">
+    <div id="AgentDropdown" class="col-xs-10 col-sm-5">
         <select class="form-control"></select>
     </div>
     <div class="col-xs-10 col-sm-7">
