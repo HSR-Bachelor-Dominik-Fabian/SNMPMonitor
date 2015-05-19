@@ -38,7 +38,11 @@
         connection.logging = true;
         var notifications = connection.createHubProxy("snmpDataHub");
         notifications.on("receiveUpdatedAgentWithValue", function (dataValue) {
-            $("#contentContainer").find("*").trigger("receiveUpdatedAgentNr" + dataValue.AgentNr, dataValue);
+            $("body").find("*").trigger("receiveUpdatedAgentGeneral");
+            $("body").find("*").trigger("receiveUpdatedAgentNr" + dataValue.AgentNr, dataValue);
+        });
+        notifications.on("receiveInsertDelete", function () {
+            $("body").find("*").trigger("receiveAgentInsertDelete");
         });
         connection.start().done(function () {
             notifications.invoke("joinDataGroup", "Agent_General");

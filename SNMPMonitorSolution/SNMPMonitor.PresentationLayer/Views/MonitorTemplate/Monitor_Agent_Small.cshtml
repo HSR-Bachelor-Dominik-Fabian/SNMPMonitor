@@ -31,46 +31,23 @@
 }}
 <script type="text/javascript">
     $(document).ready(function () {
-        /*var connection = $.hubConnection();
-        connection.logging = true;
-        var notifications = connection.createHubProxy("snmpDataHub");
-        notifications.on("receiveUpdatedAgent", function (dataValue) {
-            $("#agentSmall_{{=it.AgentNr}} .agentName").html(dataValue.Name);
-            $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress + ':' + dataValue.Port);
-            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
-            if (dataValue.Status == 1) {
-                useClass("ma-success");
-            }
-            else if (dataValue.Status == 2) {
-                useClass("ma-warning");
-            }
-            else {
-                useClass("ma-danger");
-            }
-        });
-        connection.start().done(function () {
-            notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
-        }).fail(function (e) {
-            alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
-        });*/
-
         $("#agentSmall_{{=it.AgentNr}}").on("receiveUpdatedAgentNr{{=it.AgentNr}}", function (event, dataValue) {
             $("#agentSmall_{{=it.AgentNr}} .agentName").html(dataValue.Name);
             $("#agentSmall_{{=it.AgentNr}} .ipAddress").html(dataValue.IPAddress + ':' + dataValue.Port);
-            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname(dataValue.SysName));
+            $("#agentSmall_{{=it.AgentNr}} .hostname").html(loadHostname{{=it.AgentNr}}(dataValue.SysName));
             if (dataValue.Status == 1) {
-                useClass("ma-success");
+                useClass{{=it.AgentNr}}("ma-success");
             }
             else if (dataValue.Status == 2) {
-                useClass("ma-warning");
+                useClass{{=it.AgentNr}}("ma-warning");
             }
             else {
-                useClass("ma-danger");
+                useClass{{=it.AgentNr}}("ma-danger");
             }
         });
     });
 
-    function useClass(className) {
+    function useClass{{=it.AgentNr}}(className) {
         if (!$("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").hasClass(className)) {
             $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").removeClass("ma-success");
             $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").removeClass("ma-danger");
@@ -78,7 +55,7 @@
             $("#agentSmall_{{=it.AgentNr}} .agentSmallWrapper").addClass(className);
         }
     }
-    function loadHostname(json) {
+    function loadHostname{{=it.AgentNr}}(json) {
         var output;
         try {
             var object = JSON.parse(json);

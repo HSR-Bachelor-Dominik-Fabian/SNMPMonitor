@@ -34,7 +34,6 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             context.Clients.Group("Agent_General").receiveUpdatedAgentWithValue(JObject.FromObject(agent));
-            context.Clients.Group("Agent_General").receiveUpdatedAgent();
         }
 
         public void SendInsertDelete()
