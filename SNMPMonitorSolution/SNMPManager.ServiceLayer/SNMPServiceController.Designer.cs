@@ -1,6 +1,6 @@
 ﻿namespace SNMPManager.ServiceLayer
 {
-    partial class Service1
+    partial class SNMPServiceController
     {
         /// <summary> 
         /// Required designer variable.

@@ -1,6 +1,6 @@
 ﻿namespace SNMPManager.ServiceLayer
 {
-    partial class ProjectInstaller
+    partial class SNMPServiceInstaller
     {
         /// <summary>
         /// Required designer variable.
@@ -43,7 +43,7 @@
             this.serviceInstaller1.DisplayName = "SNMP Monitor Service";
             this.serviceInstaller1.ServiceName = "Service1";
             // 
-            // ProjectInstaller
+            // SNMPServiceInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
             this.serviceProcessInstaller1,

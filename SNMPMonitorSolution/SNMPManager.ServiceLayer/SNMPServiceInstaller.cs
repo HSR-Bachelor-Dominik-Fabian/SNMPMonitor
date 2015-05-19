@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace SNMPManager.ServiceLayer
 {
     [RunInstaller(true)]
-    public partial class ProjectInstaller : System.Configuration.Install.Installer
+    public partial class SNMPServiceInstaller : System.Configuration.Install.Installer
     {
-        public ProjectInstaller()
+        public SNMPServiceInstaller()
         {
             InitializeComponent();
         }

@@ -10,21 +10,21 @@ using System.Threading.Tasks;
 
 namespace SNMPManager.ServiceLayer
 {
-    public partial class Service1 : ServiceBase
+    public partial class SNMPServiceController : ServiceBase
     {
-        public Service1()
+        public SNMPServiceController()
         {
             InitializeComponent();
         }
 
         protected override void OnStart(string[] args)
         {
-            SNMPService.Start();
+            SNMPServiceTimer.Start();
         }
 
         protected override void OnStop()
         {
-            SNMPService.Stop();
+            SNMPServiceTimer.Stop();
         }
     }
 }

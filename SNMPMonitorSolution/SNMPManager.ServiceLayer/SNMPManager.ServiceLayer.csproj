@@ -48,26 +48,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProjectInstaller.cs">
+    <Compile Include="SNMPServiceInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ProjectInstaller.Designer.cs">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    <Compile Include="SNMPServiceInstaller.Designer.cs">
+      <DependentUpon>SNMPServiceInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Service1.cs">
+    <Compile Include="SNMPServiceController.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Service1.Designer.cs">
-      <DependentUpon>Service1.cs</DependentUpon>
+    <Compile Include="SNMPServiceController.Designer.cs">
+      <DependentUpon>SNMPServiceController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SNMPService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SNMPServiceTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -77,8 +77,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    <EmbeddedResource Include="SNMPServiceInstaller.resx">
+      <DependentUpon>SNMPServiceInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
