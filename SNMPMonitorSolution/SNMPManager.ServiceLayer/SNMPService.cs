@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Timers;
-using System.Web;
 
 namespace SNMPManager.ServiceLayer
 {
-    public static class SNMPService
+    class SNMPService
     {
         private static Timer _shortTimer = new Timer();
         private static SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabase);

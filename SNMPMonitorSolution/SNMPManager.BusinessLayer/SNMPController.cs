@@ -28,8 +28,9 @@ namespace SNMPManager.BusinessLayer
             try
             {
                 DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
-                List<AgentDataModel> AgentList = connection.GetAgentsFromDatabase();
-                Parallel.ForEach(AgentList, agent => GetSNMPDataFromSingleAgent(agent));
+                List<AgentDataModel> agentList = connection.GetAgentsFromDatabase();
+
+                Parallel.ForEach(agentList, agent => GetSNMPDataFromSingleAgent(agent));
             }
             catch (SqlException e)
             {
@@ -64,7 +65,6 @@ namespace SNMPManager.BusinessLayer
                 finally
                 {
                     target.Close();
-                    connection.UpdateStatusOfAgent(agent.AgentNr, 1);
                 }
             }
             catch (SnmpException e)
@@ -91,6 +91,7 @@ namespace SNMPManager.BusinessLayer
                     resultList.Add(new KeyValuePair<string, string>(type.ObjectID, results.ToString()));
                 }
                 connection.AddMonitorDataToDatabase(agent.AgentNr, resultList);
+                connection.UpdateStatusOfAgent(agent.AgentNr, 1);
             }
         }
     }
