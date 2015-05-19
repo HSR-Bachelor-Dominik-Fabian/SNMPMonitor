@@ -3,7 +3,7 @@
     connection.logging = true;
     var notifications = connection.createHubProxy("snmpDataHub");
     notifications.on("receiveNewEvent", function (dataValue) {
-        $("#logTable").prepend(createLineForTableFromSignalR(dataValue));
+        $("#logTable").prepend(createLineForTableFromSignalR(dataValue)).fadeIn("slow");
     });
 
     $(document).ready(function () {
@@ -12,11 +12,8 @@
             type: "GET",
             success: function (data) {
                 $.each(data, function (index, value) {
-                    $("#logTable").append(createLineForTable(value));
+                    $("#logList").append(createLineForTable(value));
                 });
-            },
-            error: function () {
-
             }
         });
     });
@@ -28,30 +25,38 @@
     });
 
     function createLineForTable(value) {
-        return "<tr><td>" + value.EventNr + "</td><td>" + value.ExceptionType + "</td><td>" + value.Category + "</td><td>" + new Date(parseInt(value.EventTimestamp.replace("/Date(", "").replace(")/", ""))) + "</td><td>" + value.HResult + "</td><td>" + value.Message + "</td><td>" + value.Stacktrace + "</td></tr>";
+        return "<div><a class=\"list-group-item container-fluid\" data-toggle=\"collapse\" href=\"#log" + value.EventNr + "\" aria-expanded=\"false\" aria-controls=\"log" + value.EventNr + "\">"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventNr:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.EventNr + "</div></div>"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>ExceptionType:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.ExceptionType + "</div></div>"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventTimestamp:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + new Date(parseInt(value.EventTimestamp.replace("/Date(", "").replace(")/", ""))) + "</div></div>"
+            + "</a></div>"
+            + "<div class=\"collapse well container-fluid\" id=\"log" + value.EventNr + "\">"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Category:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Category + "</div></div>"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>HResult:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.HResult + "</div></div>"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Message:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Message + "</div></div>"
+            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Stacktrace:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Stacktrace + "</div></div>"
+            + "</div>"
     }
 
     function createLineForTableFromSignalR(value) {
-        return "<tr><td>" + value.EventNr + "</td><td>" + value.ExceptionType + "</td><td>" + value.Category + "</td><td>" + Date.parse(value.EventTimestamp + "+02:00") + "</td><td>" + value.HResult + "</td><td>" + value.Message + "</td><td>" + value.Stacktrace + "</td></tr>";
+        return "<div><a class=\"list-group-item container-fluid\" data-toggle=\"collapse\" href=\"#log" + value.EventNr + "\" aria-expanded=\"false\" aria-controls=\"log" + value.EventNr + "\">"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventNr:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.EventNr + "</div></div>"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>ExceptionType:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.ExceptionType + "</div></div>"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventTimestamp:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + Date.parse(value.EventTimestamp + "+02:00") + "</div></div>"
+        + "</a></div>"
+        + "<div class=\"collapse well container-fluid\" id=\"log" + value.EventNr + "\">"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Category:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Category + "</div></div>"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>HResult:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.HResult + "</div></div>"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Message:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Message + "</div></div>"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Stacktrace:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Stacktrace + "</div></div>"
+        + "</div>"
     }
 </script>
 
 <h2>Logs</h2>
 
-<div id="dataContainer" class="table-responsive col-xs-12">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>EventNr</th>
-                <th>ExceptionType</th>
-                <th>Category</th>
-                <th>EventTimestamp</th>
-                <th>HResult</th>
-                <th>Message</th>
-                <th>Stacktrace</th>
-            </tr>
-        </thead>
-        <tbody id="logTable"></tbody>
-    </table>
+<div id="dataContainer" class="table-responsive col-xs-11">
+    <div class="list-group" id="logList">
+    </div>
 </div>
 
