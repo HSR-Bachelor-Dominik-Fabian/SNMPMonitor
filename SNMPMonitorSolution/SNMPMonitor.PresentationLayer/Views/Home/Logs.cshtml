@@ -1,8 +1,5 @@
 ﻿<script type="text/javascript">
-    var connection = $.hubConnection();
-    connection.logging = true;
-    var notifications = connection.createHubProxy("snmpDataHub");
-    notifications.on("receiveNewEvent", function (dataValue) {
+    $("#dataContainer").on("receiveEvent", function (dataValue) {
         $("#logTable").prepend(createLineForTableFromSignalR(dataValue));
     });
 
@@ -19,12 +16,6 @@
 
             }
         });
-    });
-
-    connection.start().done(function () {
-        notifications.invoke("joinDataGroup", "Events");
-    }).fail(function (e) {
-        alert("SignalRError for AgentNr:{{=it.AgentNr}} " +e);
     });
 
     function createLineForTable(value) {
