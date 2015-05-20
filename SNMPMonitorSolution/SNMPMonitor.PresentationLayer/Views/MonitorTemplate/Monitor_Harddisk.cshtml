@@ -1,9 +1,6 @@
 ﻿  <script type="text/javascript">
     $(document).ready(function () {
-        var connection = $.hubConnection();
-        connection.logging = true;
-        var notifications = connection.createHubProxy("snmpDataHub");
-        notifications.on("receiveData", function (dataValue) {
+        $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_chartGroup").on("receiveDataForNr{{=it.AgentNr}}", function (event, dataValue) {
             if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
                 appendPointLine{{=it.AgentNr}}(dataValue);
                 updateValueToPie{{=it.AgentNr}}(dataValue);
@@ -12,12 +9,6 @@
 
         createChartLine{{=it.AgentNr}}();
         createChartPie{{=it.AgentNr}}();
-
-        connection.start().done(function () {
-            notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
-        }).fail(function (e) {
-            alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
-        });
     });
 
     function updateValueToPie{{=it.AgentNr}}(newValue) {
@@ -267,7 +258,7 @@
         });
     }
 </script>
-<div>
+<div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_chartGroup">
     <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie" class="col-xs-12 col-lg-4 col-md-6">
     </div>
     <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line" class="col-xs-12 col-lg-4 col-md-6">

@@ -1,5 +1,5 @@
 ﻿@Styles.Render("~/Content/sidebarStyles")
-<div class="container-fluid">
+<div id="sideBarContent" class="container-fluid">
     <div class="col-xs-4 sidebar-statenumbers">
         <span class="glyphicon glyphicon-ok-sign text-success"></span>
         <span class="text-success sidebar-statenumbers-success">-</span>
@@ -18,20 +18,12 @@
     var list = [];
     $(document).ready(function () {
         ajaxAgents();
-
-        var connection = $.hubConnection();
-        var notifications = connection.createHubProxy("snmpDataHub");
-        notifications.on("receiveUpdatedAgent", function () {
+        $("#sideBarContent").on("receiveUpdatedAgentGeneral", function () {
             ajaxAgents();
         });
-        notifications.on("receiveInsertDelete", function () {
+        $("#sideBarContent").on("receiveAgentInsertDelete", function () {
             list = [];
             ajaxAgents();
-        });
-        connection.start().done(function () {
-            notifications.invoke("joinDataGroup", "Agent_General");
-        }).fail(function (e) {
-            swal({ title: "SignalRError for sidebar",text: e,type: "error", confirmButtonClass: "btn-danger"});
         });
 
     });

@@ -16,7 +16,6 @@ namespace SNMPMonitor.BusinessLayer.ExceptionHandling
                     HandleNORMAL(category, exception);
                     break;
                 case ExceptionCategory.Low:
-                    HandleLOW(category, exception);
                     break;
                 case ExceptionCategory.Fatal:
                     HandleFATAL(category, exception);
@@ -48,19 +47,6 @@ namespace SNMPMonitor.BusinessLayer.ExceptionHandling
                 HandleException(ExceptionCategory.Fatal, innerExc);
             }
 
-        }
-
-        private static void HandleLOW(ExceptionCategory category, Exception exc)
-        {
-            try
-            {
-                DataLayer.ExceptionHandling.ExceptionLogger.SaveExceptionToDB(category.ToString(), exc);
-            }
-            catch (Exception innerExc)
-            {
-                DataLayer.ExceptionHandling.ExceptionLogger.LogException(category.ToString(), exc);
-                HandleException(ExceptionCategory.Fatal, innerExc);
-            }
         }
 
         private static void HandleHIGH(ExceptionCategory category, Exception exc)

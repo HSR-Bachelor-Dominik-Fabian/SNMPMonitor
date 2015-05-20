@@ -2,16 +2,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         loadMonitor();
-
-        var connection = $.hubConnection();
-        var notifications = connection.createHubProxy("snmpDataHub");
-        notifications.on("receiveInsertDelete", function () {
+        $("#dataContainer").on("receiveAgentInsertDelete", function () {
             loadMonitor();
-        });
-        connection.start().done(function () {
-            notifications.invoke("joinDataGroup", "Agent_General");
-        }).fail(function (e) {
-            swal({ title: "SignalRError for DashboardMain", text: e, type: "error", confirmButtonClass: "btn-danger" });
         });
     });
 

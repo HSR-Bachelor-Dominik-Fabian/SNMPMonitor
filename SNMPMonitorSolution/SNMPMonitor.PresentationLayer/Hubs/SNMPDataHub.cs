@@ -20,21 +20,20 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             
-            context.Clients.Group("Agent_" + dataToShow.AgentID).receiveData(JObject.FromObject(dataToShow));
+            context.Clients.Group("Agent_General").receiveData(JObject.FromObject(dataToShow));
         }
 
         public void SendNewEvent(EventModel eventModel)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
 
-            context.Clients.Group("Events").receiveNewEvent(JObject.FromObject(eventModel));
+            context.Clients.Group("Agent_General").receiveNewEvent(JObject.FromObject(eventModel));
         }
 
         public void SendUpdatedAgent(AgentModel agent)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            context.Clients.Group("Agent_" + agent.AgentNr).receiveUpdatedAgent(JObject.FromObject(agent));
-            context.Clients.Group("Agent_General").receiveUpdatedAgent();
+            context.Clients.Group("Agent_General").receiveUpdatedAgentWithValue(JObject.FromObject(agent));
         }
 
         public void SendInsertDelete()

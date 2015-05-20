@@ -71,7 +71,7 @@ namespace SNMPManager.BusinessLayer
             {
                 DatabaseConnectionManager connection = new DatabaseConnectionManager(_connectionString);
                 connection.UpdateStatusOfAgent(agent.AgentNr, 3);
-                ExceptionCore.HandleException(ExceptionCategory.High, e);
+                ExceptionCore.HandleException(ExceptionCategory.Low, e);
             }
             catch (Exception e)
             {

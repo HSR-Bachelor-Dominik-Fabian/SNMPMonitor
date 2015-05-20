@@ -1,21 +1,12 @@
 ﻿<script type="text/javascript">
     $(document).ready(function () {
-        var connection = $.hubConnection();
-        connection.logging = true;
-        var notifications = connection.createHubProxy("snmpDataHub");
-        notifications.on("receiveData", function (dataValue) {
+        $("#Chart{{=it.AgentNr}}_Memory").on("receiveDataForNr{{=it.AgentNr}}", function (event, dataValue) {
             if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
                 appendPointToMemoryLine{{=it.AgentNr}}(dataValue);
             }
         });
 
         createMemoryChartLine{{=it.AgentNr}}();
-
-        connection.start().done(function () {
-            notifications.invoke("joinDataGroup","Agent_{{=it.AgentNr}}");
-        }).fail(function (e) {
-            alert("SignalRError for AgentNR:{{=it.AgentNr}} " +e);
-        });
     });
 
     function calcUsedMemoryPers(memoryResult) {
