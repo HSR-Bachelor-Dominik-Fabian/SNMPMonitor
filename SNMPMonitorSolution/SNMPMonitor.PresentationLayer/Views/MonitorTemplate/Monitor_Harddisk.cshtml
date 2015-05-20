@@ -1,6 +1,6 @@
 ﻿  <script type="text/javascript">
     $(document).ready(function () {
-        $("Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie").on("receiveDataForNr{{=it.AgentNr}}", function (event, dataValue) {
+        $("#Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_chartGroup").on("receiveDataForNr{{=it.AgentNr}}", function (event, dataValue) {
             if (dataValue.ObjectID == "1.3.6.1.2.1.25.2.3") {
                 appendPointLine{{=it.AgentNr}}(dataValue);
                 updateValueToPie{{=it.AgentNr}}(dataValue);
@@ -258,7 +258,7 @@
         });
     }
 </script>
-<div>
+<div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_chartGroup">
     <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_pie" class="col-xs-12 col-lg-4 col-md-6">
     </div>
     <div id="Chart{{=it.AgentNr}}_1_3_6_1_2_1_25_2_3_line" class="col-xs-12 col-lg-4 col-md-6">

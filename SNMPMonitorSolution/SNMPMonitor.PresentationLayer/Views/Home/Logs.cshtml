@@ -1,6 +1,6 @@
 ﻿<script type="text/javascript">
     $("#dataContainer").on("receiveEvent", function (dataValue) {
-        $("#logTable").prepend(createLineForTableFromSignalR(dataValue)).fadeIn("slow");
+        $("#logList").prepend(createLineForTableFromSignalR(dataValue)).fadeIn("slow");
     });
 
     $(document).ready(function () {
