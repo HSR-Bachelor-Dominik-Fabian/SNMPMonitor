@@ -19,7 +19,6 @@ namespace SNMPManager.BusinessLayer.Tests
             }
             catch (Exception exc)
             {
-                Console.WriteLine(exc.StackTrace);
                 successfull = false;
             }
 

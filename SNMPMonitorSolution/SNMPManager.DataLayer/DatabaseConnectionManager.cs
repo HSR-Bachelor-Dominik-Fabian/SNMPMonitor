@@ -219,10 +219,10 @@ namespace SNMPManager.DataLayer
             {
                 _myConnection.Open();
 
-                SqlCommand saveAgentCommand = new SqlCommand("deleteAgent", _myConnection);
-                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                saveAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
-                saveAgentCommand.ExecuteNonQuery();
+                SqlCommand deleteAgentCommand = new SqlCommand("deleteAgent", _myConnection);
+                deleteAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                deleteAgentCommand.Parameters.Add(new SqlParameter("@AgentNr", agentNr));
+                deleteAgentCommand.ExecuteNonQuery();
 
             }
             finally
