@@ -25,7 +25,6 @@
                             type:"POST",
                             success:function(data){
                                 swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer:"3000"}); 
-                                window.location = "#/";
                             },
                             error: function (jqXHR, textStatus, errorThrown){
                                 swal({title:"Fehler beim Löschen",text: "Konnte nicht gelöscht werden. Fehler: " + errorThrown, type:"error", confirmButtonClass: "btn-danger"});   
@@ -37,27 +36,35 @@
                 } 
             });
         });
+        var found = false;
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
             type: "GET",
+            cache: false,
             async: false,
             success: function (data) {
+                var firstID  = 0;
                 $.each(data, function(index, value){
                     var selected="";
-                    if(model == 0&& index == 0){
-                        window.location = "#/Monitor/" + value.AgentNr;
+                    if(index === 0){
+                        firstID = value.AgentNr;
                     }
-                    if(value.AgentNr == model){
+                    if(value.AgentNr === model){
+                        found = true;
                         selected = "selected = 'selected'";
                     }
                     addAgentToDropdown(value, selected);   
-                });                 
+                });       
+                if(found === false && firstID > 0){
+                    window.location = "#/Monitor/" + firstID;
+                }
             }
         });
-        if(model > 0){
+        if(model > 0 && found === true){
             $.ajax({
                 url: "@Url.Action("GetMonitorSummaryForAgent", "Data")/" + model,
                 type: "GET",
+                cache: false,
                 success: function (data) {
                     createAgent(data);                    
                 }
@@ -77,6 +84,7 @@
                 $.ajax({
                     url: url + a,
                     type: 'get',
+                    cache: false,
                     async: false,
                     success: function (html) {
                         temp = html;
