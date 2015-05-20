@@ -71,10 +71,10 @@ namespace SNMPManager.DataLayer.Tests
         {
             List<MonitoringTypeDataModel> monitoringTypesExpected = new List<MonitoringTypeDataModel>();
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(1, "sysDesc", "1.3.6.1.2.1.1.1"));
-            monitoringTypesExpected.Add(new MonitoringTypeDataModel(4, "hrMemorySize", "1.3.6.1.2.1.25.2.2"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(9, "sysName", "1.3.6.1.2.1.1.5"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(10, "sysUptime", "1.3.6.1.2.1.25.1.1"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(11, "cpuUsage", "1.3.6.1.2.1.25.3.3"));
+            monitoringTypesExpected.Add(new MonitoringTypeDataModel(12, "hrDiskStorageTable", "1.3.6.1.2.1.25.3.2"));
 
             int agentNr = 1;
             List<MonitoringTypeDataModel> monitoringTypesActual = databaseConnection.GetMonitoringTypesForAgentFromDatabase(agentNr);
