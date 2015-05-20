@@ -50,9 +50,9 @@
                 $(this).triggerHandler("receiveAgentInsertDelete");
             });
         });
-        notifications.on("receiveNewEvent", function () {
+        notifications.on("receiveNewEvent", function (dataValue) {
             $("body").find("*").each(function (index, value) {
-                $(this).triggerHandler("receiveEvent");
+                $(this).triggerHandler("receiveEvent", dataValue);
             });
         });
         notifications.on("receiveData", function (dataValue) {
