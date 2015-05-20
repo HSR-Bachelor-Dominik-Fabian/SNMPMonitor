@@ -13,6 +13,7 @@
 
     function loadMonitor() {
         var model = @Model;
+        $("#dataContainer").empty();
         $("#AgentDropdown select").on( "change", function(){
             window.location = "#/Monitor/" + $(this).val();
         });
@@ -20,25 +21,25 @@
             window.location = "#/ModifyAgent/" + model;
         });
         $("#removeAgentBtn").on("click", function(){
-            swal({   title: "Sicher?",   text: "Der Agent und die gesammelten Daten können nicht wiederhergestellt werden!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Ja, löschen",   cancelButtonText: "Nein, abbrechen",   closeOnConfirm: false,   closeOnCancel: false },
-                function(isConfirm){
-                    if (isConfirm) {
-
+            swal({   title: "Sicher?",   text: "Der Agent und die gesammelten Daten können nicht wiederhergestellt werden!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Ja, löschen",   cancelButtonText: "Nein, abbrechen",   closeOnConfirm: false,   closeOnCancel: false }, 
+                function(isConfirm){  
+                    if (isConfirm) {   
+                        
                         $.ajax({
                             url:"@Url.Action("DeleteAgent","Data")/" + model,
                             type:"POST",
                             success:function(data){
-                                swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer:"3000"});
+                                swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer:"3000"}); 
                             },
                             error: function (jqXHR, textStatus, errorThrown){
-                                swal({title:"Fehler beim Löschen",text: "Konnte nicht gelöscht werden. Fehler: " + errorThrown, type:"error", confirmButtonClass: "btn-danger"});
+                                swal({title:"Fehler beim Löschen",text: "Konnte nicht gelöscht werden. Fehler: " + errorThrown, type:"error", confirmButtonClass: "btn-danger"});   
                             }
                         });
                     }
-                    else {
-                        swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});
-                    }
-                });
+                else {
+                            swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});   
+                } 
+            });
         });
         var found = createDropdown(model);
         if(model > 0 && found === true){
@@ -47,7 +48,7 @@
                 type: "GET",
                 cache: false,
                 success: function (data) {
-                    createAgent(data);
+                    createAgent(data);                    
                 }
             });
         }
@@ -76,8 +77,8 @@
                         found = true;
                         selected = "selected = 'selected'";
                     }
-                    addAgentToDropdown(value, selected);
-                });
+                    addAgentToDropdown(value, selected);   
+                });       
                 if(found === false && firstID > 0){
                     window.location = "#/Monitor/" + firstID;
                 }
