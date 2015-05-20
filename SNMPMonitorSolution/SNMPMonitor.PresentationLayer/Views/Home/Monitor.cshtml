@@ -5,6 +5,10 @@
         $("#dataContainer").on("receiveAgentInsertDelete", function () {
             loadMonitor();
         });
+        $("#dataContainer").on("receiveUpdatedAgentGeneral", function(){
+            var model = @Model;
+            createDropdown(model);
+        });
     });
 
     function loadMonitor() {
@@ -16,26 +20,45 @@
             window.location = "#/ModifyAgent/" + model;
         });
         $("#removeAgentBtn").on("click", function(){
-            swal({   title: "Sicher?",   text: "Der Agent und die gesammelten Daten können nicht wiederhergestellt werden!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Ja, löschen",   cancelButtonText: "Nein, abbrechen",   closeOnConfirm: false,   closeOnCancel: false }, 
-                function(isConfirm){  
-                    if (isConfirm) {   
-                        
+            swal({   title: "Sicher?",   text: "Der Agent und die gesammelten Daten können nicht wiederhergestellt werden!",   type: "warning", confirmButtonClass: "btn-default",showCancelButton: true, confirmButtonText: "Ja, löschen",   cancelButtonText: "Nein, abbrechen",   closeOnConfirm: false,   closeOnCancel: false },
+                function(isConfirm){
+                    if (isConfirm) {
+
                         $.ajax({
                             url:"@Url.Action("DeleteAgent","Data")/" + model,
                             type:"POST",
                             success:function(data){
-                                swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer:"3000"}); 
+                                swal({title:"Gelöscht!", text: "Der Agent ist nun nicht mehr verfügbar", type:"success", timer:"3000"});
                             },
                             error: function (jqXHR, textStatus, errorThrown){
-                                swal({title:"Fehler beim Löschen",text: "Konnte nicht gelöscht werden. Fehler: " + errorThrown, type:"error", confirmButtonClass: "btn-danger"});   
+                                swal({title:"Fehler beim Löschen",text: "Konnte nicht gelöscht werden. Fehler: " + errorThrown, type:"error", confirmButtonClass: "btn-danger"});
                             }
                         });
                     }
-                else {
-                            swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});   
-                } 
-            });
+                    else {
+                        swal({title:"Abgebrochen",text: "Es wurden keine Daten gelöscht!", type:"error", timer: "3000", confirmButtonClass: "btn-danger"});
+                    }
+                });
         });
+        var found = createDropdown(model);
+        if(model > 0 && found === true){
+            $.ajax({
+                url: "@Url.Action("GetMonitorSummaryForAgent", "Data")/" + model,
+                type: "GET",
+                cache: false,
+                success: function (data) {
+                    createAgent(data);
+                }
+            });
+        }
+    }
+
+    function addAgentToDropdown(json, selected){
+        $("#AgentDropdown select").append('<option value='+ json.AgentNr +' ' + selected + '>'+ json.Name +'</option>');
+
+    }
+    function createDropdown(model){
+        $("#AgentDropdown select").empty();
         var found = false;
         $.ajax({
             url: "@Url.Action("GetAgents", "Data")",
@@ -53,30 +76,15 @@
                         found = true;
                         selected = "selected = 'selected'";
                     }
-                    addAgentToDropdown(value, selected);   
-                });       
+                    addAgentToDropdown(value, selected);
+                });
                 if(found === false && firstID > 0){
                     window.location = "#/Monitor/" + firstID;
                 }
             }
         });
-        if(model > 0 && found === true){
-            $.ajax({
-                url: "@Url.Action("GetMonitorSummaryForAgent", "Data")/" + model,
-                type: "GET",
-                cache: false,
-                success: function (data) {
-                    createAgent(data);                    
-                }
-            });
-        }
+        return found;
     }
-
-    function addAgentToDropdown(json, selected){
-        $("#AgentDropdown select").append('<option value='+ json.AgentNr +' ' + selected + '>'+ json.Name +'</option>');
-
-    }
-
     function createAgent(json) {
         var def = {
             loadfile: function (url) {
