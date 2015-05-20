@@ -185,7 +185,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
                         type = temp;
                     }
                 }
-                Agent newAgent = new Agent(0, inputAgentName, inputIpAddress, type, portNr, 1, "", "", "");
+                Agent newAgent = new Agent(inputAgentName, inputIpAddress, type, portNr);
                 controller.AddAgentToDatabase(newAgent, cpuCheck, discCheck);
                 output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
             }

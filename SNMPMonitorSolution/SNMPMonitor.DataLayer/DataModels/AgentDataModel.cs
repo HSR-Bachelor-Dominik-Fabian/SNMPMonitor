@@ -18,6 +18,19 @@ namespace SNMPMonitor.DataLayer
         private readonly string _sysName;
         private readonly string _sysUptime;
 
+        public AgentDataModel(String name, String iPAddress, TypeDataModel type, int port)
+        {
+            _agentNr = 0;
+            _name = name;
+            _iPAddress = iPAddress;
+            _type = type;
+            _port = port;
+            _status = 1;
+            _sysDesc = "";
+            _sysName = "";
+            _sysUptime = "";
+        }
+
         public AgentDataModel(int agentNr, String name, String iPAddress, TypeDataModel type, int port, int status, string sysDesc, string sysName, string sysUptime)
         {
             _agentNr = agentNr;

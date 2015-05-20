@@ -69,22 +69,6 @@ namespace SNMPMonitor.BusinessLayer
             return monitoringDataList;
         }
 
-        public void AddAgentToDatabaseForDemo(string name, string iPAddress, int port)
-        {
-            try
-            {
-                _databaseConnection.AddAgentToDatabaseForDemo(name, iPAddress, port);
-            }
-            catch (SqlException e)
-            {
-                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
-            }
-            catch (Exception e)
-            {
-                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
-            }
-        }
-
         public List<Agent> GetAgents()
         {
             List<Agent> agentList = new List<Agent>();
@@ -181,7 +165,7 @@ namespace SNMPMonitor.BusinessLayer
 
         public void AddAgentToDatabase(Agent agent, bool cpuCheck, bool discCheck)
         {
-            AgentDataModel agentData = new AgentDataModel(agent.AgentNr, agent.Name, agent.IPAddress, new TypeDataModel(agent.Type.TypeNr, agent.Type.Name), agent.Port, agent.Status, "undefined", "undefined", "undefined");
+            AgentDataModel agentData = new AgentDataModel(agent.Name, agent.IPAddress, new TypeDataModel(agent.Type.TypeNr, agent.Type.Name), agent.Port);
             try
             {
                 _databaseConnection.AddAgentToDatabase(agentData, cpuCheck, discCheck);

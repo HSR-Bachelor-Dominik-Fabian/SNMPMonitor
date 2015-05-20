@@ -18,6 +18,19 @@ namespace SNMPMonitor.BusinessLayer
         private readonly string _sysName;
         private readonly string _sysUptime;
 
+        public Agent(String name, String iPAddress, Type type, int port)
+        {
+            _agentNr = 0;
+            _name = name;
+            _iPAddress = iPAddress;
+            _type = type;
+            _port = port;
+            _status = 1;
+            _sysDesc = "";
+            _sysName = "";
+            _sysUptime = "";
+        }
+
         public Agent(int agentNr, String name, String iPAddress, Type type, int port, int status, string sysDesc, string sysName, string sysUptime)
         {
             _agentNr = agentNr;

@@ -9,7 +9,7 @@ namespace SNMPMonitor.DataLayer.Tests
     public class DatabaseConnectionTests
     {
         DatabaseConnectionMonitor databaseConnection;
-        AgentDataModel agent = new AgentDataModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", new TypeDataModel(1, "Server"), 40001, 1, "", "", "");
+        AgentDataModel agent = new AgentDataModel("sinv-56075.edu.hsr.ch", "152.96.56.75", new TypeDataModel(1, "Server"), 40001);
 
         [TestInitialize]
         public void TestSetup()
@@ -20,7 +20,6 @@ namespace SNMPMonitor.DataLayer.Tests
 
             if (agents.Count == 0)
             {
-                //AgentDataModel agent = new AgentDataModel(1, "sinv-56075.edu.hsr.ch", "152.96.56.75", new TypeDataModel(1, "Server"), 40001, 1, "Test-Client", "sinv-56075", "");
                 databaseConnection.AddAgentToDatabase(agent, false, false);
             }
         }
@@ -38,8 +37,6 @@ namespace SNMPMonitor.DataLayer.Tests
         [TestMethod]
         public void TestGetTypesFromDatabase()
         {
-            //List<TypeDataModel> typeDataList = databaseConnection.GetTypesFromDatabase();
-            //Assert.AreEqual(2, typeDataList.Count);
             List<TypeDataModel> typesActual = databaseConnection.GetTypesFromDatabase();
 
             List<TypeDataModel> typesExpected = new List<TypeDataModel>() { new TypeDataModel(1, "Server"), new TypeDataModel(2, "Switch") };
@@ -105,7 +102,7 @@ namespace SNMPMonitor.DataLayer.Tests
         public void TestAddAndDeleteAgentFromDatabase()
         {
             List<AgentDataModel> agentsBeforeAdd = databaseConnection.GetAgentsFromDatabase();
-            AgentDataModel newAgent = new AgentDataModel(1, "Test-Server", "10.10.10.10", new TypeDataModel(1, "Server"), 161, 1, "", "", "");
+            AgentDataModel newAgent = new AgentDataModel("Test-Server", "10.10.10.10", new TypeDataModel(1, "Server"), 161);
 
             databaseConnection.AddAgentToDatabase(newAgent, false, false);
 
