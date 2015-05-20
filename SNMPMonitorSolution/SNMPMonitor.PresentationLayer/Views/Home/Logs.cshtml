@@ -1,6 +1,6 @@
 ﻿<script type="text/javascript">
     $("#dataContainer").on("receiveEvent", function (event, dataValue) {
-        $("#logList").prepend(createLineForTableFromSignalR(dataValue)).fadeIn("slow");
+        $("#logList").prepend(createLineForTable(dataValue)).fadeIn("slow");
     });
 
     $(document).ready(function () {
@@ -9,6 +9,7 @@
             type: "GET",
             success: function (data) {
                 $.each(data, function (index, value) {
+                    console.log(value.EventTimestamp);
                     $("#logList").append(createLineForTable(value));
                 });
             }
@@ -16,24 +17,11 @@
     });
 
     function createLineForTable(value) {
-        return "<div><a class=\"list-group-item container-fluid\" data-toggle=\"collapse\" href=\"#log" + value.EventNr + "\" aria-expanded=\"false\" aria-controls=\"log" + value.EventNr + "\">"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventNr:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.EventNr + "</div></div>"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>ExceptionType:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.ExceptionType + "</div></div>"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventTimestamp:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + new Date(parseInt(value.EventTimestamp.replace("/Date(", "").replace(")/", ""))) + "</div></div>"
-            + "</a></div>"
-            + "<div class=\"collapse well container-fluid\" id=\"log" + value.EventNr + "\">"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Category:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Category + "</div></div>"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>HResult:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.HResult + "</div></div>"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Message:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Message + "</div></div>"
-            + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Stacktrace:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Stacktrace + "</div></div>"
-            + "</div>"
-    }
-
-    function createLineForTableFromSignalR(value) {
+        var date = new Date(value.EventTimestamp + "+02:00");
         return "<div><a class=\"list-group-item container-fluid\" data-toggle=\"collapse\" href=\"#log" + value.EventNr + "\" aria-expanded=\"false\" aria-controls=\"log" + value.EventNr + "\">"
         + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventNr:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.EventNr + "</div></div>"
         + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>ExceptionType:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.ExceptionType + "</div></div>"
-        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventTimestamp:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + Date.parse(value.EventTimestamp + "+02:00") + "</div></div>"
+        + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventTimestamp:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + date.toLocaleString() + "</div></div>"
         + "</a></div>"
         + "<div class=\"collapse well container-fluid\" id=\"log" + value.EventNr + "\">"
         + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>Category:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.Category + "</div></div>"
