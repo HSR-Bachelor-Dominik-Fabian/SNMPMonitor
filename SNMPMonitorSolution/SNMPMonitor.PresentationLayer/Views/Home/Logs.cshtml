@@ -7,6 +7,7 @@
         $.ajax({
             url: "@Url.Action("GetAllEvents", "Data")",
             type: "GET",
+            cache: false,
             success: function (data) {
                 $.each(data, function (index, value) {
                     $("#logList").append(createLineForTable(value));
