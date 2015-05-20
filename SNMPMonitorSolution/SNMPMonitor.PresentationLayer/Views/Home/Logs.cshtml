@@ -30,7 +30,6 @@
     }
 
     function createLineForTableFromSignalR(value) {
-        console.log(value);
         return "<div><a class=\"list-group-item container-fluid\" data-toggle=\"collapse\" href=\"#log" + value.EventNr + "\" aria-expanded=\"false\" aria-controls=\"log" + value.EventNr + "\">"
         + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>EventNr:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.EventNr + "</div></div>"
         + "<div class=\"col-xs-8\"><div class=\"col-lg-3 col-md-5 col-xs-7\"><strong>ExceptionType:</strong></div><div class=\"col-lg-9 col-md-7 col-xs-7\">" + value.ExceptionType + "</div></div>"
