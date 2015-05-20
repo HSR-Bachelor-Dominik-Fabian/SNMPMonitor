@@ -67,7 +67,7 @@ public partial class Triggers
         }
     }
     
-    public static void SNMPMonitorRowInsertedTrigger()
+    public static void MonitorDataInsertedTrigger()
     {
         try
         {
@@ -188,6 +188,7 @@ public partial class Triggers
             sqlP.Send("Fehler InsertDeleteTrigger: " + exc.Message);
         }
     }
+
     public static string cleanForJSON(string s)
     {
         if (s == null || s.Length == 0)
