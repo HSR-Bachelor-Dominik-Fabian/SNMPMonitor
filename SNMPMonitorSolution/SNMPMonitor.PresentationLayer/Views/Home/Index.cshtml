@@ -8,27 +8,27 @@
         var app = $.sammy(function () {
             this.element_selector = '#contentContainer';
             this.get('#/', function (context) {
-                context.load("@Url.Action("Dashboard","Home")").swap();
+                context.load("@Url.Action("Dashboard","Home")", { cache: false }).swap();
                 SetActiveLink("");
             });
             this.get('#/Monitor', function (context) {
                 this.redirect("#/Monitor/0");
             });
             this.get('#/Monitor/:id', function (context) {
-                context.load("@Url.Action("Monitor","Home")/" + this.params["id"]).swap();
+                context.load("@Url.Action("Monitor","Home")/" + this.params["id"], {cache:false}).swap();
                 SetActiveLink("Monitor");
             });
             this.get('#/Logs', function (context) {
-                context.load("@Url.Action("Logs","Home")").swap();
+                context.load("@Url.Action("Logs","Home")", { cache: false }).swap();
                 SetActiveLink("Logs");
             });
             this.get('#/AddAgent', function (context) {
-                context.load("@Url.Action("AddAgent","Home")").swap();
+                context.load("@Url.Action("AddAgent","Home")", { cache: false }).swap();
                 var ul = $('ul');
                 ul.children().removeClass('active');
             });
             this.get('#/ModifyAgent/:id', function (context) {
-                context.load("@Url.Action("ModifyAgent","Home")/" + this.params["id"]).swap();
+                context.load("@Url.Action("ModifyAgent","Home")/" + this.params["id"], { cache: false }).swap();
                 var ul = $('ul');
                 ul.children().removeClass('active');
             });
@@ -63,7 +63,7 @@
         connection.start().done(function () {
             notifications.invoke("joinDataGroup", "Agent_General");
         }).fail(function (e) {
-            alert("SignalRError: " + e);
+            swal({ title: "SignalRError", text: e, type: "error", confirmButtonClass: "btn-danger" });
         });
 
 

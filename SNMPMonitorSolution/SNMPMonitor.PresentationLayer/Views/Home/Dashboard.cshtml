@@ -19,6 +19,7 @@
                 $.ajax({
                     url: "@Url.Action("GetAgents", "Data")",
                     method: "GET",
+                    cache: false,
                     success: function (agentData) {
                         $.each(agentData, function (index, value) {
                             $("#dataContainer").append(templateFunc(value));
