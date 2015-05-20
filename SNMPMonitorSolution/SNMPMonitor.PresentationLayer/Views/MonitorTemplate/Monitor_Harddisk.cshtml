@@ -89,7 +89,7 @@
                     }
                 });
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
-                newdata.push({ x:new Date(parseInt(timestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedSpacePers))});
+                newdata.push({ x:Date.parse(timestamp), y:parseInt(Math.round(usedSpacePers))});
             } else {
                 console.log("no disk data");
             }
@@ -120,7 +120,7 @@
                     }
                 });
                 var usedSpacePers = (usedSpace / fullSpace) * 100;
-                chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y:parseInt(Math.round(usedSpacePers))}, true, shift);
+                chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp), y:parseInt(Math.round(usedSpacePers))}, true, shift);
             } else {
                 console.log("no disk data");
             }
