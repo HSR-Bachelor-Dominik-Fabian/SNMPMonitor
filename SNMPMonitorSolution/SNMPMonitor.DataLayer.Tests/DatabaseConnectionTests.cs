@@ -60,10 +60,10 @@ namespace SNMPMonitor.DataLayer.Tests
         {
             List<MonitoringTypeDataModel> monitoringTypesExpected = new List<MonitoringTypeDataModel>();
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(1, "sysDesc", "1.3.6.1.2.1.1.1"));
-            monitoringTypesExpected.Add(new MonitoringTypeDataModel(4, "hrMemorySize", "1.3.6.1.2.1.25.2.2"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(9, "sysName", "1.3.6.1.2.1.1.5"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(10, "sysUptime", "1.3.6.1.2.1.25.1.1"));
             monitoringTypesExpected.Add(new MonitoringTypeDataModel(11, "cpuUsage", "1.3.6.1.2.1.25.3.3"));
+            monitoringTypesExpected.Add(new MonitoringTypeDataModel(12, "hrDiskStorageTable", "1.3.6.1.2.1.25.3.2"));
 
             int agentNr = 1;
             List<MonitoringTypeDataModel> monitoringTypesActual = databaseConnection.GetMonitoringTypesForAgentFromDatabase(agentNr);
@@ -186,11 +186,55 @@ namespace SNMPMonitor.DataLayer.Tests
                 Assert.IsFalse(true);
             }
         }
-        
+             
         [TestMethod]
         public void TestUpdateAgentInDatabase()
         {
+            AgentDataModel newAgent = new AgentDataModel("Test-Server", "10.10.10.10", new TypeDataModel(1, "Server"), 161);
+            
+            // Add new Agent to Database
+            databaseConnection.AddAgentToDatabase(newAgent, false, false);
 
+            // Get AgentNr for new added Agent
+            List<AgentDataModel> agentsAfterAdd = databaseConnection.GetAgentsFromDatabase();
+            int agentNr = agentsAfterAdd[agentsAfterAdd.Count - 1].AgentNr;
+
+            // Check MonitoringType for inserted Agent
+            List<MonitoringTypeDataModel> monitoringTypesExpectedBeforeUpdate = new List<MonitoringTypeDataModel>();
+            monitoringTypesExpectedBeforeUpdate.Add(new MonitoringTypeDataModel(1, "sysDesc", "1.3.6.1.2.1.1.1"));
+            monitoringTypesExpectedBeforeUpdate.Add(new MonitoringTypeDataModel(9, "sysName", "1.3.6.1.2.1.1.5"));
+            monitoringTypesExpectedBeforeUpdate.Add(new MonitoringTypeDataModel(10, "sysUptime", "1.3.6.1.2.1.25.1.1"));
+            
+            List<MonitoringTypeDataModel> monitoringTypesActualBeforeUpdate = databaseConnection.GetMonitoringTypesForAgentFromDatabase(agentNr);
+            for (int i = 0; i < monitoringTypesActualBeforeUpdate.Count; i++)
+            {
+                Assert.AreEqual(monitoringTypesExpectedBeforeUpdate[i].MonitoringTypeNr, monitoringTypesActualBeforeUpdate[i].MonitoringTypeNr);
+                Assert.AreEqual(monitoringTypesExpectedBeforeUpdate[i].Description, monitoringTypesActualBeforeUpdate[i].Description);
+                Assert.AreEqual(monitoringTypesExpectedBeforeUpdate[i].ObjectID, monitoringTypesActualBeforeUpdate[i].ObjectID);
+            }
+
+            // Update new Agent
+            databaseConnection.UpdateAgentInDatabase(agentsAfterAdd[agentsAfterAdd.Count - 1], true, true);
+
+            // Check MonitoringType for updated Agent
+            List<MonitoringTypeDataModel> monitoringTypesExpectedAfterUpdate = new List<MonitoringTypeDataModel>();
+            monitoringTypesExpectedAfterUpdate.Add(new MonitoringTypeDataModel(1, "sysDesc", "1.3.6.1.2.1.1.1"));
+            monitoringTypesExpectedAfterUpdate.Add(new MonitoringTypeDataModel(9, "sysName", "1.3.6.1.2.1.1.5"));
+            monitoringTypesExpectedAfterUpdate.Add(new MonitoringTypeDataModel(10, "sysUptime", "1.3.6.1.2.1.25.1.1"));
+            monitoringTypesExpectedAfterUpdate.Add(new MonitoringTypeDataModel(11, "cpuUsage", "1.3.6.1.2.1.25.3.3"));
+            monitoringTypesExpectedAfterUpdate.Add(new MonitoringTypeDataModel(12, "hrDiskStorageTable", "1.3.6.1.2.1.25.3.2"));
+
+            List<MonitoringTypeDataModel> monitoringTypesActualAfterUpdate = databaseConnection.GetMonitoringTypesForAgentFromDatabase(agentNr);
+            for (int i = 0; i < monitoringTypesActualAfterUpdate.Count; i++)
+            {
+                Assert.AreEqual(monitoringTypesExpectedAfterUpdate[i].MonitoringTypeNr, monitoringTypesActualAfterUpdate[i].MonitoringTypeNr);
+                Assert.AreEqual(monitoringTypesExpectedAfterUpdate[i].Description, monitoringTypesActualAfterUpdate[i].Description);
+                Assert.AreEqual(monitoringTypesExpectedAfterUpdate[i].ObjectID, monitoringTypesActualAfterUpdate[i].ObjectID);
+            }
+
+            // Delete new Agent
+            databaseConnection.DeleteAgentInDatabase(agentNr);
         }
+       
     }
 }
