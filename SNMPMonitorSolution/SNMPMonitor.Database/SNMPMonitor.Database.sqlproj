@@ -64,6 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SNMPMonitorRowInsertedTrigger.cs" />
+    <Compile Include="SNMPMonitorTriggers.cs" />
   </ItemGroup>
 </Project>

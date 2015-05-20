@@ -5,6 +5,7 @@ using Microsoft.SqlServer.Server;
 using System.Net;
 using System.Diagnostics;
 using System.Collections.Specialized;
+using System.Text;
 
 
 public partial class Triggers
@@ -66,7 +67,7 @@ public partial class Triggers
         }
     }
     
-    public static void SNMPMonitorRowInsertedTrigger()
+    public static void MonitorDataInsertedTrigger()
     {
         try
         {
@@ -142,13 +143,19 @@ public partial class Triggers
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
-                            values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                            if (reader.GetName(i).Equals("Message") || reader.GetName(i).Equals("Stacktrace")) 
+                            {
+                                values += "{\"" + reader.GetName(i) + "\":\"" + cleanForJSON(reader.GetValue(i).ToString()) +"\"},";
+                            }
+                            else
+                            {
+                                values += "{\"" + reader.GetName(i) + "\":\"" + reader.GetValue(i) + "\"},";
+                            }
                         }
                     }
                     reader.Close();
                 }
                 values += "]}";
-
                 string param = "param=" + values;
                 client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 client.UploadString(uri, "POST", param);
@@ -180,5 +187,63 @@ public partial class Triggers
             SqlPipe sqlP = SqlContext.Pipe;
             sqlP.Send("Fehler InsertDeleteTrigger: " + exc.Message);
         }
+    }
+
+    public static string cleanForJSON(string s)
+    {
+        if (s == null || s.Length == 0)
+        {
+            return "";
+        }
+
+        char c = '\0';
+        int i;
+        int len = s.Length;
+        StringBuilder sb = new StringBuilder(len + 4);
+        String t;
+
+        for (i = 0; i < len; i += 1)
+        {
+            c = s[i];
+            switch (c)
+            {
+                case '\\':
+                case '"':
+                    sb.Append('\\');
+                    sb.Append(c);
+                    break;
+                case '/':
+                    sb.Append('\\');
+                    sb.Append(c);
+                    break;
+                case '\b':
+                    sb.Append("\\b");
+                    break;
+                case '\t':
+                    sb.Append("\\t");
+                    break;
+                case '\n':
+                    sb.Append("\\n");
+                    break;
+                case '\f':
+                    sb.Append("\\f");
+                    break;
+                case '\r':
+                    sb.Append("\\r");
+                    break;
+                default:
+                    if (c < ' ')
+                    {
+                        t = "000" + String.Format("X", c);
+                        sb.Append("\\u" + t.Substring(t.Length - 4));
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                    }
+                    break;
+            }
+        }
+        return sb.ToString();
     }
 }
