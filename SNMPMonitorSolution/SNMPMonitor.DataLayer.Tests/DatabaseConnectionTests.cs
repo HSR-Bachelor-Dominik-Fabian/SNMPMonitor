@@ -162,6 +162,35 @@ namespace SNMPMonitor.DataLayer.Tests
             Assert.AreEqual("Stacktrace", eventsAfterAdd[lastIndex].Stacktrace);
             
         }
+
+        [TestMethod]
+        public void TestGetAgentFromDatabase()
+        {
+            AgentDataModel agent = databaseConnection.GetAgentFromDatabase(1);
+
+            if (agent != null)
+            {
+                AgentDataModel testAgent = agent;
+                Assert.AreEqual(1, testAgent.AgentNr);
+                Assert.AreEqual("sinv-56075.edu.hsr.ch", testAgent.Name);
+                Assert.AreEqual("152.96.56.75", testAgent.IPAddress);
+                TypeDataModel testAgentType = testAgent.Type;
+                Assert.AreEqual(1, testAgentType.TypeNr);
+                Assert.AreEqual(40001, testAgent.Port);
+                Assert.AreEqual(1, testAgent.Status);
+                Assert.AreEqual("{\n  \"Results\": [\n    {\n      \"OID\": \"1.3.6.1.2.1.1.1.0\",\n      \"Type\": \"OctetString\",\n      \"Value\": \"Hardware: Intel64 Family 6 Model 62 Stepping 4 AT/AT COMPATIBLE - Software: Windows Version 6.3 (Build 9600 Multiprocessor Free)\"\n    }\n  ]\n}".Replace("\n", Environment.NewLine), testAgent.SysDescription);
+                Assert.AreEqual("{\n  \"Results\": [\n    {\n      \"OID\": \"1.3.6.1.2.1.1.5.0\",\n      \"Type\": \"OctetString\",\n      \"Value\": \"sinv-56075\"\n    }\n  ]\n}".Replace("\n", Environment.NewLine), testAgent.SysName);
+            }
+            else
+            {
+                Assert.IsFalse(true);
+            }
+        }
         
+        [TestMethod]
+        public void TestUpdateAgentInDatabase()
+        {
+
+        }
     }
 }

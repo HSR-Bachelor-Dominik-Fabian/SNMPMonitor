@@ -15,7 +15,7 @@
             var shift = chart.series[0].data.length >= 15;
             var object = JSON.parse(value["Result"]);
             var cpuLoad = calcCpuLoad(object);
-            chart.series[0].addPoint({ x:Date.parse(value.MonitorTimestamp + "+02:00"), y: cpuLoad }, true, shift);
+            chart.series[0].addPoint({ x:Date.parse(value.MonitorTimestamp), y: cpuLoad }, true, shift);
         }
 
         function calcCpuLoad(json) {
@@ -84,7 +84,7 @@
                                 $.each(data.History, function (index, value) {
                                     var object = JSON.parse(value["Result"]);
                                     var cpuLoad = calcCpuLoad(object);
-                                    newdata.push({ x: new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y: Math.round(cpuLoad) });
+                                    newdata.push({ x: Date.parse(value.MonitorTimestamp), y: Math.round(cpuLoad) });
                                 });
                             }
                         });

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SNMPMonitor.BusinessLayer;
 using SNMPMonitor.PresentationLayer.Hubs;
 using SNMPMonitor.PresentationLayer.Models;
@@ -125,7 +126,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public JsonResult HistoryDataForOID(string id, string oid, int count)
+        public CustomJsonResult HistoryDataForOID(string id, string oid, int count)
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             int agentId;
@@ -141,31 +142,31 @@ namespace SNMPMonitor.PresentationLayer.Controllers
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, new FormatException("HistoryDataForOID: id not Integer"));
                 //TODO: Return Error
             }
-            return Json(history,JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = history, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]
-        public JsonResult GetMonitorSummary()
+        public CustomJsonResult GetMonitorSummary()
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             List<KeyValuePair<Agent, List<MonitoringType>>> monitorSummary = controller.GetMonitoringSummary();
-            return Json(monitorSummary,JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = monitorSummary, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]
-        public JsonResult GetMonitorSummaryForAgent(int id)
+        public CustomJsonResult GetMonitorSummaryForAgent(int id)
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             KeyValuePair<Agent, List<MonitoringType>> monitorSummary = controller.GetMonitorSummaryForAgent(id);
-            return Json(monitorSummary, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = monitorSummary, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]
-        public JsonResult GetAllEvents()
+        public CustomJsonResult GetAllEvents()
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
-            List<Event> monitorSummary = controller.GetAllEvents();
-            return Json(monitorSummary, JsonRequestBehavior.AllowGet);
+            List<Event> eventSummary = controller.GetAllEvents();
+            return new CustomJsonResult { Data = eventSummary , JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
         [HttpPost]
@@ -193,11 +194,11 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAgents()
+        public CustomJsonResult GetAgents()
         {
             SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             List<Agent> agents = controller.GetAgents();
-            return Json(agents, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = agents, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

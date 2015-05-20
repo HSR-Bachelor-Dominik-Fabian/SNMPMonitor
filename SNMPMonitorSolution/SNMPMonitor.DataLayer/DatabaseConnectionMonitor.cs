@@ -192,28 +192,6 @@ namespace SNMPMonitor.DataLayer
             }
         }
 
-        public void AddAgentToDatabaseForDemo(string name, string iPAddress, int port)
-        {
-            try
-            {
-                _myConnection.Open();
-
-                SqlCommand saveAgentCommand = new SqlCommand("saveAgentForDemo" ,_myConnection);
-                saveAgentCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                SqlParameter paramName = new SqlParameter("@Name", name);
-                SqlParameter paramIP = new SqlParameter("@IPAddress", iPAddress);
-                SqlParameter paramPort = new SqlParameter("@Port", port);
-                saveAgentCommand.Parameters.Add(paramName);
-                saveAgentCommand.Parameters.Add(paramIP);
-                saveAgentCommand.Parameters.Add(paramPort);
-                saveAgentCommand.ExecuteNonQuery();
-            }
-            finally
-            {
-                _myConnection.Close();
-            }
-        }
-
         public List<MonitorDataDataModel> GetHistoryOfOIDForAgent(int agentNr, string ObjectID, int count)
         {
             List<MonitorDataDataModel> monitorDataList = new List<MonitorDataDataModel>();

@@ -68,7 +68,7 @@
             if(memoryResult["Results"].length > 0)
             {
                 usedMemoryPers = calcUsedMemoryPers(memoryResult);
-                chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp + "+02:00"), y:Math.round(usedMemoryPers)}, true, shift);
+                chart.series[0].addPoint({ x:Date.parse(json.MonitorTimestamp), y:Math.round(usedMemoryPers)}, true, shift);
             } else {
                 console.log("no memory data");
             }
@@ -129,7 +129,7 @@
                                     if(memoryResult.Results.length > 0)
                                     {
                                         usedMemoryPers = calcUsedMemoryPers(memoryResult);
-                                        newdata.push({ x:new Date(parseInt(value.MonitorTimestamp.replace("/Date(", "").replace(")/", ""))), y:parseInt(Math.round(usedMemoryPers))});
+                                        newdata.push({ x:Date.parse(value.MonitorTimestamp), y:parseInt(Math.round(usedMemoryPers))});
                                     } else {
                                         console.log("no memory data");
                                     }

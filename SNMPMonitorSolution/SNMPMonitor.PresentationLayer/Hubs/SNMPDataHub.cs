@@ -20,20 +20,20 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
             
-            context.Clients.Group("Agent_General").receiveData(JObject.FromObject(dataToShow));
+            context.Clients.Group("Agent_General").receiveData(JObject.FromObject(dataToShow, this.GetSerializer()));
         }
 
         public void SendNewEvent(EventModel eventModel)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
 
-            context.Clients.Group("Agent_General").receiveNewEvent(JObject.FromObject(eventModel));
+            context.Clients.Group("Agent_General").receiveNewEvent(JObject.FromObject(eventModel, this.GetSerializer()));
         }
 
         public void SendUpdatedAgent(AgentModel agent)
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            context.Clients.Group("Agent_General").receiveUpdatedAgentWithValue(JObject.FromObject(agent));
+            context.Clients.Group("Agent_General").receiveUpdatedAgentWithValue(JObject.FromObject(agent, this.GetSerializer()));
         }
 
         public void SendInsertDelete()
@@ -50,6 +50,15 @@ namespace SNMPMonitor.PresentationLayer.Hubs
         public Task LeaveDataGroup(string groupName)
         {
             return Groups.Remove(Context.ConnectionId, groupName);
+        }
+
+        private JsonSerializer GetSerializer() 
+        {
+            JsonSerializerSettings serializerSettings = new JsonSerializerSettings();
+            serializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            serializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+
+            return JsonSerializer.Create(serializerSettings);
         }
     }
 }
