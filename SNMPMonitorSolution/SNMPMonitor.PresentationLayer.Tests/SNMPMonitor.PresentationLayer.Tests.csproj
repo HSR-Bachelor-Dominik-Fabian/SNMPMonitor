@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Hubs\SNMPDataHubTest.cs" />
-    <Compile Include="Models\MonitorDataModelTest.cs" />
+    <Compile Include="Models\ModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
