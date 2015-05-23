@@ -15,30 +15,6 @@ namespace SNMPMonitor.PresentationLayer.Controllers
 {
     public class DataController : Controller
     {
-        public HttpStatusCodeResult RowInsertedTrigger(string id  = "1", string result = "12")
-        {
-            HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
-            try
-            {
-                SNMPDataHub Hub = new SNMPDataHub();
-                string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                string param = "{param:[{\"Result\":\"" + result + "\"},{\"MonitorTimestamp\":\"" + date + "\"},{\"ObjectID\":\"1.3.6.1.2.1.25.3.3.1.2.8\"},{\"AgentNr\":\"" + id + "\"},]}";
-                JObject jobject = JObject.Parse(param);
-                Models.MonitorDataModel monitor = new Models.MonitorDataModel(jobject);
-                Hub.SendSNMPData(monitor);
-                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
-            }
-            catch (FormatException e)
-            {
-                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, e);
-            }
-            catch (Exception e)
-            {
-                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
-            }
-            return output;
-        }
-
         [HttpPost]
         public HttpStatusCodeResult RowInsertedTrigger(string param)
         {
@@ -54,10 +30,12 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             catch (FormatException e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             catch (Exception e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             return output;
         }
@@ -77,10 +55,12 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             catch (FormatException e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             catch (Exception e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             return output;
         }
@@ -100,10 +80,12 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             catch (FormatException e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.High, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             catch (Exception e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             return output;
         }
@@ -121,6 +103,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
             catch (Exception e)
             {
                 BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, e);
+                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
             }
             return output;
         }
@@ -128,19 +111,27 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         [HttpGet]
         public CustomJsonResult HistoryDataForOID(string id, string oid, int count)
         {
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             int agentId;
             HistoryMonitorDataModel history = null;
-            if (int.TryParse(id, out agentId))
+            try
             {
-                List<MonitorData> businessLayerHistory = controller.GetHistoryOfOIDForAgent(agentId, oid, count);
-                businessLayerHistory.Sort((item1, item2) => item1.Timestamp.CompareTo(item2.Timestamp));
-                history = new HistoryMonitorDataModel(businessLayerHistory);
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                
+                if (int.TryParse(id, out agentId))
+                {
+                    List<MonitorData> businessLayerHistory = controller.GetHistoryOfOIDForAgent(agentId, oid, count);
+                    businessLayerHistory.Sort((item1, item2) => item1.Timestamp.CompareTo(item2.Timestamp));
+                    history = new HistoryMonitorDataModel(businessLayerHistory);
+                }
+                else
+                {
+                    BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, new FormatException("HistoryDataForOID: id not Integer"));
+                    //TODO: Return Error
+                }
             }
-            else
+            catch (Exception exc)
             {
-                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, new FormatException("HistoryDataForOID: id not Integer"));
-                //TODO: Return Error
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
             }
             return new CustomJsonResult { Data = history, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -148,24 +139,51 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         [HttpGet]
         public CustomJsonResult GetMonitorSummary()
         {
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
-            List<KeyValuePair<Agent, List<MonitoringType>>> monitorSummary = controller.GetMonitoringSummary();
+            List<KeyValuePair<Agent, List<MonitoringType>>> monitorSummary = null;
+            try
+            {
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                monitorSummary = controller.GetMonitoringSummary();
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
+            
             return new CustomJsonResult { Data = monitorSummary, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]
         public CustomJsonResult GetMonitorSummaryForAgent(int id)
         {
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
-            KeyValuePair<Agent, List<MonitoringType>> monitorSummary = controller.GetMonitorSummaryForAgent(id);
+            KeyValuePair<Agent, List<MonitoringType>> monitorSummary = null;
+            try
+            {
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                monitorSummary = controller.GetMonitorSummaryForAgent(id);
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
+           
             return new CustomJsonResult { Data = monitorSummary, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]
         public CustomJsonResult GetAllEvents()
         {
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
-            List<Event> eventSummary = controller.GetAllEvents();
+            List<Event> eventSummary = null;
+            try
+            {
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                eventSummary = controller.GetAllEvents();
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
+            
             return new CustomJsonResult { Data = eventSummary , JsonRequestBehavior = JsonRequestBehavior.AllowGet};
         }
 
@@ -173,31 +191,48 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         public HttpStatusCodeResult AddAgentToMonitor(string inputAgentName, string inputIpAddress, string inputPortNr, string typeName, bool cpuCheck, bool discCheck)
         {
             HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.InternalServerError);
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
-            int portNr;
-            if (int.TryParse(inputPortNr, out portNr))
+            try
             {
-                List<SNMPMonitor.BusinessLayer.Type> types = controller.GetTypes();
-                SNMPMonitor.BusinessLayer.Type type = null;
-                foreach (SNMPMonitor.BusinessLayer.Type temp in types)
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                int portNr;
+                if (int.TryParse(inputPortNr, out portNr))
                 {
-                    if (temp.Name == typeName)
+                    List<SNMPMonitor.BusinessLayer.Type> types = controller.GetTypes();
+                    SNMPMonitor.BusinessLayer.Type type = null;
+                    foreach (SNMPMonitor.BusinessLayer.Type temp in types)
                     {
-                        type = temp;
+                        if (temp.Name == typeName)
+                        {
+                            type = temp;
+                        }
                     }
+                    Agent newAgent = new Agent(inputAgentName, inputIpAddress, type, portNr);
+                    controller.AddAgentToDatabase(newAgent, cpuCheck, discCheck);
+                    output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
                 }
-                Agent newAgent = new Agent(inputAgentName, inputIpAddress, type, portNr);
-                controller.AddAgentToDatabase(newAgent, cpuCheck, discCheck);
-                output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
             }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
+            
             return output;
         }
 
         [HttpGet]
         public CustomJsonResult GetAgents()
         {
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
-            List<Agent> agents = controller.GetAgents();
+            List<Agent> agents = null;
+            try
+            {
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+                agents = controller.GetAgents();
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
+            
             return new CustomJsonResult { Data = agents, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -205,7 +240,9 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         public HttpStatusCodeResult UpdateAgentInMonitor(int inputAgentNr, string inputAgentName, string inputIpAddress, string inputPortNr, string typeName, bool cpuCheck, bool discCheck)
         {
             HttpStatusCodeResult output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
-            SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
+            try
+            {
+                SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);
             int portNr;
             if (int.TryParse(inputPortNr, out portNr))
             {
@@ -222,6 +259,12 @@ namespace SNMPMonitor.PresentationLayer.Controllers
                 controller.UpdateAgentInDatabase(updatedAgent, cpuCheck, discCheck);
                 output = new HttpStatusCodeResult(System.Net.HttpStatusCode.OK);
             }
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
+            
             return output;
         }
 
