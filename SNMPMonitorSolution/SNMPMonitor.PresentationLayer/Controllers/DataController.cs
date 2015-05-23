@@ -126,7 +126,6 @@ namespace SNMPMonitor.PresentationLayer.Controllers
                 else
                 {
                     BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, new FormatException("HistoryDataForOID: id not Integer"));
-                    //TODO: Return Error
                 }
             }
             catch (Exception exc)
@@ -156,7 +155,7 @@ namespace SNMPMonitor.PresentationLayer.Controllers
         [HttpGet]
         public CustomJsonResult GetMonitorSummaryForAgent(int id)
         {
-            KeyValuePair<Agent, List<MonitoringType>> monitorSummary = null;
+            KeyValuePair<Agent, List<MonitoringType>> monitorSummary = new KeyValuePair<Agent,List<MonitoringType>>(null,null);
             try
             {
                 SNMPController controller = new SNMPController(Properties.Settings.Default.ProdDatabaseConnectionString);

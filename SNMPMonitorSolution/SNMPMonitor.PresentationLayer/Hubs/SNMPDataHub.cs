@@ -18,28 +18,57 @@ namespace SNMPMonitor.PresentationLayer.Hubs
     {
         public void SendSNMPData(MonitorDataModel dataToShow)
         {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
+            try
+            {
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
+
+                context.Clients.Group("Agent_General").receiveData(JObject.FromObject(dataToShow, this.GetSerializer()));
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
             
-            context.Clients.Group("Agent_General").receiveData(JObject.FromObject(dataToShow, this.GetSerializer()));
         }
 
         public void SendNewEvent(EventModel eventModel)
         {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
+            try
+            {
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
 
-            context.Clients.Group("Agent_General").receiveNewEvent(JObject.FromObject(eventModel, this.GetSerializer()));
+                context.Clients.Group("Agent_General").receiveNewEvent(JObject.FromObject(eventModel, this.GetSerializer()));
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
         }
 
         public void SendUpdatedAgent(AgentModel agent)
         {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            context.Clients.Group("Agent_General").receiveUpdatedAgentWithValue(JObject.FromObject(agent, this.GetSerializer()));
+            try
+            {
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
+                context.Clients.Group("Agent_General").receiveUpdatedAgentWithValue(JObject.FromObject(agent, this.GetSerializer()));
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
         }
 
         public void SendInsertDelete()
         {
-            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
-            context.Clients.Group("Agent_General").receiveInsertDelete();
+            try
+            {
+                IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SNMPDataHub>();
+                context.Clients.Group("Agent_General").receiveInsertDelete();
+            }
+            catch (Exception exc)
+            {
+                BusinessLayer.ExceptionHandling.ExceptionCore.HandleException(BusinessLayer.ExceptionHandling.ExceptionCategory.Normal, exc);
+            }
         }
 
         public Task JoinDataGroup(string groupName)

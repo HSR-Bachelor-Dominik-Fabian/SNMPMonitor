@@ -95,14 +95,14 @@ namespace SNMPMonitor.PresentationLayer.Models
             JArray array = json.Descendants().OfType<JProperty>().First(x => x.Name == "param").Value.ToObject<JArray>();
             if (array != null)
             {
-                JProperty agentNrProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "AgentNr");
-                JProperty nameProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Name");
-                JProperty ipAddressProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "IPAddress");
-                JProperty statusProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Status");
-                JProperty portProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "Port");
-                JProperty sysDescProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysDesc");
-                JProperty sysNameProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysName");
-                JProperty sysUptimeProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == "sysUptime");
+                JProperty agentNrProperty = getJProperty(array, "AgentNr");
+                JProperty nameProperty = getJProperty(array, "Name");
+                JProperty ipAddressProperty = getJProperty(array, "IPAddress");
+                JProperty statusProperty = getJProperty(array, "Status");
+                JProperty portProperty = getJProperty(array, "Port");
+                JProperty sysDescProperty = getJProperty(array, "sysDesc");
+                JProperty sysNameProperty = getJProperty(array, "sysName");
+                JProperty sysUptimeProperty = getJProperty(array, "sysUptime");
 
                 this._name = nameProperty.Value.ToString();
                 this._ipAddress = ipAddressProperty.Value.ToString();
@@ -145,6 +145,12 @@ namespace SNMPMonitor.PresentationLayer.Models
             {
                 throw new FormatException("The JObject has to be in Format {param=[{'AgentNr','<Value>'},{'Name','<value>'},{'IPAddress','<value>'},{'Status','<value>'},{'Port','<value>'},{'sysDesc','<value>'},{'sysName','<value>'},{'sysUptime','<value>'}]}");
             }
+        }
+
+        private static JProperty getJProperty(JArray array, string name)
+        {
+            JProperty agentNrProperty = array.Descendants().OfType<JProperty>().First(x => x.Name == name);
+            return agentNrProperty;
         }
     }
 }

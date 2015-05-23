@@ -8,7 +8,6 @@ namespace SNMPMonitor.PresentationLayer.Controllers
 {
     public class MonitorTemplateController : Controller
     {
-        // GET: MonitorTemplate
         public PartialViewResult Monitor_Agent()
         {
             return PartialView();
