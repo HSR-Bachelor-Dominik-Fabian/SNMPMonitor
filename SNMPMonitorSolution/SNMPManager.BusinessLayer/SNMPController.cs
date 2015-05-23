@@ -73,6 +73,10 @@ namespace SNMPManager.BusinessLayer
                 connection.UpdateStatusOfAgent(agent.AgentNr, 3);
                 ExceptionCore.HandleException(ExceptionCategory.Low, e);
             }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
             catch (Exception e)
             {
                 ExceptionCore.HandleException(ExceptionCategory.Normal, e);

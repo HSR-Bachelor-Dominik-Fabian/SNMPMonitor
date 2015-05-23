@@ -31,9 +31,6 @@ namespace SNMPManager.BusinessLayer
             Oid lastOid = (Oid)this.oid.Clone();
             Pdu pdu = new Pdu(PduType.GetBulk);
             pdu.NonRepeaters = 0;
-            // MaxRepetitions tells the agent how many Oid/Value pairs to return
-            // in the response.
-            //pdu.MaxRepetitions = 5;
             while (lastOid != null)
             {
                 if (pdu.RequestId != 0)
@@ -70,8 +67,6 @@ namespace SNMPManager.BusinessLayer
                             }
                             else
                             {
-                                // we have reached the end of the requested
-                                // MIB tree. Set lastOid to null and exit loop
                                 lastOid = null;
                                 break;
                             }
