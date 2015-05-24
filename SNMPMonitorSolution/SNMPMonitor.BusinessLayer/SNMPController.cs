@@ -286,10 +286,6 @@ namespace SNMPMonitor.BusinessLayer
             {
                 ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
             }
-            catch (InvalidCastException e)
-            {
-                ExceptionCore.HandleException(ExceptionCategory.High, e);
-            }
             catch (Exception e)
             {
                 ExceptionCore.HandleException(ExceptionCategory.Normal, e);
