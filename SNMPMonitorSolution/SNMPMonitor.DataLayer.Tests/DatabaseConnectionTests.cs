@@ -148,8 +148,6 @@ namespace SNMPMonitor.DataLayer.Tests
             databaseConnection.AddEventToDatabase("FormatException", "HIGH", Convert.ToDateTime("07.05.2015 10:10:10"), "2", "Nice try", "Stacktrace");
 
             List<EventDataModel> eventsAfterAdd = databaseConnection.GetAllEventsFromDatabase();
-
-            Assert.AreEqual(eventsBeforeAdd.Count + 1, eventsAfterAdd.Count);
             
             int lastIndex = 0;
             
