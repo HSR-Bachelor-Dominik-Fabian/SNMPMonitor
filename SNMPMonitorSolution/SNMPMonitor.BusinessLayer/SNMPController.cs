@@ -278,7 +278,19 @@ namespace SNMPMonitor.BusinessLayer
 
         public void DeleteAgent(int agentNr)
         {
-            _databaseConnection.DeleteAgentInDatabase(agentNr);
+            try
+            {
+                _databaseConnection.DeleteAgentInDatabase(agentNr);
+            }
+            catch (SqlException e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Fatal, e);
+            }
+            catch (Exception e)
+            {
+                ExceptionCore.HandleException(ExceptionCategory.Normal, e);
+            }
+
         }
     }
 }

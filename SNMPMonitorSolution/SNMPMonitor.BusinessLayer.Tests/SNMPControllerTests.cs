@@ -56,8 +56,6 @@ namespace SNMPMonitor.BusinessLayer.Tests
         [TestMethod]
         public void TestGetAgents()
         {
-            //List<Agent> agentList = controller.GetAgents();
-            //Assert.AreEqual(1, agentList.Count);
             List<Agent> agents = controller.GetAgents();
 
             if (agents.Count > 0)
@@ -129,7 +127,7 @@ namespace SNMPMonitor.BusinessLayer.Tests
             }
             else
             {
-                Assert.IsTrue(false);
+                Assert.IsFalse(true);
             }
         }
         
